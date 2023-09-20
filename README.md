@@ -14,7 +14,7 @@
 ![](./docs/img/er.drawio.png)
 ![](./docs/img/er2.drawio.png)
 ### Диаграмма БД
-![](./docs/img/database.pdf)
+![](./docs/img/database.png)
 ### Экраны будущего web-приложения на уровне черновых эскизов.
 ![](./docs/img/add1.png)
 ![](./docs/img/add2.png)
