@@ -15,6 +15,8 @@
 ![](./docs/img/er2.drawio.png)
 ### Диаграмма БД
 ![](./docs/img/database.png)
+### BPMN диаграмма
+![](./docs/bpmn.svg)
 ### Экраны будущего web-приложения на уровне черновых эскизов.
 ![](./docs/img/add1.png)
 ![](./docs/img/add2.png)
