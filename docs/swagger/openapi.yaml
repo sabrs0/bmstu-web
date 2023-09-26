@@ -1,0 +1,776 @@
+---
+openapi: 3.0.1
+info:
+  title: Foundations
+  version: '1.0'
+  description: The API for the Foundations project
+paths:
+  "/api/v1/foundations":
+    get:
+      tags:
+      - Foundation
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundation"
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundation"
+            text/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundation"
+    post:
+      security:
+      - token: []
+      tags:
+      - Foundation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/FoundationBase"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/FoundationBase"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/FoundationBase"
+      responses:
+        '201':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '409':
+          description: Conflict
+  "/api/v1/foundations/{id}":
+    put:
+      security:
+      - token: []
+      tags:
+      - Foundation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/FoundationBase"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/FoundationBase"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/FoundationBase"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+    delete:
+      security:
+      - token: []
+      tags:
+      - Foundation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    get:
+      tags:
+      - Foundation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundation"
+        '404':
+          description: Not Found
+  "/api/v1/foundrisings":
+    get:
+      tags:
+      - Foundrising
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundrising"
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundrising"
+            text/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundrising"
+    post:
+      security:
+      - token: []
+      tags:
+      - Foundrising
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+      responses:
+        '201':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '409':
+          description: Conflict
+  "/api/v1/foundrisings/{id}":
+    put:
+      security:
+      - token: []
+      tags:
+      - Foundrising
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+    patch:
+      security:
+      - token: []
+      tags:
+      - Foundrising
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/FoundrisingBase"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+    delete:
+      security:
+      - token: []
+      tags:
+      - Foundrising
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    get:
+      tags:
+      - Foundrising
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Foundrising"
+        '404':
+          description: Not Found
+  "/api/v1/transactions":
+    get:
+      security:
+      - token: []
+      tags:
+      - Transaction
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Transaction"
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Transaction"
+            text/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Transaction"
+        '401':
+          description: Unauthorized
+  "/api/v1/transactions/{id}":
+    get:
+      security:
+      - token: []
+      tags:
+      - Transaction
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Transaction"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Transaction"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Transaction"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    delete:
+      security:
+      - token: []
+      tags:
+      - Transaction
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Transaction"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Transaction"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Transaction"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+  "/api/v1/users":
+    get:
+      security:
+      - token: []
+      tags:
+      - User
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/User"
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/User"
+            text/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/User"
+        '401':
+          description: Unauthorized
+    post:
+      security:
+      - token: []
+      tags:
+      - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserBase"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/UserBase"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/UserBase"
+      responses:
+        '201':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/User"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '409':
+          description: Conflict
+  "/api/v1/users/{id}":
+    delete:
+      security:
+      - token: []
+      tags:
+      - User
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/User"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    get:
+      security:
+      - token: []
+      tags:
+      - User
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/User"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+  "/api/v1/login":
+    post:
+      tags:
+      - Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Login"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/Login"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/Login"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/Token"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Token"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/Token"
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+components:
+  schemas:
+    Foundation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        curFoudrisingAmount:
+          type: integer
+          format: int32
+        ClosedFoundrisingAmount:
+          type: integer
+          format: int32
+        Volunteer_amount:
+          type: integer
+          format: int32
+        Country:
+          type: string
+          nullable: true
+      additionalProperties: false
+    
+    FoundationBase:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        Country:
+          type: string
+          nullable: true
+      additionalProperties: false
+    
+        
+    Foundrising:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        found_id:
+          type: integer
+          format: int32
+        reqSum:
+          type: integer
+          format: int32
+        curSum:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: false
+      additionalProperties: false
+    FoundrisingBase:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        found_id:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: false
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+        Login:
+          type: string
+        Password:
+          type: string
+      additionalProperties: false
+    UserBase:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+        Login:
+          type: string
+        Password:
+          type: string
+      additionalProperties: false
+    Login:
+      type: object
+      properties:
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Token:
+      type: object
+      properties:
+        tokenVal:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TransactionBase:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        fromId:
+          type: integer
+          format: int32
+          nullable: true
+        toId:
+          type: integer
+          format: int32
+          nullable: true
+        fromType:
+          type: string
+          nullable: true
+        toType:
+          type: string
+          nullable: true
+        sum:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        fromId:
+          type: integer
+          format: int32
+          nullable: true
+        toId:
+          type: integer
+          format: int32
+          nullable: true
+        fromType:
+          type: string
+          nullable: true
+        toType:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+        sum:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+      token:
+        type: apiKey
+        description: Please insert JWT with Token into field
+        name: Authorization
+        in: header

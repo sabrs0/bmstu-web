@@ -8,7 +8,6 @@ import (
 	"github.com/sabrs0/bmstu-web/src/my_errors"
 
 	"github.com/gotk3/gotk3/gtk"
-	//"github.com/gotk3/gotk3/gtk"
 	ents "github.com/sabrs0/bmstu-web/src/business/entities"
 	ctrls "github.com/sabrs0/bmstu-web/src/controllers"
 )

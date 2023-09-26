@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/sabrs0/bmstu-wb/db_course/views"
+	"github.com/sabrs0/bmstu-web/src/views"
 
-	conf_pk "db_course/config_pkg"
+	conf_pk "github.com/sabrs0/bmstu-web/src/config_pkg"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
