@@ -162,6 +162,38 @@ paths:
                 "$ref": "#/components/schemas/Foundation"
         '404':
           description: Not Found
+  "/api/v1/foundations/{id}/foundrisings":
+    get:
+      tags:
+      - Foundation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundrising"
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundrising"
+            text/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Foundrising"
+        '404':
+          description: Not Found
   "/api/v1/foundrisings":
     get:
       tags:
