@@ -24,10 +24,10 @@ type IUserService interface {
 }
 
 type UserService struct {
-	UR repos.UserRepository
+	UR repos.IUserRepository
 }
 
-func NewUserService(urepo repos.UserRepository) UserService {
+func NewUserService(urepo repos.IUserRepository) UserService {
 	return UserService{UR: urepo}
 }
 

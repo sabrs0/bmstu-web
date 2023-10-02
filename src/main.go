@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sabrs0/bmstu-web/src/views"
+	//"github.com/sabrs0/bmstu-web/src/views"
 
 	conf_pk "github.com/sabrs0/bmstu-web/src/config_pkg"
 
@@ -11,9 +11,9 @@ import (
 
 func main() {
 	dsn := conf_pk.Connect_string
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	/*db*/ _, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err == nil {
-		views.Gtk_init(db)
+		//views.Gtk_init(db)
 	}
 
 }

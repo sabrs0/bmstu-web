@@ -14,7 +14,6 @@ type ITransactionService interface {
 	Delete(id_ string) error
 	GetAll() ([]ents.Transaction, error)
 	GetById(id_ string) (ents.Transaction, error)
-
 	GetFromId(type_ bool, id_ string, FndS FoundationService,
 		FndgS FoundrisingService,
 		US UserService) ([]ents.Transaction, error)
@@ -27,10 +26,10 @@ type ITransactionService interface {
 }
 
 type TransactionService struct {
-	TR repos.TransactionRepository
+	TR repos.ITransactionRepository
 }
 
-func NewTransactionService(frepo repos.TransactionRepository) TransactionService {
+func NewTransactionService(frepo repos.ITransactionRepository) TransactionService {
 	return TransactionService{TR: frepo}
 }
 

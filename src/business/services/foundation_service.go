@@ -24,10 +24,10 @@ type IFoundationService interface {
 }
 
 type FoundationService struct {
-	FR repos.FoundationRepository
+	FR repos.IFoundationRepository //	FoundationRepository
 }
 
-func NewFoundationService(frepo repos.FoundationRepository) FoundationService {
+func NewFoundationService(frepo repos.IFoundationRepository) FoundationService {
 	return FoundationService{FR: frepo}
 }
 

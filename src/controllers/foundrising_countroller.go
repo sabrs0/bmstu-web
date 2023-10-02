@@ -86,7 +86,7 @@ func (UC *FoundrisingController) Add(found_id_ string, descr string, reqSum_ str
 func (UC *FoundrisingController) Delete(id string) error {
 	err := UC.FS.Delete(id)
 	if err == nil {
-		TR := repos.NewTransactionRepository(UC.FS.FR.DB)
+		TR := repos.NewTransactionRepository(UC.FS.FR.GetDB())
 		TS := servs.NewTransactionService(*TR)
 		transactions1, err := TS.GetToId(ents.TO_FOUNDRISING, id, UC.FndS, UC.FS)
 		if err == nil {

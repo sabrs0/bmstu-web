@@ -15,6 +15,9 @@ type IFoundationRepository interface {
 	Select() ([]ents.Foundation, bool)
 	SelectById(id uint64) (ents.Foundation, bool)
 	SelectByLogin(name string) (ents.Foundation, bool)
+	SelectByName(name string) (ents.Foundation, bool)
+	SelectByCountry(country string) ([]ents.Foundation, bool)
+	GetDB() *gorm.DB
 }
 
 type FoundationRepository struct {
@@ -24,7 +27,9 @@ type FoundationRepository struct {
 func NewFoundationRepository(db_ *gorm.DB) *FoundationRepository {
 	return &FoundationRepository{DB: db_}
 }
-
+func (UR *FoundationRepository) GetDB() *gorm.DB {
+	return UR.DB
+}
 func (FR *FoundationRepository) Insert(F ents.Foundation) error {
 	var LastUsr ents.Foundation
 	FR.DB.Table("foundation_tab").Last(&LastUsr)

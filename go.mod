@@ -3,7 +3,6 @@ module github.com/sabrs0/bmstu-web
 go 1.20
 
 require (
-	github.com/gotk3/gotk3 v0.6.2
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.4
 )

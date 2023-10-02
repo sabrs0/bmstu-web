@@ -14,7 +14,8 @@ type IUserRepository interface {
 	Delete(U ents.User) error
 	Select() ([]ents.User, bool)
 	SelectById(id uint64) (ents.User, bool)
-	SelectByName(name string) (ents.User, bool)
+	SelectByLogin(name string) (ents.User, bool)
+	GetDB() *gorm.DB
 }
 
 type UserRepository struct {
@@ -24,7 +25,9 @@ type UserRepository struct {
 func NewUserRepository(db_ *gorm.DB) *UserRepository {
 	return &UserRepository{DB: db_}
 }
-
+func (UR *UserRepository) GetDB() *gorm.DB {
+	return UR.DB
+}
 func (UR *UserRepository) Insert(U ents.User) error {
 	var LastUsr ents.User
 	UR.DB.Table("user_tab").Last(&LastUsr)

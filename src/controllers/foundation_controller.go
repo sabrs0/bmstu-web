@@ -50,7 +50,7 @@ func (UC *FoundationController) Add(login string, password string, name string, 
 func (UC *FoundationController) Delete(id string) error {
 	err := UC.FS.Delete(id)
 	if err == nil {
-		UR := repos.NewUserRepository(UC.FS.FR.DB)
+		UR := repos.NewUserRepository(UC.FS.FR.GetDB())
 		US := servs.NewUserService(*UR)
 		transactions1, err := UC.TS.GetFromId(ents.FROM_FOUNDATION, id, UC.FS, US)
 		if err == nil {

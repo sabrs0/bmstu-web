@@ -16,7 +16,10 @@ type IFoundrisingRepository interface {
 	SelectById(id uint64) (ents.Foundrising, bool)
 	SelectByFoundId(id uint64) ([]ents.Foundrising, bool)
 	SelectByCreateDate(date string) ([]ents.Foundrising, bool)
+	SelectByFoundIdActive(id uint64) ([]ents.Foundrising, bool)
 	SelectByCloseDate(date string) ([]ents.Foundrising, bool)
+	SelectByIdAndFoundId(id_ uint64, found_id_ uint64) (ents.Foundrising, bool)
+	GetDB() *gorm.DB
 }
 
 type FoundrisingRepository struct {
@@ -26,7 +29,9 @@ type FoundrisingRepository struct {
 func NewFoundrisingRepository(db_ *gorm.DB) *FoundrisingRepository {
 	return &FoundrisingRepository{DB: db_}
 }
-
+func (UR *FoundrisingRepository) GetDB() *gorm.DB {
+	return UR.DB
+}
 func (FR *FoundrisingRepository) Insert(F ents.Foundrising) error {
 	var LastFnd ents.Foundrising
 	FR.DB.Table("foundrising_tab").Last(&LastFnd)

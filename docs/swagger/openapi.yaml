@@ -37,13 +37,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FoundationBase"
+              "$ref": "#/components/schemas/FoundationPost"
           text/json:
             schema:
-              "$ref": "#/components/schemas/FoundationBase"
+              "$ref": "#/components/schemas/FoundationPost"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/FoundationBase"
+              "$ref": "#/components/schemas/FoundationPost"
       responses:
         '201':
           description: Success
@@ -80,13 +80,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FoundationBase"
+              "$ref": "#/components/schemas/FoundationPost"
           text/json:
             schema:
-              "$ref": "#/components/schemas/FoundationBase"
+              "$ref": "#/components/schemas/FoundationPost"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/FoundationBase"
+              "$ref": "#/components/schemas/FoundationPost"
       responses:
         '200':
           description: Success
@@ -226,13 +226,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
           text/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
       responses:
         '201':
           description: Success
@@ -269,13 +269,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
           text/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
       responses:
         '200':
           description: Success
@@ -313,13 +313,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
           text/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingBase"
+              "$ref": "#/components/schemas/FoundrisingPost"
       responses:
         '200':
           description: Success
@@ -517,13 +517,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/UserBase"
+              "$ref": "#/components/schemas/UserPost"
           text/json:
             schema:
-              "$ref": "#/components/schemas/UserBase"
+              "$ref": "#/components/schemas/UserPost"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/UserBase"
+              "$ref": "#/components/schemas/UserPost"
       responses:
         '201':
           description: Success
@@ -654,12 +654,22 @@ components:
         Volunteer_amount:
           type: integer
           format: int32
+        fund_balance:
+          type: number
+          format: double
+        income:
+          type: number
+          format: double
+        outcome:
+          type: number
+          format: double
         Country:
           type: string
           nullable: true
       additionalProperties: false
     
-    FoundationBase:
+    
+    FoundationPost:
       type: object
       properties:
         id:
@@ -668,10 +678,29 @@ components:
         name:
           type: string
           nullable: true
-        Country:
+        country:
+          type: string
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        password:
           type: string
           nullable: true
       additionalProperties: false
+    #FoundationBase:
+    #  type: object
+    #  properties:
+    #    id:
+    #      type: integer
+    #      format: int32
+    #    name:
+    #      type: string
+    #      nullable: true
+    #    Country:
+    #      type: string
+    #      nullable: true
+    #  additionalProperties: false
     
         
     Foundrising:
@@ -686,14 +715,23 @@ components:
         reqSum:
           type: integer
           format: int32
+        ph_amount:
+          type: integer
+          format: int32
         curSum:
           type: integer
           format: int32
         description:
           type: string
           nullable: false
+        creation_date:
+          type: string
+          nullable: false
+        close_date:
+          type: string
+          nullable: false
       additionalProperties: false
-    FoundrisingBase:
+    FoundrisingPost:
       type: object
       properties:
         id:
@@ -702,32 +740,63 @@ components:
         found_id:
           type: integer
           format: int32
+        reqSum:
+          type: integer
+          format: int32
         description:
           type: string
           nullable: false
+        creation_date:
+          type: string
+          nullable: false
       additionalProperties: false
+   # FoundrisingBase:
+    #  type: object
+     # properties:
+    #    id:
+    #      type: integer
+    #      format: int32
+    #    found_id:
+    #      type: integer
+    #      format: int32
+    #    description:
+    #      type: string
+    #      nullable: false
+    #  additionalProperties: false
     User:
       type: object
       properties:
-        Id:
-          type: integer
-          format: int32
         Login:
           type: string
-        Password:
-          type: string
+        Balance:
+          type: number
+          format: double
+        CharitySum:
+          type: integer
+          format: int32
+        ClosedFingAmount:
+          type: integer
+          format: int32
       additionalProperties: false
-    UserBase:
+    UserPost:
       type: object
       properties:
-        Id:
-          type: integer
-          format: int32
         Login:
           type: string
         Password:
           type: string
       additionalProperties: false
+    #UserBase:
+    #  type: object
+    #  properties:
+    #    Id:
+    #      type: integer
+    #      format: int32
+    #    Login:
+    #      type: string
+    #    Password:
+    #      type: string
+    #  additionalProperties: false
     Login:
       type: object
       properties:
@@ -743,32 +812,6 @@ components:
       properties:
         tokenVal:
           type: string
-          nullable: true
-      additionalProperties: false
-    TransactionBase:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          nullable: true
-        fromId:
-          type: integer
-          format: int32
-          nullable: true
-        toId:
-          type: integer
-          format: int32
-          nullable: true
-        fromType:
-          type: string
-          nullable: true
-        toType:
-          type: string
-          nullable: true
-        sum:
-          type: integer
-          format: int32
           nullable: true
       additionalProperties: false
     Transaction:

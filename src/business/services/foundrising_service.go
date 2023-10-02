@@ -25,10 +25,10 @@ type IFoundrisingService interface {
 }
 
 type FoundrisingService struct {
-	FR repos.FoundrisingRepository
+	FR repos.IFoundrisingRepository
 }
 
-func NewFoundrisingService(frepo repos.FoundrisingRepository) FoundrisingService {
+func NewFoundrisingService(frepo repos.IFoundrisingRepository) FoundrisingService {
 	return FoundrisingService{FR: frepo}
 }
 

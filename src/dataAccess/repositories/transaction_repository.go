@@ -15,6 +15,8 @@ type ITransactionRepository interface {
 	SelectFrom(type_ bool, id uint64) ([]ents.Transaction, bool)
 	SelectTo(type_ bool, id uint64) ([]ents.Transaction, bool)
 	SelectById(id uint64) (ents.Transaction, bool)
+	SelectFoundrisingPhilantropIds(foundrising_id uint64) ([]uint64, bool)
+	GetDB() *gorm.DB
 }
 
 type TransactionRepository struct {
@@ -24,7 +26,9 @@ type TransactionRepository struct {
 func NewTransactionRepository(db_ *gorm.DB) *TransactionRepository {
 	return &TransactionRepository{DB: db_}
 }
-
+func (UR *TransactionRepository) GetDB() *gorm.DB {
+	return UR.DB
+}
 func (TR *TransactionRepository) Insert(T ents.Transaction) error {
 	var LastTrn ents.Transaction
 	TR.DB.Table("transaction_tab").Last(&LastTrn)
