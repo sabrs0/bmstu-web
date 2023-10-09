@@ -162,6 +162,51 @@ paths:
                 "$ref": "#/components/schemas/Foundation"
         '404':
           description: Not Found
+  "/api/v1/foundations/{id}/donate":
+    post:
+        security:
+        - token: []
+        tags:
+        - Foundation
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        requestBody:
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/FoundationDonate"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/FoundationDonate"
+            application/*+json:
+              schema:
+                "$ref": "#/components/schemas/FoundationDonate"
+        responses:
+          '200':
+            description: Success
+            content:
+              text/plain:
+                schema:
+                  "$ref": "#/components/schemas/Transaction"
+              application/json:
+                schema:
+                  "$ref": "#/components/schemas/Transaction"
+              text/json:
+                schema:
+                  "$ref": "#/components/schemas/Transaction"
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+          '404':
+            description: Not Found
+          '409':
+            description: Conflict
   "/api/v1/foundations/{id}/foundrisings":
     get:
       tags:
@@ -602,6 +647,51 @@ paths:
           description: Unauthorized
         '404':
           description: Not Found
+  "/api/v1/users/{id}/donate":
+    post:
+        security:
+        - token: []
+        tags:
+        - User
+        parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        requestBody:
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserDonate"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/UserDonate"
+            application/*+json:
+              schema:
+                "$ref": "#/components/schemas/UserDonate"
+        responses:
+          '200':
+            description: Success
+            content:
+              text/plain:
+                schema:
+                  "$ref": "#/components/schemas/Transaction"
+              application/json:
+                schema:
+                  "$ref": "#/components/schemas/Transaction"
+              text/json:
+                schema:
+                  "$ref": "#/components/schemas/Transaction"
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+          '404':
+            description: Not Found
+          '409':
+            description: Conflict
   "/api/v1/login":
     post:
       tags:
@@ -672,9 +762,6 @@ components:
     FoundationPost:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
         name:
           type: string
           nullable: true
@@ -688,20 +775,18 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-    #FoundationBase:
-    #  type: object
-    #  properties:
-    #    id:
-    #      type: integer
-    #      format: int32
-    #    name:
-    #      type: string
-    #      nullable: true
-    #    Country:
-    #      type: string
-    #      nullable: true
-    #  additionalProperties: false
-    
+      
+    FoundationDonate:
+      type: object
+      properties:
+        found_id:
+          type: integer
+          format: int32
+        sum_of_money:
+          type: integer
+          format: int32
+      additionalProperties: false
+
         
     Foundrising:
       type: object
@@ -734,9 +819,6 @@ components:
     FoundrisingPost:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
         found_id:
           type: integer
           format: int32
@@ -750,19 +832,6 @@ components:
           type: string
           nullable: false
       additionalProperties: false
-   # FoundrisingBase:
-    #  type: object
-     # properties:
-    #    id:
-    #      type: integer
-    #      format: int32
-    #    found_id:
-    #      type: integer
-    #      format: int32
-    #    description:
-    #      type: string
-    #      nullable: false
-    #  additionalProperties: false
     User:
       type: object
       properties:
@@ -786,17 +855,19 @@ components:
         Password:
           type: string
       additionalProperties: false
-    #UserBase:
-    #  type: object
-    #  properties:
-    #    Id:
-    #      type: integer
-    #      format: int32
-    #    Login:
-    #      type: string
-    #    Password:
-    #      type: string
-    #  additionalProperties: false
+    UserDonate:
+      type: object
+      properties:
+        entity-type:
+          type: integer
+          format: int32
+        entity-id:
+          type: integer
+          format: int32
+        sum_of_money:
+          type: integer
+          format: int32
+      additionalProperties: false
     Login:
       type: object
       properties:
