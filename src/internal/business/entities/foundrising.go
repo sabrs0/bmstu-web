@@ -1,12 +1,15 @@
 package entities
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+)
 
 const DateFormat string = "2006-01-02"
 
 type FoundrisingPut struct {
-	Description  string `json:"description"`
-	Required_sum string `json:"required_sum"`
+	Description  string `json:"description,omitempty"`
+	Required_sum string `json:"required_sum,omitempty"`
 }
 type FoundrisingAdd struct {
 	Found_id      uint64 `json:"found_id"`
@@ -46,4 +49,16 @@ func (F *Foundrising) SetCreateDate(newName string) {
 
 func (F *Foundrising) SetFoundId(id uint64) {
 	F.Found_id = id
+}
+func (params FoundrisingPut) ValidatePut() error {
+	if params.Description == "" || params.Required_sum == "" {
+		return fmt.Errorf("Not enough params for foundrising put")
+	}
+	return nil
+}
+func (params FoundrisingPut) ValidatePatch() error {
+	if params.Description == "" && params.Required_sum == "" {
+		return fmt.Errorf("Not enough params for foundrising patch")
+	}
+	return nil
 }

@@ -8,7 +8,6 @@ import (
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 	resp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response"
 	fndResp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response/foundations"
-	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )
 
 type IFoundrisingsGetter interface {
@@ -21,15 +20,7 @@ func GetFoundrisings(log *slog.Logger, ctrl IFoundrisingsGetter) http.HandlerFun
 		var response fndResp.FoundrisingsResponse
 		var foundrisings []ents.Foundrising
 		defer func() {
-			status := http.StatusBadRequest
-			if err == my_errors.ErrorNotExists {
-				status = http.StatusNotFound
-			}
-			if err == my_errors.ErrorConflict {
-				status = http.StatusConflict
-			}
-			log.Error(err.Error())
-			resp.JSONRender(w, status, response)
+			resp.ErrWrapper(log, w, response, err)
 		}()
 		const op = "handlers.foundation.getFoundrisings"
 		log = slog.With(
@@ -42,6 +33,6 @@ func GetFoundrisings(log *slog.Logger, ctrl IFoundrisingsGetter) http.HandlerFun
 		}
 		response = fndResp.FoundrisingsResponse{Foundrisings: foundrisings}
 		log.Info("Successs")
-		resp.JSONRender(w, http.StatusOK, response)
+		resp.JSONRender(w, http.StatusOK, &response)
 	}
 }

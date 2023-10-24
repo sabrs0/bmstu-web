@@ -1,4 +1,4 @@
-package foundations
+package transactions
 
 import (
 	"log/slog"
@@ -6,34 +6,33 @@ import (
 
 	"github.com/gorilla/mux"
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+
 	resp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response"
-	fndResp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response/foundations"
+	trResp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response/transactions"
 )
 
 type IByIdGetter interface {
-	GetByID(id_ string) (ents.Foundation, error)
+	GetByID(id_ string) (ents.Transaction, error)
 }
 
 func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
-		var response fndResp.BaseResponse
-		var foundation ents.Foundation
-		defer func() {
-			resp.ErrWrapper(log, w, response, err)
-		}()
-		const op = "handlers.foundation.getById"
+		var response trResp.BaseResponse
+		const op = "handlers.transactions.getByID"
 		log = log.With(
 			slog.String("operation", op),
 		)
+		defer func() {
+			resp.ErrWrapper(log, w, response, err)
+		}()
 		id := mux.Vars(r)["id"]
-		foundation, err = ctrl.GetByID(id)
+		transaction, err := ctrl.GetByID(id)
 		if err != nil {
 			return
 		}
-		response = fndResp.BaseResponse{Foundation: foundation}
 		log.Info("Success")
+		response = trResp.BaseResponse{Transaction: transaction}
 		resp.JSONRender(w, http.StatusOK, &response)
-
 	}
 }

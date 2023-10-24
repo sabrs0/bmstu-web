@@ -1,7 +1,6 @@
 package foundations
 
 import (
-	"encoding/json"
 	"log/slog"
 	"net/http"
 
@@ -16,18 +15,21 @@ type IGetter interface {
 
 func GetAll(logger *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		var err error
+		var response fndResp.GetAllResponse
 		const op = "handlers.foundations.getAll"
 		logger = slog.With(
 			slog.String("operation", op),
 		)
-		var response fndResp.GetAllResponse
+		defer func() {
+			resp.ErrWrapper(logger, w, response, err)
+		}()
 		foundations, err := ctrl.GetAll()
 		if err != nil {
-			resp.JSONRender(w, http.StatusBadRequest, response)
 			return
 		}
+		logger.Info("Success")
 		response.Foundations = foundations
-		data, err := json.Marshal(response)
-		resp.JSONRender(w, http.StatusOK, data)
+		resp.JSONRender(w, http.StatusOK, &response)
 	}
 }

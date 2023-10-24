@@ -21,28 +21,27 @@ func Add(logger *slog.Logger, ctrl IAdder) http.HandlerFunc {
 		logger = logger.With(
 			slog.String("Operation", op),
 		)
+		var err error
 		var params ents.FoundationAdd
 		var response fndResp.BaseResponse
-		err := json.NewDecoder(r.Body).Decode(&params)
+		defer func() {
+			resp.ErrWrapper(logger, w, response, err)
+		}()
+		err = json.NewDecoder(r.Body).Decode(&params)
 		if err != nil {
-			resp.JSONRender(w, http.StatusBadRequest, response)
-			logger.Error(err.Error())
+
 			return
 		}
 		logger.Info("Request body decoded")
 		foundation, err := ctrl.Add(params)
 		if err != nil {
-			resp.JSONRender(w, http.StatusConflict, resp.Response{
-				Status: "Error",
-				Error:  "Failed add foundation" + err.Error(),
-			})
-			logger.Error(err.Error())
+
 			return
 		}
 
-		logger.Info("Successfully added foundation")
+		logger.Info("Success")
 		response = fndResp.BaseResponse{Foundation: foundation}
-		resp.JSONRender(w, http.StatusOK, response)
+		resp.JSONRender(w, http.StatusOK, &response)
 	}
 
 }
