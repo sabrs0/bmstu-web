@@ -4,155 +4,135 @@ import (
 	"fmt"
 	"strconv"
 
-	chk "github.com/sabrs0/bmstu-web/src/internal/business/checker"
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
-	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories"
+	"github.com/sabrs0/bmstu-web/src/internal/business/validation"
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )
 
-type IUserService interface {
-	Add(UPars chk.UserMainParams) error
-	Update(id_ string, UPars chk.UserMainParams) error
-	Delete(id_ string) error
-	GetAll() ([]ents.User, error)
-	GetById(id_ string) (ents.User, error)
-	GetByLogin(id_ string) (ents.User, error)
-	ExistsById(id uint64) bool
-	ExistsByLogin(name string) bool
-	Donate(U *ents.User, DP chk.UserDonateParams) error
-	ReplenishBalance(U *ents.User, sum float64) error
-	GetRepo() repos.IUserRepository
+type IUserRepository interface {
+	Insert(U ents.User) (ents.User, error)
+	Update(U ents.User) (ents.User, error)
+	Delete(U ents.User) (ents.User, error)
+	Select() ([]ents.User, error)
+	SelectById(id uint64) (ents.User, error)
+	SelectByLogin(name string) (ents.User, error)
+	//GetDB() *gorm.DB
 }
 
 type UserService struct {
-	UR repos.IUserRepository
+	UR IUserRepository
 }
 
-func NewUserService(urepo repos.IUserRepository) *UserService {
+func NewUserService(urepo IUserRepository) *UserService {
 	return &UserService{UR: urepo}
 }
-func (US *UserService) GetRepo() repos.IUserRepository {
+func (US *UserService) GetRepo() IUserRepository {
 	return US.UR
 }
 func (US *UserService) ExistsById(id uint64) bool {
 	_, result := US.UR.SelectById(id)
-	return result
+	return (result == nil)
 }
 
 func (US *UserService) ExistsByLogin(name string) bool {
 	_, result := US.UR.SelectByLogin(name)
-	return result
+	return (result == nil)
 }
 
-func (US *UserService) Add(UPars chk.UserMainParams) error {
+func (US *UserService) Add(UPars ents.UserAdd) (ents.User, error) {
 	if US.ExistsByLogin(UPars.Login) {
-		return fmt.Errorf(my_errors.ErrAlreadyExists)
-	} else {
-		var U ents.User = ents.NewUser()
-		var err_ error = UPars.CheckParams()
-		if err_ == nil {
-			U.SetLogin(UPars.Login)
-			U.SetPassword(UPars.Password)
-			US.UR.Insert(U)
-		} else {
-			return err_
-		}
+		return ents.User{}, fmt.Errorf(my_errors.ErrAlreadyExists)
 	}
-	return nil
+	U := ents.NewUser()
+	err := validation.CheckUserAddParams(UPars)
+	if err != nil {
+		return ents.User{}, err
+	}
+	U.SetLogin(UPars.Login)
+	U.SetPassword(UPars.Password)
+
+	return US.UR.Insert(U)
 }
 
-func (US *UserService) Update(id_ string, UPars chk.UserMainParams) error {
+func (US *UserService) Update(id_ string, UPars ents.UserAdd) (ents.User, error) {
 	if US.ExistsByLogin(UPars.Login) {
-		return fmt.Errorf(my_errors.ErrAlreadyExists)
-	} else {
-		var errGet error
-		var U ents.User
-		U, errGet = US.GetById(id_)
-		if errGet != nil {
-			return errGet
-		} else {
-			var err_ error = UPars.CheckParams()
-			if err_ == nil {
-				U.SetLogin(UPars.Login)
-				U.SetPassword(UPars.Password)
-				US.UR.Update(U)
-			} else {
-				return err_
-			}
-		}
+		return ents.User{}, fmt.Errorf(my_errors.ErrAlreadyExists)
 	}
-	return nil
-}
-
-func (US *UserService) Delete(id_ string) error {
 	var errGet error
 	var U ents.User
 	U, errGet = US.GetById(id_)
 	if errGet != nil {
-		return errGet
-	} else {
-		return US.UR.Delete(U)
+		return ents.User{}, errGet
 	}
+	err := validation.CheckUserAddParams(UPars)
+	if err != nil {
+		return ents.User{}, err
+	}
+	U.SetLogin(UPars.Login)
+	U.SetPassword(UPars.Password)
+
+	return US.UR.Update(U)
+}
+
+func (US *UserService) Delete(id_ string) (ents.User, error) {
+	var errGet error
+	var U ents.User
+	U, errGet = US.GetById(id_)
+	if errGet != nil {
+		return ents.User{}, errGet
+	}
+	return US.UR.Delete(U)
 }
 func (US *UserService) GetAll() ([]ents.User, error) {
 	Users, err := US.UR.Select()
-	if !err {
-		return nil, fmt.Errorf("не удалось получить список всех пользователей")
-	} else {
-		return Users, nil
+	if err != nil {
+		return nil, fmt.Errorf("не удалось получить список всех пользователей: %s", err)
 	}
+	return Users, nil
 }
 func (US *UserService) GetById(id_ string) (ents.User, error) {
 	sid, err := strconv.Atoi(id_)
 	id := uint64(sid)
-	var U ents.User
 	if err != nil {
-		return U, fmt.Errorf("некорректный id")
-	} else {
-		if !US.ExistsById(id) {
-			return U, fmt.Errorf(my_errors.ErrNotExists)
-		} else {
-			var err_ bool
-			U, err_ = US.UR.SelectById(id)
-			if !err_ {
-				return U, fmt.Errorf("не удалось получить пользователся по id")
-			}
-		}
+		return ents.User{}, fmt.Errorf("некорректный id")
+	}
+	if !US.ExistsById(id) {
+		return ents.User{}, fmt.Errorf(my_errors.ErrNotExists)
+	}
+	U, err := US.UR.SelectById(id)
+	if err != nil {
+		return U, fmt.Errorf("не удалось получить пользователся по id:  %w", my_errors.ErrorNotExists)
 	}
 	return U, nil
 }
 
 func (US *UserService) GetByLogin(name_ string) (ents.User, error) {
-	var U ents.User
+
 	if !US.ExistsByLogin(name_) {
-		return U, fmt.Errorf(my_errors.ErrNotExists)
-	} else {
-		var err_ bool
-		U, err_ = US.UR.SelectByLogin(name_)
-		if !err_ {
-			return U, fmt.Errorf("не удалось получить пользователся по логину")
-		}
+		return ents.User{}, fmt.Errorf(my_errors.ErrNotExists)
+	}
+	U, err := US.UR.SelectByLogin(name_)
+	if err != nil {
+		return U, fmt.Errorf("не удалось получить пользователся по логину: %w", my_errors.ErrorNotExists)
 	}
 	return U, nil
 }
-func (US *UserService) Donate(U *ents.User, DP chk.UserDonateParams) error {
 
-	U.Balance -= DP.Sum_of_money
-	U.CharitySum += DP.Sum_of_money
-	if DP.IsClosedFoundrising {
+// проверка формата денег и логики самих денег будет на уровне controllers, сюда приходят уже проверенные деньги
+func (US *UserService) Donate(U *ents.User, sum float64) error {
+
+	U.Balance -= sum
+	U.CharitySum += sum
+	/*if DP.IsClosedFoundrising {
 		U.ClosedFingAmount += 1
-	}
-	US.UR.Update(*U)
-	return nil
+	}*/
+	_, err := US.UR.Update(*U)
+	return err
 }
 
 func (US *UserService) ReplenishBalance(U *ents.User, sum float64) error {
-	var err error
-	if err != nil {
-		return fmt.Errorf("не удалось пополнить баланс")
-	} else {
-		U.Balance += sum
-	}
-	US.UR.Update(*U)
-	return nil
+	U.Balance += sum
+
+	_, err := US.UR.Update(*U)
+	return err
 }

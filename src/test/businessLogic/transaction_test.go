@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	chk "github.com/sabrs0/bmstu-web/src/internal/business/checker"
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 	servs "github.com/sabrs0/bmstu-web/src/internal/business/services"
+	chk "github.com/sabrs0/bmstu-web/src/internal/business/validation"
 )
 
 func TestTransactionServiceAdd(t *testing.T) {

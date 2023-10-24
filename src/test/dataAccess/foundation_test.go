@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
-	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories"
+	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories/gorm"
 )
 
 func TestFoundationInsert(t *testing.T) {
@@ -20,7 +20,7 @@ func TestFoundationInsert(t *testing.T) {
 func TestFoundationUpdate(t *testing.T) {
 	f := ents.Foundation{
 		Id:      2000,
-		Country: "USA",
+		Country: "США",
 	}
 	repo := repos.NewFoundationRepository(mockDB)
 	err := repo.Update(f)
@@ -29,7 +29,7 @@ func TestFoundationUpdate(t *testing.T) {
 	}
 	f = ents.Foundation{
 		Id:      1000,
-		Country: "USA",
+		Country: "США",
 	}
 	err = repo.Update(f)
 	if err != nil {
@@ -39,7 +39,7 @@ func TestFoundationUpdate(t *testing.T) {
 func TestFoundationDelete(t *testing.T) {
 	f := ents.Foundation{
 		Id:      2000,
-		Country: "USA",
+		Country: "США",
 	}
 	repo := repos.NewFoundationRepository(mockDB)
 	err := repo.Delete(f)
@@ -48,7 +48,7 @@ func TestFoundationDelete(t *testing.T) {
 	}
 	f = ents.Foundation{
 		Id:      1000,
-		Country: "USA",
+		Country: "США",
 	}
 	err = repo.Delete(f)
 	if err != nil {
@@ -73,7 +73,7 @@ func TestFoundationSelectById(t *testing.T) {
 func TestFoundationSelectByLogin(t *testing.T) {
 
 	repo := repos.NewFoundationRepository(mockDB)
-	_, isOk := repo.SelectByLogin("USA123")
+	_, isOk := repo.SelectByLogin("США123")
 	if !isOk {
 		t.Errorf("Cannot Select, some trouble\n")
 	}
@@ -87,7 +87,7 @@ func TestFoundationSelectByName(t *testing.T) {
 }
 func TestFoundationSelectByCountry(t *testing.T) {
 	repo := repos.NewFoundationRepository(mockDB)
-	ans, isOk := repo.SelectByCountry("USA")
+	ans, isOk := repo.SelectByCountry("США")
 	if (!isOk && len(ans) != 0) || (isOk && len(ans) == 0) {
 		t.Errorf("Cannot Select, some trouble\n")
 	}

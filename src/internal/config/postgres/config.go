@@ -17,7 +17,7 @@ type Config struct {
 }
 
 func (c *Config) String() string {
-	return "host=" + c.Host + "user=" + c.User + "password=" + c.Password + "dbname=" + c.DbName + "port=" + c.Port + "sslmode=" + c.SslMode
+	return "host=" + c.Host + " user=" + c.User + " password=" + c.Password + " dbname=" + c.DbName + " port=" + c.Port + " sslmode=" + c.SslMode
 }
 func MustLoad() *Config {
 	cfgPath := os.Getenv("FND_DB_CFG_PATH")

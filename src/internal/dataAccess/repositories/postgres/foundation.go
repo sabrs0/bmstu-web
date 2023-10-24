@@ -15,12 +15,14 @@ type FoundationRepository struct {
 func NewFoundationRepository(db_ *sql.DB) *FoundationRepository {
 	return &FoundationRepository{DB: db_}
 }
-func (FR *FoundationRepository) Insert(F ents.Foundation) error {
+func (FR *FoundationRepository) Insert(F ents.Foundation) (ents.Foundation, error) {
 	var LastId uint64
 	row := FR.DB.QueryRow("SELECT id from foundation_tab ORDER BY id DESC LIMIT 1")
 	err := row.Scan(&LastId)
 	if err != nil {
-		return err
+		if err != sql.ErrNoRows {
+			return ents.Foundation{}, err
+		}
 	}
 	_, err = FR.DB.Exec(`insert into foundation_tab(
 		id, 
@@ -48,22 +50,20 @@ func (FR *FoundationRepository) Insert(F ents.Foundation) error {
 		F.Login,
 	)
 	if err != nil {
-		return fmt.Errorf("error in insert Foundation repo")
-	} else {
-		return nil
+		return ents.Foundation{}, fmt.Errorf("error in insert Foundation repo")
 	}
+	return F, nil
 }
 
-func (FR *FoundationRepository) Delete(F ents.Foundation) error {
+func (FR *FoundationRepository) Delete(F ents.Foundation) (ents.Foundation, error) {
 	_, err := FR.DB.Exec("delete from foundation_tab where id = $1", F.Id)
 	if err != nil {
-		return fmt.Errorf("error in Delete Foundation repo")
-	} else {
-		return nil
+		return ents.Foundation{}, fmt.Errorf("error in Delete Foundation repo")
 	}
+	return F, nil
 }
 
-func (FR *FoundationRepository) Update(F ents.Foundation) error {
+func (FR *FoundationRepository) Update(F ents.Foundation) (ents.Foundation, error) {
 	_, err := FR.DB.Exec(`update foundation_tab set 
 	name = $1, 
 	password = $2, 
@@ -87,18 +87,18 @@ func (FR *FoundationRepository) Update(F ents.Foundation) error {
 		F.Login,
 		F.Id)
 	if err != nil {
-		return fmt.Errorf("error in Update foundation_tab repo")
-	} else {
-		return nil
+		return ents.Foundation{}, fmt.Errorf("error in Update foundation_tab repo")
 	}
+	return F, nil
 }
 
-func (FR *FoundationRepository) Select() ([]ents.Foundation, bool) {
+func (FR *FoundationRepository) Select() ([]ents.Foundation, error) {
 	var foundation_tab []ents.Foundation
-	//result := FR.DB.Table("foundation_tab").Order("ID").Find(&foundation_tab)
 	rows, err := FR.DB.Query("select * from foundation_tab")
 	if err != nil {
-		return nil, false
+		if err != sql.ErrNoRows {
+			return nil, err
+		}
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -115,14 +115,14 @@ func (FR *FoundationRepository) Select() ([]ents.Foundation, bool) {
 			&F.Login,
 		)
 		if err != nil {
-			return nil, false
+			return nil, err
 		}
 		foundation_tab = append(foundation_tab, F)
 	}
 
-	return foundation_tab, (len(foundation_tab) != 0)
+	return foundation_tab, nil
 }
-func (FR *FoundationRepository) SelectById(id uint64) (ents.Foundation, bool) {
+func (FR *FoundationRepository) SelectById(id uint64) (ents.Foundation, error) {
 	var F ents.Foundation
 	row := FR.DB.QueryRow("select * from foundation_tab where id = $1", id)
 	err := row.Scan(&F.Id,
@@ -136,12 +136,12 @@ func (FR *FoundationRepository) SelectById(id uint64) (ents.Foundation, bool) {
 		&F.Country,
 		&F.Login)
 	if err != nil {
-		return ents.Foundation{}, false
+		return F, err
 	}
-	return F, true
+	return F, nil
 }
 
-func (FR *FoundationRepository) SelectByLogin(name string) (ents.Foundation, bool) {
+func (FR *FoundationRepository) SelectByLogin(name string) (ents.Foundation, error) {
 	var F ents.Foundation
 	row := FR.DB.QueryRow("select * from foundation_tab where login = $1", name)
 	err := row.Scan(&F.Id,
@@ -155,11 +155,11 @@ func (FR *FoundationRepository) SelectByLogin(name string) (ents.Foundation, boo
 		&F.Country,
 		&F.Login)
 	if err != nil {
-		return ents.Foundation{}, false
+		return F, err
 	}
-	return F, true
+	return F, nil
 }
-func (FR *FoundationRepository) SelectByName(name string) (ents.Foundation, bool) {
+func (FR *FoundationRepository) SelectByName(name string) (ents.Foundation, error) {
 	var F ents.Foundation
 	row := FR.DB.QueryRow("select * from foundation_tab where name = $1", name)
 	err := row.Scan(&F.Id,
@@ -173,16 +173,17 @@ func (FR *FoundationRepository) SelectByName(name string) (ents.Foundation, bool
 		&F.Country,
 		&F.Login)
 	if err != nil {
-		return ents.Foundation{}, false
+		return F, err
 	}
-	return F, true
+	return F, nil
 }
-func (FR *FoundationRepository) SelectByCountry(country string) ([]ents.Foundation, bool) {
+func (FR *FoundationRepository) SelectByCountry(country string) ([]ents.Foundation, error) {
 	var foundation_tab []ents.Foundation
-	//result := FR.DB.Table("foundation_tab").Order("ID").Find(&foundation_tab)
 	rows, err := FR.DB.Query("select * from foundation_tab where country = $1", country)
 	if err != nil {
-		return nil, false
+		if err != sql.ErrNoRows {
+			return nil, err
+		}
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -199,10 +200,11 @@ func (FR *FoundationRepository) SelectByCountry(country string) ([]ents.Foundati
 			&F.Login,
 		)
 		if err != nil {
-			return nil, false
+			return foundation_tab, err
+
 		}
 		foundation_tab = append(foundation_tab, F)
 	}
 
-	return foundation_tab, (len(foundation_tab) != 0)
+	return foundation_tab, nil
 }

@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"testing"
 
-	chk "github.com/sabrs0/bmstu-web/src/internal/business/checker"
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 	servs "github.com/sabrs0/bmstu-web/src/internal/business/services"
+	chk "github.com/sabrs0/bmstu-web/src/internal/business/validation"
 )
 
 func TestFoundationServiceAdd(t *testing.T) {
@@ -16,17 +16,17 @@ func TestFoundationServiceAdd(t *testing.T) {
 			Id:       1,
 			Name:     "Foundation",
 			Password: "123",
-			Country:  "Russia",
+			Country:  "Россия",
 			Login:    "Foundation123",
 		},
 	}
 	serv := servs.NewFoundationService(NewFoundationRepMock(Foundations))
-	pars := chk.NewFoundationMainParams("Foundation123", "123", "F", "Russia")
+	pars := chk.NewFoundationMainParams("Foundation123", "123", "F", "Россия")
 	err := serv.Add(pars)
 	if err == nil {
 		t.Errorf("Shoud be error, but err is nil\n")
 	}
-	pars = chk.NewFoundationMainParams("Foundation124", "123", "F", "Russia")
+	pars = chk.NewFoundationMainParams("Foundation124", "123", "F", "Россия")
 	err = serv.Add(pars)
 	if err != nil {
 		t.Errorf("Shoud be nil, but err is %s\n", err)
@@ -38,17 +38,17 @@ func TestFoundationServiceUpdate(t *testing.T) {
 			Id:       1,
 			Name:     "Foundation",
 			Password: "123",
-			Country:  "Russia",
+			Country:  "Россия",
 			Login:    "Foundation123",
 		},
 	}
 	serv := servs.NewFoundationService(NewFoundationRepMock(Foundations))
-	pars := chk.NewFoundationMainParams("Foundation123", "123", "F", "Russia")
+	pars := chk.NewFoundationMainParams("Foundation123", "123", "F", "Россия")
 	err := serv.Update("0", pars)
 	if err == nil {
 		t.Errorf("Shoud be error, but err is nil\n")
 	}
-	pars = chk.NewFoundationMainParams("Foundation125", "123", "F", "Russia")
+	pars = chk.NewFoundationMainParams("Foundation125", "123", "F", "Россия")
 	err = serv.Update("1", pars)
 	if err != nil {
 		t.Errorf("Shoud be nil, but err is %s\n", err)
@@ -60,7 +60,7 @@ func TestFoundationServiceGetAll(t *testing.T) {
 			Id:       1,
 			Name:     "Foundation",
 			Password: "123",
-			Country:  "Russia",
+			Country:  "Россия",
 			Login:    "Foundation123",
 		},
 	}
@@ -79,7 +79,7 @@ func TestFoundationServiceGetById(t *testing.T) {
 			Id:       1,
 			Name:     "Foundation",
 			Password: "123",
-			Country:  "Russia",
+			Country:  "Россия",
 			Login:    "Foundation123",
 		},
 	}
@@ -98,7 +98,7 @@ func TestFoundationServiceGetBylogin(t *testing.T) {
 			Id:       1,
 			Name:     "Foundation",
 			Password: "123",
-			Country:  "Russia",
+			Country:  "Россия",
 			Login:    "Foundation123",
 		},
 	}
@@ -121,7 +121,7 @@ func TestFoundationServiceDonate(t *testing.T) {
 			Id:           1,
 			Name:         "Foundation",
 			Password:     "123",
-			Country:      "Russia",
+			Country:      "Россия",
 			Login:        "Foundation123",
 			Fund_balance: 110.00,
 		},

@@ -1,13 +1,16 @@
 package entities
 
+type TransactionAdd struct {
+	From_essence_type bool    `json:"from_essence_type"`
+	From_id           uint64  `gorm:"not null" json:"from_id"`
+	To_essence_type   bool    `json:"to_essence_type"`
+	Sum_of_money      float64 `json:"sum_of_money"`
+	Comment           string  `json:"comment"`
+	To_id             uint64  `gorm:"not null" json:"to_id"`
+}
 type Transaction struct {
-	Id                uint64 `gorm:"primaryKey;not null"`
-	From_essence_type bool
-	From_id           uint64 `gorm:"not null"`
-	To_essence_type   bool
-	Sum_of_money      float64
-	Comment           string
-	To_id             uint64 `gorm:"not null"`
+	Id uint64 `gorm:"primaryKey;not null" json:"id"`
+	TransactionAdd
 }
 
 func NewTransaction() Transaction {

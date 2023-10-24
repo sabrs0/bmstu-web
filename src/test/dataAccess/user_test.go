@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
-	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories"
+	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories/gorm"
 )
 
 func TestUserInsert(t *testing.T) {

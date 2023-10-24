@@ -3,29 +3,24 @@ package controllers
 import (
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 	servs "github.com/sabrs0/bmstu-web/src/internal/business/services"
-	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories/gorm"
 
 	"strconv"
-
-	"gorm.io/gorm"
 )
 
 type TransactionController struct {
-	TS  servs.ITransactionService
-	FS  servs.IFoundationService
-	FgS servs.IFoundrisingService
-	US  servs.IUserService
+	TS  servs.TransactionService
+	FS  servs.FoundationService
+	FgS servs.FoundrisingService
+	US  servs.UserService // индусский код
 }
 
-func NewTransactionController(db *gorm.DB, fs servs.IFoundationService, fgs servs.IFoundrisingService,
-	us servs.IUserService) *TransactionController {
-	TR := repos.NewTransactionRepository(db)
-	tS := servs.NewTransactionService(TR)
+func NewTransactionController(FdR servs.IFoundationRepository, FgR servs.IFoundrisingRepository,
+	UR servs.IUserRepository, TR servs.ITransactionRepository) *TransactionController {
 	return &TransactionController{
-		TS:  tS,
-		FS:  fs,
-		FgS: fgs,
-		US:  us,
+		TS:  *servs.NewTransactionService(TR),
+		FS:  *servs.NewFoundationService(FdR),
+		FgS: *servs.NewFoundrisingService(FgR),
+		US:  *servs.NewUserService(UR),
 	}
 }
 
@@ -38,25 +33,28 @@ func (TC *TransactionController) GetByID(id_ string) (ents.Transaction, error) {
 func (TC *TransactionController) GetFromId(type_ string, id_ string) ([]ents.Transaction, error) {
 	booltype, err := strconv.ParseBool(type_)
 	var Transactions []ents.Transaction
-	if err == nil {
-		Transactions, err = TC.TS.GetFromId(booltype, id_, TC.FS, TC.US)
+	if err != nil {
+		return nil, err
 	}
+	Transactions, err = TC.TS.GetFromId(booltype, id_, &TC.FS, &TC.US)
 	return Transactions, err
 }
 func (TC *TransactionController) GetToId(type_ string, id_ string) ([]ents.Transaction, error) {
 	booltype, err := strconv.ParseBool(type_)
 	var Transactions []ents.Transaction
-	if err == nil {
-		Transactions, err = TC.TS.GetToId(booltype, id_, TC.FS, TC.FgS)
+	if err != nil {
+		return nil, err
 	}
+	Transactions, err = TC.TS.GetToId(booltype, id_, &TC.FS, &TC.FgS)
+
 	return Transactions, err
 }
 
-func (TC *TransactionController) Delete(id string) error {
+func (TC *TransactionController) Delete(id string) (ents.Transaction, error) {
 	return TC.TS.Delete(id)
 
 }
 
 func (TC *TransactionController) GetFoundrisingPhilantropIds(id_ string) ([]uint64, error) {
-	return TC.TS.GetFoundrisingPhilantropIds(id_, TC.FgS)
+	return TC.TS.GetFoundrisingPhilantropIds(id_, &TC.FgS)
 }

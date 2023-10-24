@@ -1,3 +1,3 @@
-\copy USER_TAB from 'C:/Projects/Go/src/db_course/sql_scripts/mockData/USR_TAB.csv' csv header ;
-\copy foundation_TAB from 'C:/Projects/Go/src/db_course/sql_scripts/mockData/FOUNDAT_TAB.csv' csv header ;
-\copy foundrising_TAB from 'C:/Projects/Go/src/db_course/sql_scripts/mockData/FOUNDRIS_TAB.csv' csv header ;
+\copy USER_TAB from '/home/sersab/go_projects/src/github.com/sabrs0/bmstu-web/src/internal/sql_scripts/mockData/USR_TAB.csv' csv header ;
+\copy foundation_TAB from '/home/sersab/go_projects/src/github.com/sabrs0/bmstu-web/src/internal/sql_scripts/mockData/FOUNDAT_TAB.csv' csv header ;
+\copy foundrising_TAB from '/home/sersab/go_projects/src/github.com/sabrs0/bmstu-web/src/internal/sql_scripts/mockData/FOUNDRIS_TAB.csv' csv header ;

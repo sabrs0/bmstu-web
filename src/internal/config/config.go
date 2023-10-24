@@ -9,13 +9,13 @@ import (
 )
 
 type Config struct {
-	Env string `yaml:"env" env-default:"local"` // env-required не запускает, если не задали это поле
-	//StoragePath string `yaml:"storage_path" env-required:"true"`
+	Env        string `yaml:"env" env-default:"local"` // env-required не запускает, если не задали это поле
+	HTTPServer `yaml:"http_server"`
 }
 type HTTPServer struct {
-	address     string        `yaml:"address" env-default:"localhost:8080"`
-	timeout     time.Duration `yaml:"timeout" env-default:"4s"`
-	idleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
+	Address     string        `yaml:"address" env-default:"localhost:8080"`
+	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
+	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
 }
 
 func MustLoad() *Config { //приставка must - я так помечаю функции, которые не возвращают ошибки, а фаталятся

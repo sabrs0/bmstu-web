@@ -314,13 +314,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingPost"
+              "$ref": "#/components/schemas/FoundrisingPut"
           text/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingPost"
+              "$ref": "#/components/schemas/FoundrisingPut"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingPost"
+              "$ref": "#/components/schemas/FoundrisingPut"
       responses:
         '200':
           description: Success
@@ -358,13 +358,13 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingPost"
+              "$ref": "#/components/schemas/FoundrisingPut"
           text/json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingPost"
+              "$ref": "#/components/schemas/FoundrisingPut"
           application/*+json:
             schema:
-              "$ref": "#/components/schemas/FoundrisingPost"
+              "$ref": "#/components/schemas/FoundrisingPut"
       responses:
         '200':
           description: Success
@@ -779,12 +779,15 @@ components:
     FoundationDonate:
       type: object
       properties:
-        found_id:
-          type: integer
-          format: int32
+        foundrising_id:
+          type: string
+          nullable: true
         sum_of_money:
           type: integer
           format: int32
+        comm:
+          type: string
+          nullable: true
       additionalProperties: false
 
         
@@ -832,6 +835,16 @@ components:
           type: string
           nullable: false
       additionalProperties: false
+    FoundrisingPut:
+      type: object
+      properties:
+        reqSum:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: false
+      additionalProperties: false
     User:
       type: object
       properties:
@@ -867,6 +880,8 @@ components:
         sum_of_money:
           type: integer
           format: int32
+        comm:
+          type: string
       additionalProperties: false
     Login:
       type: object

@@ -6,87 +6,77 @@ import (
 	"strconv"
 	"time"
 
-	chk "github.com/sabrs0/bmstu-web/src/internal/business/checker"
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
-	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories"
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )
 
-type IFoundrisingService interface {
-	Add(FPars chk.FoundrisingMainParams) error
-	Update(id_ string, FPars chk.FoundrisingMainParams) error
-	Delete(id_ string) error
-	GetAll() ([]ents.Foundrising, error)
-	GetById(id_ string) (ents.Foundrising, error)
-	GetByCreateDate(date string) ([]ents.Foundrising, error)
-	GetByCloseDate(date string) ([]ents.Foundrising, error)
-	GetByFoundId(id_ string) ([]ents.Foundrising, error)
-	GetByFoundIdActive(id_ string) ([]ents.Foundrising, error)
-	GetByIdAndFoundId(id_ string, found_id_ string) (ents.Foundrising, error)
-	ExistsById(id uint64) bool
-	AcceptDonate(id_ string, sum float64, isNewPhil bool) (float64, error)
-	GetRepo() repos.IFoundrisingRepository
+type IFoundrisingRepository interface {
+	Insert(F ents.Foundrising) (ents.Foundrising, error)
+	Update(F ents.Foundrising) (ents.Foundrising, error)
+	Delete(F ents.Foundrising) (ents.Foundrising, error)
+	Select() ([]ents.Foundrising, error)
+	SelectById(id uint64) (ents.Foundrising, error)
+	SelectByFoundId(id uint64) ([]ents.Foundrising, error)
+	SelectByCreateDate(date string) ([]ents.Foundrising, error)
+	SelectByFoundIdActive(id uint64) ([]ents.Foundrising, error)
+	SelectByCloseDate(date string) ([]ents.Foundrising, error)
+	SelectByIdAndFoundId(id_ uint64, found_id_ uint64) (ents.Foundrising, error)
+	//GetDB() *gorm.DB
 }
 
 type FoundrisingService struct {
-	FR repos.IFoundrisingRepository
+	FR IFoundrisingRepository
 }
 
-func NewFoundrisingService(frepo repos.IFoundrisingRepository) *FoundrisingService {
+func NewFoundrisingService(frepo IFoundrisingRepository) *FoundrisingService {
 	return &FoundrisingService{FR: frepo}
 }
-func (FS *FoundrisingService) GetRepo() repos.IFoundrisingRepository {
+func (FS *FoundrisingService) GetRepo() IFoundrisingRepository {
 	return FS.FR
 }
 
 func (FS *FoundrisingService) ExistsById(id uint64) bool {
 	_, result := FS.FR.SelectById(id)
-	return result
+	return (result == nil)
 }
 
-func (FS *FoundrisingService) Add(FPars chk.FoundrisingMainParams) error {
+func (FS *FoundrisingService) Add(FPars ents.FoundrisingAdd) (ents.Foundrising, error) {
 
 	var U ents.Foundrising = ents.NewFoundrising()
-	U.SetReqSum(FPars.ReqSum)
-	U.SetCreateDate(FPars.CreateDate)
-	U.SetDescription(FPars.Descr)
+	floatSum, _ := strconv.ParseFloat(FPars.Required_sum, 64)
+	U.SetReqSum(floatSum)
+	U.SetCreateDate(FPars.Creation_date)
+	U.SetDescription(FPars.Description)
 	U.SetFoundId(FPars.Found_id)
-	err := FS.FR.Insert(U)
 
-	return err
+	return FS.FR.Insert(U)
 }
 
-func (FS *FoundrisingService) Update(id_ string, FPars chk.FoundrisingMainParams) error {
+func (FS *FoundrisingService) Update(id_ string, FPars ents.FoundrisingPut) (ents.Foundrising, error) {
 
-	var errGet error
-	var U ents.Foundrising
-	U, errGet = FS.GetById(id_)
-	if errGet != nil {
-		return errGet
-	} else {
-		U.SetDescription(FPars.Descr)
-		U.SetReqSum(FPars.ReqSum)
-		FS.FR.Update(U)
+	U, err := FS.GetById(id_)
+	if err != nil {
+		return ents.Foundrising{}, err
 	}
-	return nil
+	U.SetDescription(FPars.Description)
+	floatSum, _ := strconv.ParseFloat(FPars.Required_sum, 64)
+
+	U.SetReqSum(floatSum)
+
+	return FS.FR.Update(U)
 }
 
-func (FS *FoundrisingService) Delete(id_ string) error {
-	var errGet error
-	var U ents.Foundrising
-	U, errGet = FS.GetById(id_)
-	if errGet != nil {
-		return errGet
-	} else {
-		FS.FR.Delete(U)
+func (FS *FoundrisingService) Delete(id_ string) (ents.Foundrising, error) {
+	U, err := FS.GetById(id_)
+	if err != nil {
+		return ents.Foundrising{}, err
 	}
-	return nil
+	return FS.FR.Delete(U)
 }
 func (FS *FoundrisingService) GetAll() ([]ents.Foundrising, error) {
 	Foundrisings, err := FS.FR.Select()
-
-	if !err {
-		return nil, fmt.Errorf("не удалось получить список всех сборов")
+	if err != nil {
+		return nil, fmt.Errorf("не удалось получить список всех сборов: %s", err)
 	} else {
 		return Foundrisings, nil
 	}
@@ -97,16 +87,13 @@ func (FS *FoundrisingService) GetById(id_ string) (ents.Foundrising, error) {
 	var U ents.Foundrising
 	if err != nil {
 		return U, fmt.Errorf("некорректный id")
-	} else {
-		if !FS.ExistsById(id) {
-			return U, fmt.Errorf("несуществующий id")
-		} else {
-			var err_ bool
-			U, err_ = FS.FR.SelectById(id)
-			if !err_ {
-				return U, fmt.Errorf("не удалось получить сбор по id")
-			}
-		}
+	}
+	if !FS.ExistsById(id) {
+		return U, fmt.Errorf("несуществующий id %w", my_errors.ErrorNotExists)
+	}
+	U, err = FS.FR.SelectById(id)
+	if err != nil {
+		return U, fmt.Errorf("не удалось получить сбор по id: %s", err)
 	}
 	return U, nil
 }
@@ -114,15 +101,12 @@ func (FS *FoundrisingService) GetById(id_ string) (ents.Foundrising, error) {
 func (FS *FoundrisingService) GetByFoundId(id_ string) ([]ents.Foundrising, error) {
 	sid, err := strconv.Atoi(id_)
 	id := uint64(sid)
-	var U []ents.Foundrising
 	if err != nil {
-		return U, fmt.Errorf("некорректный id")
-	} else {
-		var err_ bool
-		U, err_ = FS.FR.SelectByFoundId(id)
-		if !err_ {
-			return U, fmt.Errorf("не удалось получить сбор по id фонда")
-		}
+		return nil, fmt.Errorf("некорректный id %w", my_errors.ErrorNotExists)
+	}
+	U, err := FS.FR.SelectByFoundId(id)
+	if err != nil {
+		return U, fmt.Errorf("не удалось получить сбор по id фонда: %s", err)
 	}
 	return U, nil
 }
@@ -132,16 +116,15 @@ func (FS *FoundrisingService) GetByIdAndFoundId(id_ string, found_id_ string) (e
 	id := uint64(sid)
 
 	s_found_id, err := strconv.Atoi(found_id_)
-	found_id := uint64(s_found_id)
+
 	var U ents.Foundrising
 	if err != nil || err1 != nil {
 		return U, fmt.Errorf("некорректный id")
-	} else {
-		var err_ bool
-		U, err_ = FS.FR.SelectByIdAndFoundId(id, found_id)
-		if !err_ {
-			return U, fmt.Errorf("не удалось получить фонд данного сбора")
-		}
+	}
+	found_id := uint64(s_found_id)
+	U, err = FS.FR.SelectByIdAndFoundId(id, found_id)
+	if err != nil {
+		return U, fmt.Errorf("не удалось получить фонд данного сбора: %s", err)
 	}
 	return U, nil
 }
@@ -149,35 +132,29 @@ func (FS *FoundrisingService) GetByIdAndFoundId(id_ string, found_id_ string) (e
 func (FS *FoundrisingService) GetByFoundIdActive(id_ string) ([]ents.Foundrising, error) {
 	sid, err := strconv.Atoi(id_)
 	id := uint64(sid)
-	var U []ents.Foundrising
 	if err != nil {
-		return U, fmt.Errorf("некорректный id")
-	} else {
-		var err_ bool
-		U, err_ = FS.FR.SelectByFoundIdActive(id)
-		if !err_ {
-			return U, fmt.Errorf(my_errors.ErrNotExistsFoundrising)
-		}
+		return nil, fmt.Errorf("некорректный id")
 	}
+	U, err := FS.FR.SelectByFoundIdActive(id)
+	if err != nil {
+		return U, fmt.Errorf(my_errors.ErrNotExistsFoundrising)
+	}
+
 	return U, nil
 }
 
 func (FS *FoundrisingService) GetByCreateDate(date string) ([]ents.Foundrising, error) {
-	var U []ents.Foundrising
-	var err_ bool
-	U, err_ = FS.FR.SelectByCreateDate(date)
-	if !err_ {
-		return U, fmt.Errorf("не удалось получить сбор по id по дате создания")
+	U, err := FS.FR.SelectByCreateDate(date)
+	if err != nil {
+		return U, fmt.Errorf("не удалось получить сбор по id по дате создания: %s", err)
 	}
 	return U, nil
 }
 
 func (FS *FoundrisingService) GetByCloseDate(date string) ([]ents.Foundrising, error) {
-	var U []ents.Foundrising
-	var err_ bool
-	U, err_ = FS.FR.SelectByCloseDate(date)
-	if !err_ {
-		return U, fmt.Errorf("не удалось получить сбор по дате закрытия")
+	U, err := FS.FR.SelectByCloseDate(date)
+	if err != nil {
+		return U, fmt.Errorf("не удалось получить сбор по дате закрытия: %s", err)
 	}
 	return U, nil
 }
@@ -190,24 +167,26 @@ func (FS *FoundrisingService) AcceptDonate(id_ string, sum float64, isNewPhil bo
 	F, err = FS.GetById(id_)
 	if err != nil {
 		return remainder, err
-	} else {
-		if isNewPhil {
-			F.Philantrops_amount += 1
-		}
-		if F.Current_sum+sum > F.Required_sum {
-			remainder = F.Current_sum + sum - F.Required_sum
-			F.Closing_date.String = time.Now().Format(ents.DateFormat)
-			F.Closing_date.Valid = true
-			F.Current_sum = F.Required_sum
-		} else if math.Abs(F.Current_sum+sum-F.Required_sum) <= 1e-9 {
-			F.Closing_date.String = time.Now().Format(ents.DateFormat)
-			F.Closing_date.Valid = true
-			F.Current_sum = F.Required_sum
-			remainder = 0.00
-		} else {
-			F.Current_sum += sum
-		}
 	}
-	FS.FR.Update(F)
+	if isNewPhil {
+		F.Philantrops_amount += 1
+	}
+	if F.Current_sum+sum > F.Required_sum {
+		remainder = F.Current_sum + sum - F.Required_sum
+		F.Closing_date.String = time.Now().Format(ents.DateFormat)
+		F.Closing_date.Valid = true
+		F.Current_sum = F.Required_sum
+	} else if math.Abs(F.Current_sum+sum-F.Required_sum) <= 1e-9 {
+		F.Closing_date.String = time.Now().Format(ents.DateFormat)
+		F.Closing_date.Valid = true
+		F.Current_sum = F.Required_sum
+		remainder = 0.00
+	} else {
+		F.Current_sum += sum
+	}
+	_, err = FS.FR.Update(F)
+	if err != nil {
+		return 0.0, err
+	}
 	return remainder, nil
 }

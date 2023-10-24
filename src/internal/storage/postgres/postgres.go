@@ -9,15 +9,15 @@ import (
 )
 
 type Storage struct {
-	db *sql.DB
+	DB *sql.DB
 }
 
 func New() (*Storage, error) {
-	var op string = "storage.postgres.new"
+	const op string = "storage.postgres.new"
 	cfg := cfg.MustLoad()
 	db, err := sql.Open("postgres", cfg.String())
 	if err != nil {
 		return nil, fmt.Errorf("%s error: %s", op, err)
 	}
-	return &Storage{db: db}, nil
+	return &Storage{DB: db}, nil
 }

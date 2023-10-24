@@ -4,140 +4,118 @@ import (
 	"fmt"
 	"strconv"
 
-	chk "github.com/sabrs0/bmstu-web/src/internal/business/checker"
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
-	repos "github.com/sabrs0/bmstu-web/src/internal/dataAccess/repositories"
+	"github.com/sabrs0/bmstu-web/src/internal/business/validation"
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )
 
-type IFoundationService interface {
-	Add(FPars chk.FoundationMainParams) error
-	Update(id_ string, FPars chk.FoundationMainParams) error
-	Delete(id_ string) error
-	GetAll() ([]ents.Foundation, error)
-	GetById(id_ string) (ents.Foundation, error)
-	GetByLogin(id_ string) (ents.Foundation, error)
-	GetByName(name_ string) (ents.Foundation, error)
-	GetByCountry(country string) ([]ents.Foundation, error)
-	ExistsById(id uint64) bool
-	ExistsBylogin(name string) bool
-	Donate(F *ents.Foundation, DP chk.FoundationDonateParams) error
-	AcceptDonate(id_ string, sum float64) error
-	ReplenishBalance(U *ents.Foundation, sum float64) error
-	GetRepo() repos.IFoundationRepository
+type IFoundationRepository interface {
+	Insert(F ents.Foundation) (ents.Foundation, error)
+	Update(F ents.Foundation) (ents.Foundation, error)
+	Delete(F ents.Foundation) (ents.Foundation, error)
+	Select() ([]ents.Foundation, error)
+	SelectById(id uint64) (ents.Foundation, error)
+	SelectByLogin(name string) (ents.Foundation, error)
+	SelectByName(name string) (ents.Foundation, error)
+	SelectByCountry(country string) ([]ents.Foundation, error)
+	//GetDB() *gorm.DB
 }
 
 type FoundationService struct {
-	FR repos.IFoundationRepository //	FoundationRepository
+	FR IFoundationRepository //	FoundationRepository
 }
 
-func NewFoundationService(frepo repos.IFoundationRepository) *FoundationService {
+func NewFoundationService(frepo IFoundationRepository) *FoundationService {
 	return &FoundationService{FR: frepo}
 }
-func (FS *FoundationService) GetRepo() repos.IFoundationRepository {
+func (FS *FoundationService) GetRepo() IFoundationRepository {
 	return FS.FR
 }
 func (FS *FoundationService) ExistsById(id uint64) bool {
 	_, result := FS.FR.SelectById(id)
-	return result
+	return (result == nil)
 }
 func (FS *FoundationService) ExistsByLogin(name string) bool {
 	_, result := FS.FR.SelectByLogin(name)
-	return result
+	return (result == nil)
 }
 func (FS *FoundationService) ExistsByName(name string) bool {
 	_, result := FS.FR.SelectByName(name)
-	return result
+	return (result == nil)
 }
 
 func (FS *FoundationService) ExistsByCountry(country string) bool {
-	_, result := FS.FR.SelectByCountry(country)
-	return result
+	ans, err := FS.FR.SelectByCountry(country)
+	return (err == nil && len(ans) != 0)
 }
 
-func (FS *FoundationService) Add(FPars chk.FoundationMainParams) error {
+func (FS *FoundationService) Add(FPars ents.FoundationAdd) (ents.Foundation, error) {
 	if FS.ExistsByLogin(FPars.Login) {
-		return fmt.Errorf(my_errors.ErrAlreadyExists)
-	} else {
-		if chk.CheckCountry(FPars.Country) != nil {
-			return fmt.Errorf(my_errors.ErrCountry)
-		} else {
-			var F ents.Foundation = ents.NewFoundation()
-			var err_ error = FPars.CheckParams()
-			if err_ == nil {
-				F.SetLogin(FPars.Login)
-				F.SetPassword(FPars.Password)
-				F.SetCountry(FPars.Country)
-				F.SetName(FPars.Name)
-				FS.FR.Insert(F)
-			} else {
-				return err_
-			}
-		}
+		return ents.Foundation{}, my_errors.ErrorConflict
 	}
-	return nil
+	var F ents.Foundation = ents.NewFoundation()
+	var err_ error = validation.CheckFoundationAddParams(FPars)
+	if err_ != nil {
+		return ents.Foundation{}, err_
+	}
+	F.SetLogin(FPars.Login)
+	F.SetPassword(FPars.Password)
+	F.SetCountry(FPars.Country)
+	F.SetName(FPars.Name)
+
+	return FS.FR.Insert(F)
 }
 
-func (FS *FoundationService) Update(id_ string, FPars chk.FoundationMainParams) error {
+func (FS *FoundationService) Update(id_ string, FPars ents.FoundationAdd) (ents.Foundation, error) {
 	if FS.ExistsByLogin(FPars.Login) {
-		return fmt.Errorf(my_errors.ErrAlreadyExists)
-	} else {
-		var errGet error
-		var F ents.Foundation
-		F, errGet = FS.GetById(id_)
-		if errGet != nil {
-			return errGet
-		} else {
-			var err_ error = FPars.CheckParams()
-			if err_ == nil {
-				F.SetLogin(FPars.Login)
-				F.SetPassword(FPars.Password)
-				F.SetCountry(FPars.Country)
-				F.SetName(FPars.Name)
-				FS.FR.Update(F)
-			} else {
-				return err_
-			}
-		}
+		return ents.Foundation{}, fmt.Errorf(my_errors.ErrAlreadyExists)
 	}
-	return nil
-}
-
-func (FS *FoundationService) Delete(id_ string) error {
-	var errGet error
+	var err error
 	var F ents.Foundation
-	F, errGet = FS.GetById(id_)
-	if errGet != nil {
-		return errGet
-	} else {
-		return FS.FR.Delete(F)
+	F, err = FS.GetById(id_)
+	if err != nil {
+		return ents.Foundation{}, err
 	}
+	err = validation.CheckFoundationAddParams(FPars)
+	if err != nil {
+		return ents.Foundation{}, err
+	}
+	F.SetLogin(FPars.Login)
+	F.SetPassword(FPars.Password)
+	F.SetCountry(FPars.Country)
+	F.SetName(FPars.Name)
+
+	return FS.FR.Update(F)
+}
+
+func (FS *FoundationService) Delete(id_ string) (ents.Foundation, error) {
+	F, err := FS.GetById(id_)
+	if err != nil {
+		return ents.Foundation{}, err
+	}
+
+	return FS.FR.Delete(F)
 }
 func (FS *FoundationService) GetAll() ([]ents.Foundation, error) {
 	Foundations, err := FS.FR.Select()
-	if !err {
-		return nil, fmt.Errorf("не удалось получить список всех фондов")
-	} else {
-		return Foundations, nil
+	if err != nil {
+		return nil, fmt.Errorf("не удалось получить список всех фондов: %s", err)
 	}
+	return Foundations, nil
 }
 
 func (FS *FoundationService) GetById(id_ string) (ents.Foundation, error) {
 	sid, err := strconv.Atoi(id_)
 	id := uint64(sid)
-	var F ents.Foundation
 	if err != nil {
-		return F, fmt.Errorf("некорректный id")
-	} else {
-		if !FS.ExistsById(id) {
-			return F, fmt.Errorf(my_errors.ErrNotExists)
-		} else {
-			var err_ bool
-			F, err_ = FS.FR.SelectById(id)
-			if !err_ {
-				return F, fmt.Errorf("не удалось получить фонд по id")
-			}
-		}
+		return ents.Foundation{}, fmt.Errorf("некорректный id")
+	}
+	if !FS.ExistsById(id) {
+		return ents.Foundation{}, fmt.Errorf(my_errors.ErrNotExists)
+	}
+	F, err := FS.FR.SelectById(id)
+	if err != nil {
+		return F, fmt.Errorf("не удалось получить фонд по id: %s", err)
 	}
 	return F, nil
 }
@@ -146,10 +124,10 @@ func (FS *FoundationService) GetByLogin(name_ string) (ents.Foundation, error) {
 	if !FS.ExistsByLogin(name_) {
 		return F, fmt.Errorf(my_errors.ErrNotExists)
 	} else {
-		var err_ bool
-		F, err_ = FS.FR.SelectByLogin(name_)
-		if !err_ {
-			return F, fmt.Errorf("не удалось получить фонд по логину")
+		var err error
+		F, err = FS.FR.SelectByLogin(name_)
+		if err != nil {
+			return F, fmt.Errorf("не удалось получить фонд по логину: %s", err)
 		}
 	}
 	return F, nil
@@ -159,10 +137,10 @@ func (FS *FoundationService) GetByName(name_ string) (ents.Foundation, error) {
 	if !FS.ExistsByName(name_) {
 		return F, fmt.Errorf(my_errors.ErrNotExists)
 	} else {
-		var err_ bool
-		F, err_ = FS.FR.SelectByName(name_)
-		if !err_ {
-			return F, fmt.Errorf("не удалось получить фонд по названию")
+		var err error
+		F, err = FS.FR.SelectByName(name_)
+		if err != nil {
+			return F, fmt.Errorf("не удалось получить фонд по названию: %s", err)
 		}
 	}
 	return F, nil
@@ -170,27 +148,23 @@ func (FS *FoundationService) GetByName(name_ string) (ents.Foundation, error) {
 
 func (FS *FoundationService) GetByCountry(country string) ([]ents.Foundation, error) {
 	var F []ents.Foundation
-	if chk.CheckCountry(country) != nil {
+	if validation.CheckCountry(country) != nil {
 		return F, fmt.Errorf(my_errors.ErrCountry)
-	} else {
-		var err_ bool
-		F, err_ = FS.FR.SelectByCountry(country)
-		if !err_ {
-			return F, fmt.Errorf("не удалось получить фонд по стране")
-		}
+	}
+
+	F, err := FS.FR.SelectByCountry(country)
+	if err != nil {
+		return F, fmt.Errorf("не удалось получить фонд по стране" + err.Error())
 	}
 	return F, nil
 }
 
-func (FS *FoundationService) Donate(F *ents.Foundation, DP chk.FoundationDonateParams) error {
+func (FS *FoundationService) Donate(F *ents.Foundation, sum float64) error {
 
-	F.Fund_balance -= DP.Sum_of_money
-	F.Outcome_history += DP.Sum_of_money
-	if DP.IsClosedFoundrising {
-		F.ClosedFoundrisingAmount += 1
-		F.CurFoudrisingAmount -= 1
-	}
-	err := FS.FR.Update(*F)
+	F.Fund_balance -= sum
+	F.Outcome_history += sum
+
+	_, err := FS.FR.Update(*F)
 	return err
 }
 
@@ -200,21 +174,19 @@ func (FS *FoundationService) AcceptDonate(id_ string, sum float64) error {
 	var err error
 	F, err = FS.GetById(id_)
 	if err != nil {
-		return fmt.Errorf("фонду не удалось получить средства")
-	} else {
-		F.Fund_balance += sum
-		F.Income_history += sum
+		return fmt.Errorf("фонду не удалось получить средства: %s", err)
 	}
-	FS.FR.Update(F)
-	return nil
+	F.Fund_balance += sum
+	F.Income_history += sum
+	_, err = FS.FR.Update(F)
+	return err
 }
 func (FS *FoundationService) ReplenishBalance(U *ents.Foundation, sum float64) error {
 	var err error
 	if err != nil {
-		return fmt.Errorf("фонду не удалось пополнить баланс")
-	} else {
-		U.Fund_balance += sum
+		return fmt.Errorf("фонду не удалось пополнить баланс: %s", err)
 	}
-	FS.FR.Update(*U)
-	return nil
+	U.Fund_balance += sum
+	_, err = FS.FR.Update(*U)
+	return err
 }

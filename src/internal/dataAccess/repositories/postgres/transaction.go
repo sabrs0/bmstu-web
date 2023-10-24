@@ -14,12 +14,15 @@ type TransactionRepository struct {
 func NewTransactionRepository(db_ *sql.DB) *TransactionRepository {
 	return &TransactionRepository{DB: db_}
 }
-func (TR *TransactionRepository) Insert(T ents.Transaction) error {
+func (TR *TransactionRepository) Insert(T ents.Transaction) (ents.Transaction, error) {
 	var LastId uint64
 	row := TR.DB.QueryRow("SELECT id from transaction_tab ORDER BY id DESC LIMIT 1")
 	err := row.Scan(&LastId)
 	if err != nil {
-		return err
+		if err != sql.ErrNoRows {
+			return ents.Transaction{}, err
+		}
+
 	}
 	_, err = TR.DB.Exec(`insert into transaction_tab(
 		id, 
@@ -39,26 +42,26 @@ func (TR *TransactionRepository) Insert(T ents.Transaction) error {
 		T.To_id,
 	)
 	if err != nil {
-		return fmt.Errorf("error in insert Transaction repo")
-	} else {
-		return nil
+		return ents.Transaction{}, fmt.Errorf("error in insert Transaction repo")
 	}
+	return T, nil
 }
 
-func (TR *TransactionRepository) Delete(T ents.Transaction) error {
+func (TR *TransactionRepository) Delete(T ents.Transaction) (ents.Transaction, error) {
 	_, err := TR.DB.Exec("delete from transaction_tab where id = $1", T.Id)
 	if err != nil {
-		return fmt.Errorf("error in Delete transaction repo")
-	} else {
-		return nil
+		return ents.Transaction{}, fmt.Errorf("error in Delete transaction repo")
 	}
+	return T, nil
 }
 
-func (TR *TransactionRepository) Select() ([]ents.Transaction, bool) {
+func (TR *TransactionRepository) Select() ([]ents.Transaction, error) {
 	var transaction_tab []ents.Transaction
 	rows, err := TR.DB.Query("select * from transaction_tab")
 	if err != nil {
-		return nil, false
+		if err != sql.ErrNoRows {
+			return nil, err
+		}
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -72,14 +75,14 @@ func (TR *TransactionRepository) Select() ([]ents.Transaction, bool) {
 			&T.To_id,
 		)
 		if err != nil {
-			return nil, false
+			return nil, err
 		}
 		transaction_tab = append(transaction_tab, T)
 	}
 
-	return transaction_tab, (len(transaction_tab) != 0)
+	return transaction_tab, nil
 }
-func (TR *TransactionRepository) SelectById(id uint64) (ents.Transaction, bool) {
+func (TR *TransactionRepository) SelectById(id uint64) (ents.Transaction, error) {
 	var T ents.Transaction
 	row := TR.DB.QueryRow("select * from transaction_tab where id = $1", id)
 	err := row.Scan(&T.Id,
@@ -90,16 +93,18 @@ func (TR *TransactionRepository) SelectById(id uint64) (ents.Transaction, bool) 
 		&T.Comment,
 		&T.To_id)
 	if err != nil {
-		return ents.Transaction{}, false
+		return ents.Transaction{}, err
 	}
-	return T, true
+	return T, nil
 }
 
-func (TR *TransactionRepository) SelectFrom(type_ bool, id uint64) ([]ents.Transaction, bool) {
+func (TR *TransactionRepository) SelectFrom(type_ bool, id uint64) ([]ents.Transaction, error) {
 	var transaction_tab []ents.Transaction
 	rows, err := TR.DB.Query("select * from transaction_tab where from_essence_type = $1 and from_id = $2", type_, id)
 	if err != nil {
-		return nil, false
+		if err != sql.ErrNoRows {
+			return nil, err
+		}
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -113,19 +118,21 @@ func (TR *TransactionRepository) SelectFrom(type_ bool, id uint64) ([]ents.Trans
 			&T.To_id,
 		)
 		if err != nil {
-			return nil, false
+			return nil, err
 		}
 		transaction_tab = append(transaction_tab, T)
 	}
 
-	return transaction_tab, (len(transaction_tab) != 0)
+	return transaction_tab, nil
 }
 
-func (TR *TransactionRepository) SelectTo(type_ bool, id uint64) ([]ents.Transaction, bool) {
+func (TR *TransactionRepository) SelectTo(type_ bool, id uint64) ([]ents.Transaction, error) {
 	var transaction_tab []ents.Transaction
 	rows, err := TR.DB.Query("select * from transaction_tab where to_essence_type = $1 and to_id = $2", type_, id)
 	if err != nil {
-		return nil, false
+		if err != sql.ErrNoRows {
+			return nil, err
+		}
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -139,21 +146,23 @@ func (TR *TransactionRepository) SelectTo(type_ bool, id uint64) ([]ents.Transac
 			&T.To_id,
 		)
 		if err != nil {
-			return nil, false
+			return nil, err
 		}
 		transaction_tab = append(transaction_tab, T)
 	}
 
-	return transaction_tab, (len(transaction_tab) != 0)
+	return transaction_tab, nil
 }
-func (TR *TransactionRepository) SelectFoundrisingPhilantropIds(foundrising_id uint64) ([]uint64, bool) {
+func (TR *TransactionRepository) SelectFoundrisingPhilantropIds(foundrising_id uint64) ([]uint64, error) {
 	var transaction_tab []ents.Transaction
 	rows, err := TR.DB.Query(`select * from transaction_tab where 
 							from_essence_type = $1 and 
 							to_essence_type = $2 and
 							to_id = $3`, ents.FROM_USER, ents.TO_FOUNDRISING, foundrising_id)
 	if err != nil {
-		return nil, false
+		if err != sql.ErrNoRows {
+			return nil, err
+		}
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -167,7 +176,7 @@ func (TR *TransactionRepository) SelectFoundrisingPhilantropIds(foundrising_id u
 			&T.To_id,
 		)
 		if err != nil {
-			return nil, false
+			return nil, err
 		}
 		transaction_tab = append(transaction_tab, T)
 	}
@@ -175,6 +184,6 @@ func (TR *TransactionRepository) SelectFoundrisingPhilantropIds(foundrising_id u
 	for i := range IDs {
 		IDs[i] = transaction_tab[i].From_id
 	}
-	return IDs, (len(IDs) != 0)
+	return IDs, nil
 
 }
