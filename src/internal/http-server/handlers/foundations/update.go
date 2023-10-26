@@ -20,7 +20,10 @@ func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 		var err error
 		var response fndResp.BaseResponse
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		const op = "handlers.foundations.update"
 		log = log.With(

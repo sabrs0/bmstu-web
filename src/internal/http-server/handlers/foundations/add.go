@@ -25,7 +25,10 @@ func Add(logger *slog.Logger, ctrl IAdder) http.HandlerFunc {
 		var params ents.FoundationAdd
 		var response fndResp.BaseResponse
 		defer func() {
-			resp.ErrWrapper(logger, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(logger, w, &response, err)
+			}
+
 		}()
 		err = json.NewDecoder(r.Body).Decode(&params)
 		if err != nil {

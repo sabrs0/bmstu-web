@@ -22,7 +22,10 @@ func GetAll(logger *slog.Logger, ctrl IGetter) http.HandlerFunc {
 			slog.String("operation", op),
 		)
 		defer func() {
-			resp.ErrWrapper(logger, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(logger, w, &response, err)
+			}
+
 		}()
 		foundations, err := ctrl.GetAll()
 		if err != nil {

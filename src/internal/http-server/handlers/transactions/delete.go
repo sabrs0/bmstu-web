@@ -24,7 +24,10 @@ func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 			slog.String("operation", op),
 		)
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		id := mux.Vars(r)["id"]
 		transaction, err := ctrl.Delete(id)

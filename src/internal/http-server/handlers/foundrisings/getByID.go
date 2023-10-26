@@ -24,7 +24,10 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 			slog.String("operation", op),
 		)
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		id := mux.Vars(r)["id"]
 		foundrising, err := ctrl.GetByID(id)

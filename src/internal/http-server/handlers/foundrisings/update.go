@@ -25,7 +25,10 @@ func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 			slog.String("operation", op),
 		)
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		var params ents.FoundrisingPut
 		err = json.NewDecoder(r.Body).Decode(&params)

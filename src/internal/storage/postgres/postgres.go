@@ -19,5 +19,9 @@ func New() (*Storage, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s error: %s", op, err)
 	}
+	err = db.Ping()
+	if err != nil {
+		return nil, fmt.Errorf("%s error: %s", op, err)
+	}
 	return &Storage{DB: db}, nil
 }

@@ -20,7 +20,10 @@ func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 		var response fndResp.BaseResponse
 		var foundation ents.Foundation
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		const op = "handlers.foundations.delete"
 		log.With(

@@ -2,16 +2,19 @@ package auth
 
 import (
 	"errors"
+	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/mux"
 )
 
 var jwtKey = []byte("supersecretkey")
 
 type JWTClaims struct {
-	Id   string `json:"id"`
-	Role string `json:"role"`
+	EntityId string `json:"ent_id"`
+	Role     string `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -24,8 +27,8 @@ func NewJWTService() *JWTService {
 func (service *JWTService) GenerateToken(role, id string) (string, error) {
 	expirationTime := time.Now().Add(time.Hour * 1)
 	claims := &JWTClaims{
-		Id:   id,
-		Role: role,
+		EntityId: id,
+		Role:     role,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -34,7 +37,7 @@ func (service *JWTService) GenerateToken(role, id string) (string, error) {
 	return token.SignedString(jwtKey)
 }
 
-func ValidateToken(signedToken string) error {
+func (service *JWTService) ValidateToken(signedToken string) (*jwt.Token, error) {
 	//claims := JWTClaims{}
 	token, err := jwt.ParseWithClaims(
 		signedToken,
@@ -43,17 +46,43 @@ func ValidateToken(signedToken string) error {
 			return []byte(jwtKey), nil
 		},
 	)
-	if err != nil {
-		return err
+	if err != nil || !token.Valid {
+		return nil, err
 	}
 	claims, ok := token.Claims.(*JWTClaims)
 	if !ok {
-		return errors.New("Не удалось распарсить claims")
+		return nil, errors.New("Не удалось распарсить claims")
 	}
 	if claims.ExpiresAt < time.Now().Unix() {
-		return errors.New("Токен просрочен")
+		return nil, errors.New("Токен просрочен")
 	}
 	//логика валидации токена на разрешение операции
-	return nil
 
+	return token, nil
+
+}
+func (service *JWTService) ValidateRequest(r *http.Request, roleToAccept []string) error {
+	strToken := r.Header.Get("Authentication")
+	token, err := service.ValidateToken(strToken)
+	if err != nil {
+		return err
+	}
+	claims, _ := token.Claims.(*JWTClaims)
+	for _, role := range roleToAccept {
+		if claims.Role != role {
+			return fmt.Errorf("Неверная роль пользователя")
+		}
+	}
+	if claims.Role == "Admin" {
+		return nil
+	}
+	vars := mux.Vars(r)
+	if vars == nil || vars["id"] == "" {
+		return nil
+	}
+	id := vars["id"]
+	if claims.EntityId != id {
+		return fmt.Errorf("Неверный  id пользователя")
+	}
+	return nil
 }

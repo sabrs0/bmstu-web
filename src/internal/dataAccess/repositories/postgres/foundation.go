@@ -104,6 +104,7 @@ func (FR *FoundationRepository) Select() ([]ents.Foundation, error) {
 	for rows.Next() {
 		F := ents.Foundation{}
 		err := rows.Scan(&F.Id,
+			&F.Name,
 			&F.Password,
 			&F.CurFoudrisingAmount,
 			&F.ClosedFoundrisingAmount,
@@ -126,6 +127,7 @@ func (FR *FoundationRepository) SelectById(id uint64) (ents.Foundation, error) {
 	var F ents.Foundation
 	row := FR.DB.QueryRow("select * from foundation_tab where id = $1", id)
 	err := row.Scan(&F.Id,
+		&F.Name,
 		&F.Password,
 		&F.CurFoudrisingAmount,
 		&F.ClosedFoundrisingAmount,
@@ -145,6 +147,7 @@ func (FR *FoundationRepository) SelectByLogin(name string) (ents.Foundation, err
 	var F ents.Foundation
 	row := FR.DB.QueryRow("select * from foundation_tab where login = $1", name)
 	err := row.Scan(&F.Id,
+		&F.Name,
 		&F.Password,
 		&F.CurFoudrisingAmount,
 		&F.ClosedFoundrisingAmount,
@@ -163,6 +166,7 @@ func (FR *FoundationRepository) SelectByName(name string) (ents.Foundation, erro
 	var F ents.Foundation
 	row := FR.DB.QueryRow("select * from foundation_tab where name = $1", name)
 	err := row.Scan(&F.Id,
+		&F.Name,
 		&F.Password,
 		&F.CurFoudrisingAmount,
 		&F.ClosedFoundrisingAmount,
@@ -189,6 +193,7 @@ func (FR *FoundationRepository) SelectByCountry(country string) ([]ents.Foundati
 	for rows.Next() {
 		F := ents.Foundation{}
 		err := rows.Scan(&F.Id,
+			&F.Name,
 			&F.Password,
 			&F.CurFoudrisingAmount,
 			&F.ClosedFoundrisingAmount,

@@ -20,7 +20,10 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 		var response fndResp.BaseResponse
 		var foundation ents.Foundation
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		const op = "handlers.foundation.getById"
 		log = log.With(

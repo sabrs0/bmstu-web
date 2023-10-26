@@ -6,21 +6,26 @@ import (
 
 	"github.com/sabrs0/bmstu-web/src/internal/business/auth"
 	servs "github.com/sabrs0/bmstu-web/src/internal/business/services"
-	authServs "github.com/sabrs0/bmstu-web/src/internal/business/services/auth"
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )
+
+type TokenGenerator interface {
+	GenerateToken(role, id string) (string, error)
+}
 
 type LoginController struct {
 	FS *servs.FoundationService
 	US *servs.UserService
-	AS *authServs.JWTService //для него какие параметры при создании (например тип аутентификации, но пока пусто)
+	AS TokenGenerator //для него какие параметры при создании (например тип аутентификации, но пока пусто)
 }
 
-func NewLoginController(FR servs.IFoundationRepository, UR servs.IUserRepository) *LoginController {
+func NewLoginController(FR servs.IFoundationRepository,
+	UR servs.IUserRepository,
+	generator TokenGenerator) *LoginController {
 	return &LoginController{
 		FS: servs.NewFoundationService(FR),
 		US: servs.NewUserService(UR),
-		AS: authServs.NewJWTService(),
+		AS: generator,
 	}
 }
 func (ctrl *LoginController) Login(params auth.Params) (string, error) {

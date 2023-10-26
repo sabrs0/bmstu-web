@@ -20,7 +20,10 @@ func GetFoundrisings(log *slog.Logger, ctrl IFoundrisingsGetter) http.HandlerFun
 		var response fndResp.FoundrisingsResponse
 		var foundrisings []ents.Foundrising
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		const op = "handlers.foundation.getFoundrisings"
 		log = slog.With(

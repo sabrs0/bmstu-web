@@ -22,7 +22,10 @@ func Donate(log *slog.Logger, ctrl IDonator) http.HandlerFunc {
 		var response usrResp.DonateResponse
 		var transaction ents.Transaction
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				resp.ErrWrapper(log, w, &response, err)
+			}
+
 		}()
 		const op = "handlers.users.donate"
 		var params ents.UserDonate
