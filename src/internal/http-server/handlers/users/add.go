@@ -15,8 +15,28 @@ type IAdder interface {
 	Add(params ents.UserAdd) (ents.User, error)
 }
 
-// swagger:operation POST /users UsersPost
+// swagger:route POST /users User UsersPost
 //
+//  Consumes:
+//  - application/json
+//
+//  Produces:
+//  - application/json
+//
+//  Schemes: http
+//
+//
+//  Security:
+//	  bearerAuth:
+//
+//  Responses:
+//    default: ValidateError
+//    200: UsersBaseResponse
+//    400: ValidateError
+//    401: ValidateError
+//    409: ValidateError
+
+/*
 // ---
 // produces:
 // - application/json
@@ -27,14 +47,21 @@ type IAdder interface {
 // requestBody:
 //
 //	schema:
-//	    "$ref": "#/definitions/UserAdd"
+//	 "$ref": "#/definitions/UserAdd"
 //
 // responses:
 //
 //	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/User"
+//	 description: Success
+//	 schema:
+//	   "$ref": "#/definitions/User"
+//	'400':
+//	 description: Bad Request
+//	'401':
+//	 description: Unauthorized
+//	'409':
+//	 description: Conflict
+*/
 func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

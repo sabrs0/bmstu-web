@@ -1,16 +1,19 @@
 //   Version: 0.1
-//   Schemes: http
-//   Host: localhost:8081
-//   BasePath: /api/v1
-//      Consumes:
-//      - application/json
-//   Produces:
-//   - application/json
-//   Security:
-//   - bearerAuth:
+//  Schemes: http
+//  Host: localhost:8081
+//  BasePath: /api/v1
 //
-//   SecurityDefinitions:
-//   bearerAuth:
+//  Consumes:
+//  - application/json
+//
+//  Produces:
+//  - application/json
+//
+//  Security:
+//  - bearerAuth:
+//
+//  SecurityDefinitions:
+//  bearerAuth:
 //   type: http
 //   scheme: bearer
 //   bearerFormat: JWT
@@ -41,7 +44,7 @@ func main() {
 	cfg := cfg.MustLoad() //config
 
 	log := setupLogger(cfg.Env) //logger
-	log.Info("starting url-shortener", slog.String("env", cfg.Env))
+	log.Info("starting foundationer", slog.String("env", cfg.Env))
 	log.Debug("Debug msgs are enabled")
 
 	storage, err := postgres.New() //storage

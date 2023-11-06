@@ -15,7 +15,7 @@ type IAdder interface {
 	Add(params ents.FoundrisingAdd) (ents.Foundrising, error)
 }
 
-// swagger:operation POST /foundrisings FoundrisingsPost
+// swagger:operation POST /foundrisings Foundrising FoundrisingsPost
 //
 // ---
 // produces:
@@ -26,15 +26,21 @@ type IAdder interface {
 // - text/plain
 // requestBody:
 //
-//	schema:
-//	    "$ref": "#/definitions/FoundrisingAdd"
+//  schema:
+//     "$ref": "#/definitions/FoundrisingAdd"
 //
 // responses:
 //
-//	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/Foundrising"
+//  '200':
+//    description: Success
+//    schema:
+//     "$ref": "#/definitions/Foundrising"
+//  '400':
+//    description: Bad Request
+//  '401':
+//    description: Unauthorized
+//  '409':
+//    description: Conflict
 func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

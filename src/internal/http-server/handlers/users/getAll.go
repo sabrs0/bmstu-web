@@ -14,7 +14,25 @@ type IGetter interface {
 	GetAll() ([]ents.User, error)
 }
 
-// swagger:operation GET /Users UsersGet
+// swagger:route GET /users User UsersGet
+//
+//  Consumes:
+//  - application/json
+//
+//  Produces:
+//  - application/json
+//
+//  Schemes: http
+//
+//
+//  Security:
+//	  bearerAuth:
+//
+//  Responses:
+//    default: ValidateError
+//    200: UsersGetAllResponse
+
+/*
 //
 // ---
 // produces:
@@ -25,12 +43,15 @@ type IGetter interface {
 // - text/plain
 // responses:
 //
-//		'200':
-//		schema:
-//			type: array
-//			items:
-//	 		$ref": "#/definitions/User"
-//		  description: Success
+//  '200':
+//   schema:
+//    type: array
+//    items:
+//     $ref": "#/definitions/User"
+//   description: Success
+//  '401':
+//   description: Unauthorized
+*/
 func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

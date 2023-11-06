@@ -15,7 +15,7 @@ type IUpdater interface {
 	Update(id string, params ents.FoundationAdd) (ents.Foundation, error)
 }
 
-// swagger:operation PUT /foundations/{id} FoundationsUpdate
+// swagger:operation PUT /foundations/{id} Foundation FoundationsUpdate
 //
 // ---
 // produces:
@@ -26,29 +26,27 @@ type IUpdater interface {
 // - text/plain
 //
 // parameters:
-//   - name: id
-//     in: path
-//     required: true
-//     schema:
-//     type: integer
-//     format: int32
-//
-// requestBody:
-//
-//	schema:
-//	    "$ref": "#/definitions/FoundationAdd"
+// - name: id
+//   in: path
+//   required: true
+//   schema:
+//   type: integer
+//   format: int32
 //
 // responses:
 //
-//	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/Foundation"
-//
-// '400':
-// '401':
-// '404':
-// '409':
+//  '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/Foundation"
+//  '400':
+//   description: Bad Request
+//  '401':
+//   description: Unauthorized
+//  '404':
+//   description: Not Found
+//  '409':
+//   description: Conflict
 func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

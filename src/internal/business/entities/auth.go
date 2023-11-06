@@ -1,6 +1,6 @@
 package entities
 
-// swagger:model LoginParams
+// swagger:model
 type Params struct {
 	// in: query
 	Login    string `json:"login"`
@@ -8,7 +8,7 @@ type Params struct {
 	Role     string `json:"role"`
 }
 
-// swagger:model Token
+// swagger:model
 type Token struct {
 	Token string `json:"token"`
 }

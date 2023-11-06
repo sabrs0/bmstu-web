@@ -15,7 +15,33 @@ type IByIdGetter interface {
 	GetByID(id_ string) (ents.User, error)
 }
 
-// swagger:operation GET /users/{id} UsersGetById
+// swagger:route GET /users/{id} User UsersGetById
+//
+//  Consumes:
+//  - application/json
+//
+//  Produces:
+//  - application/json
+//
+//  Schemes: http
+//
+//
+//  Security:
+//	  bearerAuth:
+//
+//  Parameters:
+//       + name: id
+//         in: query
+//         required: true
+//         type: integer
+//         format: int32
+//  Responses:
+//    default: ValidateError
+//    200: UsersBaseResponse
+//    401: ValidateError
+//    404: ValidateError
+
+/*
 //
 // ---
 // produces:
@@ -35,11 +61,15 @@ type IByIdGetter interface {
 //
 // responses:
 //
-// '200':
-//
-//	description: Success
-//	schema:
-//	 "$ref": "#/definitions/User"
+//  '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/User"
+//  '401':
+//   description: Unauthorized
+//  '404':
+//   description: Not Found
+*/
 func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

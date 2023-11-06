@@ -16,7 +16,7 @@ type IUpdater interface {
 	Update(id string, params ents.FoundrisingPut) (ents.Foundrising, error)
 }
 
-// swagger:operation PUT /foundrisings/{id} FoundrisingsUpdate
+// swagger:operation PUT /foundrisings/{id} Foundrising FoundrisingsUpdate
 //
 // ---
 // produces:
@@ -36,15 +36,23 @@ type IUpdater interface {
 //
 // requestBody:
 //
-//	schema:
-//	    "$ref": "#/definitions/FoundrisingPut"
+//  schema:
+//   "$ref": "#/definitions/FoundrisingPut"
 //
 // responses:
 //
-//	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/Foundrising"
+//  '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/Foundrising"
+//  '400':
+//   description: Bad Request
+//  '401':
+//   description: Unauthorized
+//  '404':
+//   description: Not Found
+//  '409':
+//   description: Conflict
 func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

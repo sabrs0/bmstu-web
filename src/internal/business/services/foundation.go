@@ -18,7 +18,6 @@ type IFoundationRepository interface {
 	SelectByLogin(name string) (ents.Foundation, error)
 	SelectByName(name string) (ents.Foundation, error)
 	SelectByCountry(country string) ([]ents.Foundation, error)
-	//GetDB() *gorm.DB
 }
 
 type FoundationService struct {

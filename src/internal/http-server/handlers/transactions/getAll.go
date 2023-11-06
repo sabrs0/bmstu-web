@@ -14,7 +14,7 @@ type IGetter interface {
 	GetAll() ([]ents.Transaction, error)
 }
 
-// swagger:operation GET /transactions TransactionsGet
+// swagger:operation GET /transactions Transaction TransactionsGet
 //
 // ---
 // produces:
@@ -25,12 +25,14 @@ type IGetter interface {
 // - text/plain
 // responses:
 //
-//		'200':
-//		schema:
-//			type: array
-//			items:
-//	 		$ref": "#/definitions/Transaction"
-//		  description: Success
+//  '200':
+//    schema:
+//     type: array
+//     items:
+//      $ref": "#/definitions/Transaction"
+//    description: Success
+//  '401':
+//    description: Unauthorized
 func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

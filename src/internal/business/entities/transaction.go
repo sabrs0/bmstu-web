@@ -1,6 +1,6 @@
 package entities
 
-// swagger:model TransactionAdd
+// swagger:model
 type TransactionAdd struct {
 	// in: query
 	From_essence_type bool    `json:"from_essence_type"`
@@ -11,7 +11,7 @@ type TransactionAdd struct {
 	To_id             uint64  `gorm:"not null" json:"to_id"`
 }
 
-// swagger:model Transaction
+// swagger:model
 type Transaction struct {
 	// in: query
 	Id                uint64  `gorm:"primaryKey;not null" json:"id"`

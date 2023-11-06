@@ -2,7 +2,7 @@ package entities
 
 var Countries [9]string = [9]string{"США", "Россия", "Великобритания", "Канада", "Франция", "Германия", "Китай", "Италия", "Испания"}
 
-// swagger:model FoundationAdd
+// swagger:model
 type FoundationAdd struct {
 	// in: query
 	Name     string `json:"name"`
@@ -11,7 +11,7 @@ type FoundationAdd struct {
 	Login    string `json:"login"`
 }
 
-// swagger:model FoundationDonate
+// swagger:model
 type FoundationDonate struct {
 	// in: query
 	Foundrising_id string `json:"foundrising_id"`
@@ -19,7 +19,7 @@ type FoundationDonate struct {
 	Comm           string `json:"comment"`
 }
 
-// swagger:model Foundation
+// swagger:model
 type Foundation struct {
 	Id                      uint64  `gorm:"primaryKey;not null" json:"id"`
 	Name                    string  `gorm:"not null" json:"name"`

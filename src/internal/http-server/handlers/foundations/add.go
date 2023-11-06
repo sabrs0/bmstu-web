@@ -14,7 +14,7 @@ type IAdder interface {
 	Add(params ents.FoundationAdd) (ents.Foundation, error)
 }
 
-// swagger:operation POST /foundations FoundationsPost
+// swagger:operation POST /foundations Foundation FoundationsPost
 //
 // ---
 // produces:
@@ -26,14 +26,20 @@ type IAdder interface {
 // requestBody:
 //
 //	schema:
-//	    "$ref": "#/definitions/FoundationAdd"
+//	  "$ref": "#/definitions/FoundationAdd"
 //
 // responses:
 //
 //	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/Foundation"
+//	 description: Success
+//	 schema:
+//	   "$ref": "#/definitions/Foundation"
+//	'400':
+//	 description: Bad Request
+//	'401':
+//	 description: Unauthorized
+//	'409':
+//	 description: Conflict
 func Add(logger *slog.Logger, ctrl IAdder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

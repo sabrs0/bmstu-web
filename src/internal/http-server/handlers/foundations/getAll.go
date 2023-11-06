@@ -13,7 +13,7 @@ type IGetter interface {
 	GetAll() ([]ents.Foundation, error)
 }
 
-// swagger:operation GET /foundations FoundationsGet
+// swagger:operation GET /foundations Foundation FoundationsGet
 //
 // ---
 // produces:
@@ -24,12 +24,12 @@ type IGetter interface {
 // - text/plain
 // responses:
 //
-//		'200':
-//		schema:
-//			type: array
-//			items:
-//	 		$ref": "#/definitions/Foundation"
-//		  description: Success
+//  '200':
+//   schema:
+//    type: array
+//    items:
+//      $ref": "#/definitions/Foundation"
+//   description: Success
 func GetAll(logger *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

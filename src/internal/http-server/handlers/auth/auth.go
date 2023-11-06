@@ -15,7 +15,7 @@ type IAuther interface {
 	Login(params auth.Params) (string, error)
 }
 
-// swagger:operation POST /login Login
+// swagger:operation POST /login Login Login
 //
 //
 //
@@ -37,7 +37,9 @@ type IAuther interface {
 //   schema:
 //    "$ref": "#/definitions/Token"
 // '400':
+//   description: Bad Request
 // '404':
+//   description: Not Found
 
 func Login(log *slog.Logger, ctrl IAuther) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

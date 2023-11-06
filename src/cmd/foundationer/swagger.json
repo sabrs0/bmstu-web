@@ -1,0 +1,1124 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "version": "0.1"
+  },
+  "host": "localhost:8081",
+  "basePath": "/api/v1",
+  "paths": {
+    "/foundations": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundation"
+        ],
+        "operationId": "FoundationsGet",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref\"": "#/definitions/Foundation"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundation"
+        ],
+        "operationId": "FoundationsPost",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundation"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/foundations/{id}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundation"
+        ],
+        "operationId": "FoundationsGetById",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundation"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundation"
+        ],
+        "operationId": "FoundationsUpdate",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundation"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      },
+      "delete": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundation"
+        ],
+        "operationId": "FoundationsDelete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundation"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/foundations/{id}/donate": {
+      "post": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundation"
+        ],
+        "operationId": "FoundationsDonate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/foundations/{id}/foundtisings": {
+      "post": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundation"
+        ],
+        "operationId": "FoundationsDonate",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref\"": "#/definitions/Foundrising"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/foundrisings": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundrising"
+        ],
+        "operationId": "FoundrisingsGet",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref\"": "#/definitions/Foundrising"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundrising"
+        ],
+        "operationId": "FoundrisingsPost",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundrising"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/foundrisings/{id}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundrising"
+        ],
+        "operationId": "FoundrisingsGetById",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundrising"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundrising"
+        ],
+        "operationId": "FoundrisingsUpdate",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundrising"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      },
+      "delete": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Foundrising"
+        ],
+        "operationId": "FoundrisingsDelete",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Foundrising"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Login"
+        ],
+        "operationId": "Login"
+      }
+    },
+    "/transactions": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "TransactionsGet",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref\"": "#/definitions/Transaction"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "TransactionsGetById",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "TransactionsDelete",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "User"
+        ],
+        "operationId": "UsersGet",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref\"": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "User"
+        ],
+        "operationId": "UsersPost",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "User"
+        ],
+        "operationId": "UsersGetById",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "User"
+        ],
+        "operationId": "UsersUpdate",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "x-go-name": "Login",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      },
+      "delete": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "User"
+        ],
+        "operationId": "UsersDelete",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/users/{id}/donate": {
+      "post": {
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html",
+          "text/plain"
+        ],
+        "tags": [
+          "User"
+        ],
+        "operationId": "UsersDonate",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "x-go-name": "EntityType",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Foundation": {
+      "type": "object",
+      "properties": {
+        "closed_foundrising_amount": {
+          "type": "integer",
+          "format": "uint32",
+          "x-go-name": "ClosedFoundrisingAmount"
+        },
+        "country": {
+          "type": "string",
+          "x-go-name": "Country"
+        },
+        "cur_foudrising_amount": {
+          "type": "integer",
+          "format": "uint32",
+          "x-go-name": "CurFoudrisingAmount"
+        },
+        "fund_balance": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Fund_balance"
+        },
+        "id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "income_history": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Income_history"
+        },
+        "login": {
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "outcome_history": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Outcome_history"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "volunteer_amount": {
+          "type": "integer",
+          "format": "uint32",
+          "x-go-name": "Volunteer_amount"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "FoundationAdd": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string",
+          "x-go-name": "Country"
+        },
+        "login": {
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "name": {
+          "description": "in: query",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "FoundationDonate": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string",
+          "x-go-name": "Comm"
+        },
+        "foundrising_id": {
+          "description": "in: query",
+          "type": "string",
+          "x-go-name": "Foundrising_id"
+        },
+        "sum_of_money": {
+          "type": "string",
+          "x-go-name": "Sum_of_Money"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "Foundrising": {
+      "type": "object",
+      "properties": {
+        "closing_date": {
+          "$ref": "#/definitions/NullString"
+        },
+        "creation_date": {
+          "type": "string",
+          "x-go-name": "Creation_date"
+        },
+        "current_sum": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Current_sum"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "found_id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Found_id"
+        },
+        "id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "philantrops_amount": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Philantrops_amount"
+        },
+        "required_sum": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Required_sum"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "FoundrisingAdd": {
+      "type": "object",
+      "properties": {
+        "creation_date": {
+          "type": "string",
+          "x-go-name": "Creation_date"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "found_id": {
+          "description": "in: query",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Found_id"
+        },
+        "required_sum": {
+          "type": "string",
+          "x-go-name": "Required_sum"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "FoundrisingPut": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "description": "in: query",
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "required_sum": {
+          "type": "string",
+          "x-go-name": "Required_sum"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "NullString": {
+      "description": "var s NullString\nerr := db.QueryRow(\"SELECT name FROM foo WHERE id=?\", id).Scan(\u0026s)\n...\nif s.Valid {\nuse s.String\n} else {\nNULL value\n}",
+      "type": "object",
+      "title": "NullString represents a string that may be null.\nNullString implements the Scanner interface so\nit can be used as a scan destination:",
+      "properties": {
+        "String": {
+          "type": "string"
+        },
+        "Valid": {
+          "type": "boolean"
+        }
+      },
+      "x-go-package": "database/sql"
+    },
+    "Params": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "description": "in: query",
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "role": {
+          "type": "string",
+          "x-go-name": "Role"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "x-go-name": "Token"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string",
+          "x-go-name": "Comment"
+        },
+        "from_essence_type": {
+          "type": "boolean",
+          "x-go-name": "From_essence_type"
+        },
+        "from_id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "From_id"
+        },
+        "id": {
+          "description": "in: query",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "sum_of_money": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Sum_of_money"
+        },
+        "to_essence_type": {
+          "type": "boolean",
+          "x-go-name": "To_essence_type"
+        },
+        "to_id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "To_id"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "TransactionAdd": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string",
+          "x-go-name": "Comment"
+        },
+        "from_essence_type": {
+          "description": "in: query",
+          "type": "boolean",
+          "x-go-name": "From_essence_type"
+        },
+        "from_id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "From_id"
+        },
+        "sum_of_money": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Sum_of_money"
+        },
+        "to_essence_type": {
+          "type": "boolean",
+          "x-go-name": "To_essence_type"
+        },
+        "to_id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "To_id"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Balance"
+        },
+        "charity_sum": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "CharitySum"
+        },
+        "closed_fing_amount": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "ClosedFingAmount"
+        },
+        "id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "login": {
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    }
+  },
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "http"
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

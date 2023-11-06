@@ -14,7 +14,7 @@ type IGetter interface {
 	GetAll() ([]ents.Foundrising, error)
 }
 
-// swagger:operation GET /foundrisings FoundrisingsGet
+// swagger:operation GET /foundrisings Foundrising FoundrisingsGet
 //
 // ---
 // produces:
@@ -25,12 +25,12 @@ type IGetter interface {
 // - text/plain
 // responses:
 //
-//		'200':
-//		schema:
-//			type: array
-//			items:
-//	 		$ref": "#/definitions/Foundrising"
-//		  description: Success
+//  '200':
+//   schema:
+//    type: array
+//    items:
+//      $ref": "#/definitions/Foundrising"
+//   description: Success
 
 func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

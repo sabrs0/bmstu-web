@@ -14,7 +14,7 @@ type IByIdGetter interface {
 	GetByID(id_ string) (ents.Foundation, error)
 }
 
-// swagger:operation GET /foundations/{id} FoundationsGetById
+// swagger:operation GET /foundations/{id} Foundation FoundationsGetById
 //
 // ---
 // produces:
@@ -34,11 +34,12 @@ type IByIdGetter interface {
 //
 // responses:
 //
-// '200':
-//
-//	description: Success
-//	schema:
-//	 "$ref": "#/definitions/Foundation"
+//  '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/Foundation"
+//  '404':
+//   description: Not Found
 func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

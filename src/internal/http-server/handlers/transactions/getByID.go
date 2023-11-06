@@ -15,7 +15,7 @@ type IByIdGetter interface {
 	GetByID(id_ string) (ents.Transaction, error)
 }
 
-// swagger:operation GET /transactions/{id} TransactionsGetById
+// swagger:operation GET /transactions/{id} Transaction TransactionsGetById
 //
 // ---
 // produces:
@@ -35,11 +35,14 @@ type IByIdGetter interface {
 //
 // responses:
 //
-// '200':
-//
-//	description: Success
-//	schema:
-//	 "$ref": "#/definitions/Transaction"
+//  '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/Transaction"
+//  '401':
+//   description: Unauthorized
+//  '404':
+//   description: Not Found
 func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

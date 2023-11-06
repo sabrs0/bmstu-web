@@ -15,7 +15,7 @@ type IByIdGetter interface {
 	GetByID(id_ string) (ents.Foundrising, error)
 }
 
-// swagger:operation GET /foundrisings/{id} FoundrisingsGetById
+// swagger:operation GET /foundrisings/{id} Foundrising FoundrisingsGetById
 //
 // ---
 // produces:
@@ -35,11 +35,13 @@ type IByIdGetter interface {
 //
 // responses:
 //
-// '200':
-//
-//	description: Success
-//	schema:
-//	 "$ref": "#/definitions/Foundrising"
+//  '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/Foundrising"
+//  '404':
+//   description: Not Found
+
 func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

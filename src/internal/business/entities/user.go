@@ -1,22 +1,18 @@
 package entities
 
-// swagger:model UserDonate
 type UserDonate struct {
-	// in: query
 	EntityType bool   `json:"entity_type"`
 	EntityID   string `json:"entity_id"`
 	SumOfMoney string `json:"sum_of_money"`
 	Comm       string `json:"comment"`
 }
 
-// swagger:model UserAdd
 type UserAdd struct {
-	// in: query
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
 
-// swagger:model User
+// swagger:model
 type User struct {
 	Id               uint64  `gorm:"primaryKey;not null" json:"id"`
 	Login            string  `gorm:"not null" json:"login"`
@@ -40,4 +36,32 @@ func (U *User) SetLogin(newName string) {
 
 func (U *User) SetPassword(newPass string) {
 	U.Password = newPass
+}
+
+// swagger:parameters UsersDonate
+type UserDonateRequest struct {
+	//in: query
+	//required: true
+	//type: integer
+	//format: int64
+	Id uint64
+	//in:body
+	Params UserDonate //`json:"req"`
+}
+
+// swagger:parameters  UsersPost
+type UserPostRequest struct {
+	//in:body
+	Params UserAdd //`json:"req"`
+}
+
+// swagger:parameters  UsersUpdate
+type UserUpdateRequest struct {
+	//in: query
+	//required: true
+	//type: integer
+	//format: int64
+	Id uint64
+	//in:body
+	Params UserAdd // `json:"req"`
 }

@@ -15,7 +15,7 @@ type IDeleter interface {
 	Delete(id string) (ents.Foundrising, error)
 }
 
-// swagger:operation DELETE /foundrisings/{id} FoundrisingsDelete
+// swagger:operation DELETE /foundrisings/{id} Foundrising FoundrisingsDelete
 //
 // ---
 // produces:
@@ -34,11 +34,14 @@ type IDeleter interface {
 //     format: int32
 //
 // responses:
-//
-//	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/Foundrising"
+//  '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/Foundrising"
+//  '401':
+//   description: Unauthorized
+//  '404':
+//   description: Not Found
 func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

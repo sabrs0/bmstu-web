@@ -15,7 +15,7 @@ type IDeleter interface {
 	Delete(id string) (ents.Transaction, error)
 }
 
-// swagger:operation DELETE /transactions/{id} TransactionsDelete
+// swagger:operation DELETE /transactions/{id} Transaction TransactionsDelete
 //
 // ---
 // produces:
@@ -35,10 +35,14 @@ type IDeleter interface {
 //
 // responses:
 //
-//	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/Transaction"
+//  '200':
+//   description: Success
+//   schema:
+//      "$ref": "#/definitions/Transaction"
+//  '401':
+//   description: Unauthorized
+//  '404':
+//   description: Not Found
 func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

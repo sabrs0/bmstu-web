@@ -6,6 +6,7 @@ info:
   description: The API for the Foundations project
 servers:
   - url: http://localhost:8081
+  - url: http://localhost:8080
 paths:
   "/api/v1/foundations":
     get:
@@ -32,9 +33,9 @@ paths:
                   "$ref": "#/components/schemas/Foundation"
     post:
       security:
-       [{
-        Bearer: []
-      }]
+       [{ 
+         bearerAuth: []
+       }]
       tags:
       - Foundation
       requestBody:
@@ -71,7 +72,7 @@ paths:
     put:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Foundation
@@ -117,7 +118,7 @@ paths:
     delete:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Foundation
@@ -174,7 +175,7 @@ paths:
     post:
         security:
           [{
-            Bearer: []
+            bearerAuth: []
         }]
         tags:
         - Foundation
@@ -275,7 +276,7 @@ paths:
     post:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Foundrising
@@ -313,7 +314,7 @@ paths:
     put:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Foundrising
@@ -359,7 +360,7 @@ paths:
     patch:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Foundrising
@@ -405,7 +406,7 @@ paths:
     delete:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Foundrising
@@ -462,7 +463,7 @@ paths:
     get:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Transaction
@@ -491,7 +492,7 @@ paths:
     get:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Transaction
@@ -522,7 +523,7 @@ paths:
     delete:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - Transaction
@@ -554,7 +555,7 @@ paths:
     get:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - User
@@ -582,7 +583,7 @@ paths:
     post:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - User
@@ -620,7 +621,7 @@ paths:
     put:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - User
@@ -666,7 +667,7 @@ paths:
     delete:
       security:
        [{
-        Bearer: []
+        bearerAuth: [],
       }]
       tags:
       - User
@@ -697,7 +698,7 @@ paths:
     get:
       security:
        [{
-        Bearer: []
+        bearerAuth: []
       }]
       tags:
       - User
@@ -729,7 +730,7 @@ paths:
     post:
         security:
           [{
-          Bearer: []
+          bearerAuth: []
         }]
         tags:
         - User
@@ -1024,7 +1025,7 @@ components:
           nullable: true
       additionalProperties: false
   securitySchemes:
-      Bearer:
+      bearerAuth:
         type: http
         scheme: bearer
         bearerFormat: JWT

@@ -7,18 +7,19 @@ import (
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )
 
-/*
-	type Response struct {
-		Status string `json:"status"`
-		Error  string `json:"error,omitempty"`
-	}
+// swagger:response ValidateError
+type ErrResponse struct {
+	//in: body
+	Status string `json:"status"`
+	Error  string `json:"error,omitempty"`
+}
 
-	func Error(msg string) Response {
-		return Response{
-			Error: msg,
-		}
+func Error(msg string) ErrResponse {
+	return ErrResponse{
+		Error: msg,
 	}
-*/
+}
+
 func ErrWrapper(w http.ResponseWriter, resp any, err error) {
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Origin", "*")

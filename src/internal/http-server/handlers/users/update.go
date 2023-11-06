@@ -16,7 +16,29 @@ type IUpdater interface {
 	Update(id string, params ents.UserAdd) (ents.User, error)
 }
 
-// swagger:operation PUT /users/{id} UsersUpdate
+// swagger:route PUT /users/{id} User UsersUpdate
+//
+//  Consumes:
+//  - application/json
+//
+//  Produces:
+//  - application/json
+//
+//  Schemes: http
+//
+//
+//  Security:
+//	  bearerAuth:
+//
+//  Responses:
+//    default: ValidateError
+//    200: UsersBaseResponse
+//    400: ValidateError
+//    401: ValidateError
+//    404: ValidateError
+//    409: ValidateError
+
+/*
 //
 // ---
 // produces:
@@ -31,20 +53,28 @@ type IUpdater interface {
 //     in: path
 //     required: true
 //     schema:
-//     type: integer
-//     format: int32
-//
-// requestBody:
-//
-//	schema:
-//	    "$ref": "#/definitions/UserAdd"
+//      type: integer
+//      format: int32
+//   - name: UserAdd
+//     in: body
+//     schema:
+//       "$ref": "#/definitions/UserAdd"
 //
 // responses:
 //
-//	'200':
-//	  description: Success
-//	  schema:
-//	    "$ref": "#/definitions/User"
+//  '200':
+//   description: Success
+//   schema:
+//     "$ref": "#/definitions/User"
+//  '400':
+//   description: Bad Request
+//  '401':
+//   description: Unauthorized
+//  '404':
+//   description: Not Found
+//  '409':
+//   description: Conflict
+*/
 func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
