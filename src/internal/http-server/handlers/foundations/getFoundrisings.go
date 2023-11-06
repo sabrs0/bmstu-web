@@ -14,6 +14,36 @@ type IFoundrisingsGetter interface {
 	GetAllFoundrisings(id string) ([]ents.Foundrising, error)
 }
 
+// swagger:operation POST /foundations/{id}/foundtisings FoundationsDonate
+//
+// ---
+// produces:
+// - application/json
+// - application/xml
+// - text/xml
+// - text/html
+// - text/plain
+//
+// parameters:
+//   - name: id
+//     in: path
+//     required: true
+//     schema:
+//     type: integer
+//     format: int32
+//
+// responses:
+//
+//	'200':
+//	  description: Success
+//	  schema:
+//
+//		type: array
+//		items:
+//
+//			$ref": "#/definitions/Foundrising"
+//
+// '404':
 func GetFoundrisings(log *slog.Logger, ctrl IFoundrisingsGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
@@ -21,7 +51,8 @@ func GetFoundrisings(log *slog.Logger, ctrl IFoundrisingsGetter) http.HandlerFun
 		var foundrisings []ents.Foundrising
 		defer func() {
 			if err != nil {
-				resp.ErrWrapper(log, w, &response, err)
+				log.Error(err.Error())
+				resp.ErrWrapper(w, &response, err)
 			}
 
 		}()

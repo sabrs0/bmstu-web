@@ -1,6 +1,8 @@
 package entities
 
+// swagger:model TransactionAdd
 type TransactionAdd struct {
+	// in: query
 	From_essence_type bool    `json:"from_essence_type"`
 	From_id           uint64  `gorm:"not null" json:"from_id"`
 	To_essence_type   bool    `json:"to_essence_type"`
@@ -8,9 +10,17 @@ type TransactionAdd struct {
 	Comment           string  `json:"comment"`
 	To_id             uint64  `gorm:"not null" json:"to_id"`
 }
+
+// swagger:model Transaction
 type Transaction struct {
-	Id uint64 `gorm:"primaryKey;not null" json:"id"`
-	TransactionAdd
+	// in: query
+	Id                uint64  `gorm:"primaryKey;not null" json:"id"`
+	From_essence_type bool    `json:"from_essence_type"`
+	From_id           uint64  `gorm:"not null" json:"from_id"`
+	To_essence_type   bool    `json:"to_essence_type"`
+	Sum_of_money      float64 `json:"sum_of_money"`
+	Comment           string  `json:"comment"`
+	To_id             uint64  `gorm:"not null" json:"to_id"`
 }
 
 func NewTransaction() Transaction {

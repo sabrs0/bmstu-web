@@ -16,6 +16,35 @@ type IUpdater interface {
 	Update(id string, params ents.UserAdd) (ents.User, error)
 }
 
+// swagger:operation PUT /users/{id} UsersUpdate
+//
+// ---
+// produces:
+// - application/json
+// - application/xml
+// - text/xml
+// - text/html
+// - text/plain
+//
+// parameters:
+//   - name: id
+//     in: path
+//     required: true
+//     schema:
+//     type: integer
+//     format: int32
+//
+// requestBody:
+//
+//	schema:
+//	    "$ref": "#/definitions/UserAdd"
+//
+// responses:
+//
+//	'200':
+//	  description: Success
+//	  schema:
+//	    "$ref": "#/definitions/User"
 func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
@@ -26,7 +55,8 @@ func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 		)
 		defer func() {
 			if err != nil {
-				resp.ErrWrapper(log, w, &response, err)
+				log.Error(err.Error())
+				resp.ErrWrapper(w, &response, err)
 			}
 
 		}()

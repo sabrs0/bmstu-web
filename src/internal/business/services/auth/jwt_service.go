@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -62,16 +63,21 @@ func (service *JWTService) ValidateToken(signedToken string) (*jwt.Token, error)
 
 }
 func (service *JWTService) ValidateRequest(r *http.Request, roleToAccept []string) error {
-	strToken := r.Header.Get("Authentication")
+	strToken := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ") //
 	token, err := service.ValidateToken(strToken)
 	if err != nil {
-		return err
+		return fmt.Errorf("Невалидный токен %s. %w", strToken, err)
 	}
 	claims, _ := token.Claims.(*JWTClaims)
+	flag := 0
 	for _, role := range roleToAccept {
-		if claims.Role != role {
-			return fmt.Errorf("Неверная роль пользователя")
+		if claims.Role == role {
+			flag = 1
+			break
 		}
+	}
+	if flag == 0 {
+		return fmt.Errorf("Неверная роль пользователя %s. Должна быть %v", claims.Role, roleToAccept)
 	}
 	if claims.Role == "Admin" {
 		return nil

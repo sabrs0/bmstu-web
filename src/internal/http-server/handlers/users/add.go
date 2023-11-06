@@ -15,6 +15,26 @@ type IAdder interface {
 	Add(params ents.UserAdd) (ents.User, error)
 }
 
+// swagger:operation POST /users UsersPost
+//
+// ---
+// produces:
+// - application/json
+// - application/xml
+// - text/xml
+// - text/html
+// - text/plain
+// requestBody:
+//
+//	schema:
+//	    "$ref": "#/definitions/UserAdd"
+//
+// responses:
+//
+//	'200':
+//	  description: Success
+//	  schema:
+//	    "$ref": "#/definitions/User"
 func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
@@ -25,7 +45,8 @@ func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 		)
 		defer func() {
 			if err != nil {
-				resp.ErrWrapper(log, w, &response, err)
+				log.Error(err.Error())
+				resp.ErrWrapper(w, &response, err)
 			}
 
 		}()

@@ -15,13 +15,49 @@ type IUpdater interface {
 	Update(id string, params ents.FoundationAdd) (ents.Foundation, error)
 }
 
+// swagger:operation PUT /foundations/{id} FoundationsUpdate
+//
+// ---
+// produces:
+// - application/json
+// - application/xml
+// - text/xml
+// - text/html
+// - text/plain
+//
+// parameters:
+//   - name: id
+//     in: path
+//     required: true
+//     schema:
+//     type: integer
+//     format: int32
+//
+// requestBody:
+//
+//	schema:
+//	    "$ref": "#/definitions/FoundationAdd"
+//
+// responses:
+//
+//	'200':
+//	  description: Success
+//	  schema:
+//	    "$ref": "#/definitions/Foundation"
+//
+// '400':
+// '401':
+// '404':
+// '409':
 func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		var err error
 		var response fndResp.BaseResponse
 		defer func() {
 			if err != nil {
-				resp.ErrWrapper(log, w, &response, err)
+				log.Error(err.Error())
+				resp.ErrWrapper(w, &response, err)
 			}
 
 		}()

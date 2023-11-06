@@ -15,6 +15,31 @@ type IByIdGetter interface {
 	GetByID(id_ string) (ents.Foundrising, error)
 }
 
+// swagger:operation GET /foundrisings/{id} FoundrisingsGetById
+//
+// ---
+// produces:
+// - application/json
+// - application/xml
+// - text/xml
+// - text/html
+// - text/plain
+//
+// parameters:
+//   - name: id
+//     in: path
+//     required: true
+//     schema:
+//     type: integer
+//     format: int32
+//
+// responses:
+//
+// '200':
+//
+//	description: Success
+//	schema:
+//	 "$ref": "#/definitions/Foundrising"
 func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
@@ -25,7 +50,8 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 		)
 		defer func() {
 			if err != nil {
-				resp.ErrWrapper(log, w, &response, err)
+				log.Error(err.Error())
+				resp.ErrWrapper(w, &response, err)
 			}
 
 		}()

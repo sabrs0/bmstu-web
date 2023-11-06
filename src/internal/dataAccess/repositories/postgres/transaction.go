@@ -24,6 +24,7 @@ func (TR *TransactionRepository) Insert(T ents.Transaction) (ents.Transaction, e
 		}
 
 	}
+	T.Id = LastId + 1
 	_, err = TR.DB.Exec(`insert into transaction_tab(
 		id, 
 		from_essence_type, 
@@ -33,7 +34,7 @@ func (TR *TransactionRepository) Insert(T ents.Transaction) (ents.Transaction, e
 		comment, 
 		to_id) 
 		values ($1, $2, $3, $4, $5, $6, $7)`,
-		LastId+1,
+		T.Id,
 		T.From_essence_type,
 		T.From_id,
 		T.To_essence_type,

@@ -1,15 +1,22 @@
 package entities
 
+// swagger:model UserDonate
 type UserDonate struct {
+	// in: query
 	EntityType bool   `json:"entity_type"`
 	EntityID   string `json:"entity_id"`
 	SumOfMoney string `json:"sum_of_money"`
 	Comm       string `json:"comment"`
 }
+
+// swagger:model UserAdd
 type UserAdd struct {
+	// in: query
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
+
+// swagger:model User
 type User struct {
 	Id               uint64  `gorm:"primaryKey;not null" json:"id"`
 	Login            string  `gorm:"not null" json:"login"`

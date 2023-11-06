@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/sabrs0/bmstu-web/src/internal/business/auth"
+	auth "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 	servs "github.com/sabrs0/bmstu-web/src/internal/business/services"
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )

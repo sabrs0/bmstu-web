@@ -7,16 +7,23 @@ import (
 
 const DateFormat string = "2006-01-02"
 
+// swagger:model FoundrisingPut
 type FoundrisingPut struct {
+	// in: query
 	Description  string `json:"description,omitempty"`
 	Required_sum string `json:"required_sum,omitempty"`
 }
+
+// swagger:model FoundrisingAdd
 type FoundrisingAdd struct {
+	// in: query
 	Found_id      uint64 `json:"found_id"`
 	Description   string `json:"description"`
 	Required_sum  string `json:"required_sum"`
 	Creation_date string `json:"creation_date"`
 }
+
+// swagger:model Foundrising
 type Foundrising struct {
 	Id                 uint64         `gorm:"primaryKey;not null" json:"id"`
 	Found_id           uint64         `gorm:"not null" json:"found_id"`

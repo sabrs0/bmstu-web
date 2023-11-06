@@ -1,61 +1,72 @@
 package businessLogicTest
 
 import (
-	"math"
 	"reflect"
 	"testing"
 
+	"github.com/golang/mock/gomock"
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 	servs "github.com/sabrs0/bmstu-web/src/internal/business/services"
-	chk "github.com/sabrs0/bmstu-web/src/internal/business/validation"
+	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
+	"github.com/sabrs0/bmstu-web/src/test/businessLogic/mocks"
 )
 
 func TestUserServiceAdd(t *testing.T) {
-	var Users []ents.User = []ents.User{
-		{
-			Id:         1,
-			Login:      "user",
-			Password:   "123",
-			Balance:    100,
-			CharitySum: 1000,
-		},
+	expectedValue := ents.User{
+		Id:       0,
+		Login:    "user",
+		Password: "123",
 	}
-	serv := servs.NewUserService(NewUserRepMock(Users))
-	pars := chk.NewUserMainParams("user2", "1234")
-	err := serv.Add(pars)
+	params := ents.UserAdd{
+		Login:    "user",
+		Password: "123",
+	}
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repo := mocks.NewMockIUserRepository(ctrl)
+	repo.EXPECT().Insert(expectedValue).Return(expectedValue, nil)
+	repo.EXPECT().SelectByLogin("user").Return(ents.User{}, my_errors.ErrorNotExists)
+	serv := servs.NewUserService(repo)
+
+	ans, err := serv.Add(params)
 	if err != nil {
 		t.Errorf("Shoud be nil, but err is %s\n", err)
+	}
+	if !reflect.DeepEqual(expectedValue, ans) {
+		t.Errorf("Shoud be equal values, but:\n expected = %#v\nrecieved = %#v\n", expectedValue, ans)
 	}
 }
 func TestUserServiceUpdate(t *testing.T) {
-	var Users []ents.User = []ents.User{
-		{
-			Id:         1,
-			Login:      "user",
-			Password:   "123",
-			Balance:    100,
-			CharitySum: 1000,
-		},
+	expectedValue := ents.User{
+		Id:         1,
+		Login:      "user",
+		Password:   "123",
+		Balance:    100,
+		CharitySum: 1000,
 	}
-	serv := servs.NewUserService(NewUserRepMock(Users))
-	pars := chk.NewUserMainParams("user3", "123")
-	err := serv.Update("1", pars)
-	if err == nil {
-		t.Errorf("Shoud be error, but err is nil\n")
+	params := ents.UserAdd{
+		Login:    "user",
+		Password: "123",
 	}
-	pars = chk.NewUserMainParams("user", "123")
-	err = serv.Update("0", pars)
-	if err == nil {
-		t.Errorf("Shoud be error, but err is nil\n")
-	}
-	pars = chk.NewUserMainParams("user2", "123")
-	err = serv.Update("0", pars)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repo := mocks.NewMockIUserRepository(ctrl)
+	repo.EXPECT().Update(expectedValue).Return(expectedValue, nil)
+	repo.EXPECT().SelectByLogin("user").Return(expectedValue, nil)
+	repo.EXPECT().SelectById(uint64(1)).Return(expectedValue, nil)
+	repo.EXPECT().SelectById(uint64(1)).Return(expectedValue, nil)
+	serv := servs.NewUserService(repo)
+
+	ans, err := serv.Update("1", params)
 	if err != nil {
 		t.Errorf("Shoud be nil, but err is %s\n", err)
 	}
+	if !reflect.DeepEqual(expectedValue, ans) {
+		t.Errorf("Shoud be equal values, but:\n expected = %#v\nrecieved = %#v\n", expectedValue, ans)
+	}
 }
 func TestUserServiceGetAll(t *testing.T) {
-	var Users []ents.User = []ents.User{
+	expectedValue := []ents.User{
 		{
 			Id:         1,
 			Login:      "user",
@@ -64,70 +75,86 @@ func TestUserServiceGetAll(t *testing.T) {
 			CharitySum: 1000,
 		},
 	}
-	serv := servs.NewUserService(NewUserRepMock(Users))
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repo := mocks.NewMockIUserRepository(ctrl)
+	repo.EXPECT().Select().Return(expectedValue, nil)
+	serv := servs.NewUserService(repo)
 	ans, err := serv.GetAll()
 	if err != nil {
-		t.Errorf("Some error at getAllUsers: %s\n", err)
+		t.Errorf("Some error: %s\n", err)
 	}
-	if !reflect.DeepEqual(Users, ans) {
-		t.Errorf("Shoud be equal getAll. ans = %v, src = %v\n", ans, Users)
+	if !reflect.DeepEqual(expectedValue, ans) {
+		t.Errorf("Shoud be equal . expected = %#v\nrecieved = %#v\n\n", expectedValue, ans)
 	}
 }
 func TestUserServiceGetById(t *testing.T) {
-	var Users []ents.User = []ents.User{
-		{
-			Id:         1,
-			Login:      "user",
-			Password:   "123",
-			Balance:    100,
-			CharitySum: 1000,
-		},
+	expectedValue := ents.User{
+		Id:         1,
+		Login:      "user",
+		Password:   "123",
+		Balance:    100,
+		CharitySum: 1000,
 	}
-	serv := servs.NewUserService(NewUserRepMock(Users))
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repo := mocks.NewMockIUserRepository(ctrl)
+	repo.EXPECT().SelectById(uint64(1)).Return(expectedValue, nil)
+	repo.EXPECT().SelectById(uint64(1)).Return(expectedValue, nil)
+	serv := servs.NewUserService(repo)
 	ans, err := serv.GetById("1")
 	if err != nil {
-		t.Errorf("Some error at getById: %s\n", err)
+		t.Errorf("Some error: %s\n", err)
 	}
-	if ans != Users[0] {
-		t.Errorf("Should be equal getById. ans = %v, src = %v\n", ans, Users)
+	if ans != expectedValue {
+		t.Errorf("Should be equal . expected = %#v\nrecieved = %#v\n\n", expectedValue, ans)
 	}
 }
-func GetByLogin(t *testing.T) {
-	var Users []ents.User = []ents.User{
-		{
-			Id:         1,
-			Login:      "user",
-			Password:   "123",
-			Balance:    100,
-			CharitySum: 1000,
-		},
+func TestUserServiceGetByLogin(t *testing.T) {
+	expectedValue := ents.User{
+		Id:         0,
+		Login:      "user",
+		Password:   "123",
+		Balance:    100,
+		CharitySum: 1000,
 	}
-	serv := servs.NewUserService(NewUserRepMock(Users))
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repo := mocks.NewMockIUserRepository(ctrl)
+	repo.EXPECT().SelectByLogin("user").Return(expectedValue, nil)
+	repo.EXPECT().SelectByLogin("user").Return(expectedValue, nil)
+	serv := servs.NewUserService(repo)
 	ans, err := serv.GetByLogin("user")
 	if err != nil {
-		t.Errorf("Some error at getByLogin: %s\n", err)
+		t.Errorf("Some error : %s\n", err)
 	}
-	if !reflect.DeepEqual(Users, ans) {
-		t.Errorf("Should be equal getByLogin. ans = %v, src = %v\n", ans, Users)
+	if ans != expectedValue {
+		t.Errorf("Should be equal getById. expected = %#v\nrecieved = %#v\n\n", expectedValue, ans)
 	}
 }
 func TestUserServiceDonate(t *testing.T) {
-	var Users []ents.User = []ents.User{
-		{
-			Id:         1,
-			Login:      "user",
-			Password:   "123",
-			Balance:    110,
-			CharitySum: 1000,
-		},
+	expectedValue := ents.User{
+		Id:         1,
+		Login:      "user",
+		Password:   "123",
+		Balance:    110,
+		CharitySum: 1000,
 	}
-	serv := servs.NewUserService(NewUserRepMock(Users))
-	pars := chk.NewUserDonateParams(100.00, false)
-	err := serv.Donate(&Users[0], pars)
+	expectedDonatedValue := ents.User{
+		Id:         1,
+		Login:      "user",
+		Password:   "123",
+		Balance:    10,
+		CharitySum: 1100,
+	}
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repo := mocks.NewMockIUserRepository(ctrl)
+	repo.EXPECT().Update(expectedDonatedValue).Return(expectedDonatedValue, nil)
+	serv := servs.NewUserService(repo)
+	err := serv.Donate(&expectedValue, 100)
 	if err != nil {
 		t.Errorf("Some error at Donate: %s\n", err)
 	}
-	if math.Abs(Users[0].Balance-10.00) > 1e-9 {
-		t.Errorf("Incorrect balance after donate: balance - %f\n", Users[0].Balance)
-	}
+
 }

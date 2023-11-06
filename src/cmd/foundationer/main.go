@@ -1,3 +1,21 @@
+//   Version: 0.1
+//   Schemes: http
+//   Host: localhost:8081
+//   BasePath: /api/v1
+//      Consumes:
+//      - application/json
+//   Produces:
+//   - application/json
+//   Security:
+//   - bearerAuth:
+//
+//   SecurityDefinitions:
+//   bearerAuth:
+//   type: http
+//   scheme: bearer
+//   bearerFormat: JWT
+//
+// swagger:meta
 package main
 
 import (
@@ -6,6 +24,7 @@ import (
 
 	"log/slog"
 
+	"github.com/rs/cors"
 	cfg "github.com/sabrs0/bmstu-web/src/internal/config"
 	"github.com/sabrs0/bmstu-web/src/internal/http-server/routers/gorilla"
 	"github.com/sabrs0/bmstu-web/src/internal/lib/logger/sl"
@@ -30,8 +49,10 @@ func main() {
 		log.Error("Failed to init database", sl.Err(err))
 	}
 	router := gorilla.SetRouter(storage.DB, log)
+
+	corsHandler := cors.Default().Handler(router)
 	srv := &http.Server{
-		Handler:      router,
+		Handler:      corsHandler,
 		Addr:         cfg.HTTPServer.Address,
 		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
 		ReadTimeout:  cfg.Timeout,

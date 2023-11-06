@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	resp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response"
@@ -17,11 +17,12 @@ func New(roles []string, validator RequestValidator) func(http.Handler) http.Han
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			err := validator.ValidateRequest(r, roles)
 			if err != nil {
-
-				resp.JSONRender(w, http.StatusUnauthorized, resp.Response{
-					Error: fmt.Errorf("%w: %w", my_errors.ErrorAuth, err).Error(),
-				})
+				log.Printf("AUTH MW ERROR %s\n", err.Error())
+				resp.ErrWrapper(w, nil, my_errors.ErrorAuth)
+				return
 			}
+
+			log.Printf("TOKEN IS VALID\n")
 			next.ServeHTTP(w, r)
 		})
 	}

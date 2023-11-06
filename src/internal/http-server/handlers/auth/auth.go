@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/sabrs0/bmstu-web/src/internal/business/auth"
+	auth "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 
 	resp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response"
 	authResp "github.com/sabrs0/bmstu-web/src/internal/lib/api/response/auth"
@@ -14,6 +14,30 @@ import (
 type IAuther interface {
 	Login(params auth.Params) (string, error)
 }
+
+// swagger:operation POST /login Login
+//
+//
+//
+//
+//
+// ---
+// produces:
+// - application/json
+// - application/xml
+// - text/xml
+// - text/html
+// - text/plain
+// requestBody:
+//    schema:
+//        "$ref": "#/definitions/LoginParams"
+// responses:
+// '200':
+//   description: Success
+//   schema:
+//    "$ref": "#/definitions/Token"
+// '400':
+// '404':
 
 func Login(log *slog.Logger, ctrl IAuther) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +48,11 @@ func Login(log *slog.Logger, ctrl IAuther) http.HandlerFunc {
 			slog.String("operation", op),
 		)
 		defer func() {
-			resp.ErrWrapper(log, w, response, err)
+			if err != nil {
+				log.Error(err.Error())
+				resp.ErrWrapper(w, &response, err)
+			}
+
 		}()
 		var params auth.Params
 		err = json.NewDecoder(r.Body).Decode(&params)

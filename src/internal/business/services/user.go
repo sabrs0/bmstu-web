@@ -41,7 +41,7 @@ func (US *UserService) ExistsByLogin(name string) bool {
 
 func (US *UserService) Add(UPars ents.UserAdd) (ents.User, error) {
 	if US.ExistsByLogin(UPars.Login) {
-		return ents.User{}, fmt.Errorf(my_errors.ErrAlreadyExists)
+		return ents.User{}, my_errors.ErrorConflict
 	}
 	U := ents.NewUser()
 	err := validation.CheckUserAddParams(UPars)
@@ -55,8 +55,8 @@ func (US *UserService) Add(UPars ents.UserAdd) (ents.User, error) {
 }
 
 func (US *UserService) Update(id_ string, UPars ents.UserAdd) (ents.User, error) {
-	if US.ExistsByLogin(UPars.Login) {
-		return ents.User{}, fmt.Errorf(my_errors.ErrAlreadyExists)
+	if !US.ExistsByLogin(UPars.Login) {
+		return ents.User{}, fmt.Errorf(my_errors.ErrNotExists)
 	}
 	var errGet error
 	var U ents.User

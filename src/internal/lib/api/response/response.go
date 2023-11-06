@@ -2,23 +2,30 @@ package response
 
 import (
 	"encoding/json"
-	"log/slog"
 	"net/http"
 
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
 )
 
-type Response struct {
-	Status string `json:"status"`
-	Error  string `json:"error,omitempty"`
-}
-
-func Error(msg string) Response {
-	return Response{
-		Error: msg,
+/*
+	type Response struct {
+		Status string `json:"status"`
+		Error  string `json:"error,omitempty"`
 	}
-}
-func ErrWrapper(log *slog.Logger, w http.ResponseWriter, resp any, err error) {
+
+	func Error(msg string) Response {
+		return Response{
+			Error: msg,
+		}
+	}
+*/
+func ErrWrapper(w http.ResponseWriter, resp any, err error) {
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	status := http.StatusBadRequest
 	if err == my_errors.ErrorNotExists {
 		status = http.StatusNotFound
@@ -26,16 +33,21 @@ func ErrWrapper(log *slog.Logger, w http.ResponseWriter, resp any, err error) {
 	if err == my_errors.ErrorConflict {
 		status = http.StatusConflict
 	}
-	log.Error(err.Error())
-	JSONRender(w, status, resp)
+
+	//http.Error(w, err.Error(), status)
+	w.WriteHeader(status)
 }
 func JSONRender(w http.ResponseWriter, status int, jsonData any) {
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	data, err := json.Marshal(jsonData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
 	w.Write(data)
 }

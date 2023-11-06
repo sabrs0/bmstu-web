@@ -24,6 +24,7 @@ func (FR *UserRepository) Insert(U ents.User) (ents.User, error) {
 			return ents.User{}, err
 		}
 	}
+	U.Id = LastId + 1
 	_, err = FR.DB.Exec(`insert into User_tab(
 		id, 
 		login, 
@@ -32,7 +33,7 @@ func (FR *UserRepository) Insert(U ents.User) (ents.User, error) {
 		charity_Sum,
 		closed_Fing_Amount,) 
 		values ($1, $2, $3, $4, $5, $6)`,
-		LastId+1,
+		U.Id,
 		U.Login,
 		U.Password,
 		U.Balance,

@@ -24,6 +24,7 @@ func (FR *FoundationRepository) Insert(F ents.Foundation) (ents.Foundation, erro
 			return ents.Foundation{}, err
 		}
 	}
+	F.Id = LastId + 1
 	_, err = FR.DB.Exec(`insert into foundation_tab(
 		id, 
 		name, 
@@ -37,7 +38,7 @@ func (FR *FoundationRepository) Insert(F ents.Foundation) (ents.Foundation, erro
 		country, 
 		login) 
 		values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-		LastId+1,
+		F.Id,
 		F.Name,
 		F.Password,
 		F.CurFoudrisingAmount,

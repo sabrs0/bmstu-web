@@ -23,6 +23,7 @@ func (FR *FoundrisingRepository) Insert(F ents.Foundrising) (ents.Foundrising, e
 			return ents.Foundrising{}, err
 		}
 	}
+	F.Id = LastId + 1
 	_, err = FR.DB.Exec(`insert into Foundrising_tab(
 		id, 
 		found_id, 
@@ -33,7 +34,7 @@ func (FR *FoundrisingRepository) Insert(F ents.Foundrising) (ents.Foundrising, e
 		creation_date, 
 		closing_date) 
 		values ($1, $2, $3, $4, $5, $6, $7, $8)`,
-		LastId+1,
+		F.Id,
 		F.Found_id,
 		F.Description,
 		F.Required_sum,

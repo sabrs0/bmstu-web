@@ -1,9 +1,11 @@
 ---
-openapi: 3.0.1
+openapi: 3.0.3
 info:
   title: Foundations
   version: '1.0'
   description: The API for the Foundations project
+servers:
+  - url: http://localhost:8081
 paths:
   "/api/v1/foundations":
     get:
@@ -30,7 +32,9 @@ paths:
                   "$ref": "#/components/schemas/Foundation"
     post:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Foundation
       requestBody:
@@ -66,7 +70,9 @@ paths:
   "/api/v1/foundations/{id}":
     put:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Foundation
       parameters:
@@ -110,7 +116,9 @@ paths:
           description: Conflict
     delete:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Foundation
       parameters:
@@ -165,7 +173,9 @@ paths:
   "/api/v1/foundations/{id}/donate":
     post:
         security:
-        - token: []
+          [{
+            Bearer: []
+        }]
         tags:
         - Foundation
         parameters:
@@ -264,7 +274,9 @@ paths:
                   "$ref": "#/components/schemas/Foundrising"
     post:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Foundrising
       requestBody:
@@ -300,7 +312,9 @@ paths:
   "/api/v1/foundrisings/{id}":
     put:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Foundrising
       parameters:
@@ -344,7 +358,9 @@ paths:
           description: Conflict
     patch:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Foundrising
       parameters:
@@ -388,7 +404,9 @@ paths:
           description: Conflict
     delete:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Foundrising
       parameters:
@@ -443,7 +461,9 @@ paths:
   "/api/v1/transactions":
     get:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Transaction
       responses:
@@ -470,7 +490,9 @@ paths:
   "/api/v1/transactions/{id}":
     get:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Transaction
       parameters:
@@ -499,7 +521,9 @@ paths:
           description: Not Found
     delete:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - Transaction
       parameters:
@@ -529,7 +553,9 @@ paths:
   "/api/v1/users":
     get:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - User
       responses:
@@ -555,7 +581,9 @@ paths:
           description: Unauthorized
     post:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - User
       requestBody:
@@ -589,9 +617,57 @@ paths:
         '409':
           description: Conflict
   "/api/v1/users/{id}":
+    put:
+      security:
+       [{
+        Bearer: []
+      }]
+      tags:
+      - User
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserPost"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/UserPost"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/UserPost"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/User"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
     delete:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - User
       parameters:
@@ -620,7 +696,9 @@ paths:
           description: Not Found
     get:
       security:
-      - token: []
+       [{
+        Bearer: []
+      }]
       tags:
       - User
       parameters:
@@ -650,7 +728,9 @@ paths:
   "/api/v1/users/{id}/donate":
     post:
         security:
-        - token: []
+          [{
+          Bearer: []
+        }]
         tags:
         - User
         parameters:
@@ -735,13 +815,16 @@ components:
         name:
           type: string
           nullable: true
+        password:
+          type: string
+          nullable: true
         curFoudrisingAmount:
           type: integer
           format: int32
-        ClosedFoundrisingAmount:
+        closedFoundrisingAmount:
           type: integer
           format: int32
-        Volunteer_amount:
+        volunteer_amount:
           type: integer
           format: int32
         fund_balance:
@@ -753,7 +836,10 @@ components:
         outcome:
           type: number
           format: double
-        Country:
+        country:
+          type: string
+          nullable: true
+        login:
           type: string
           nullable: true
       additionalProperties: false
@@ -848,7 +934,12 @@ components:
     User:
       type: object
       properties:
+        Id:
+          type: integer
+          format: int32
         Login:
+          type: string
+        Password:
           type: string
         Balance:
           type: number
@@ -886,6 +977,9 @@ components:
     Login:
       type: object
       properties:
+        role:
+          type: string
+          nullable: true
         login:
           type: string
           nullable: true
@@ -930,8 +1024,7 @@ components:
           nullable: true
       additionalProperties: false
   securitySchemes:
-      token:
-        type: apiKey
-        description: Please insert JWT with Token into field
-        name: Authorization
-        in: header
+      Bearer:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
