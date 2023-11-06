@@ -4,9 +4,14 @@ import (
 	ents "github.com/sabrs0/bmstu-web/src/internal/business/entities"
 )
 
+// swagger:response TransactionsGetAllResponse
 type GetAllResponse struct {
+	//in: body
 	Transactions []ents.Transaction `json:"transactions"`
 }
+
+// swagger:response TransactionsBaseResponse
 type BaseResponse struct {
-	ents.Transaction
+	//in: body
+	Transaction ents.Transaction
 }

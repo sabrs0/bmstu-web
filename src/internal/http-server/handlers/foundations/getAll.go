@@ -13,23 +13,21 @@ type IGetter interface {
 	GetAll() ([]ents.Foundation, error)
 }
 
-// swagger:operation GET /foundations Foundation FoundationsGet
+// swagger:route GET /foundations Foundation FoundationsGet
 //
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-// responses:
+//		 Consumes:
+//		 - application/json
 //
-//  '200':
-//   schema:
-//    type: array
-//    items:
-//      $ref": "#/definitions/Foundation"
-//   description: Success
+//		 Produces:
+//		 - application/json
+//
+//		 Schemes: http
+//
+//
+//
+//		 Responses:
+//	  		default: ValidateError
+//		    200: FoundationsGetAllResponse
 func GetAll(logger *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

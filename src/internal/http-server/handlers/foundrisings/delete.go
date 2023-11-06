@@ -15,33 +15,32 @@ type IDeleter interface {
 	Delete(id string) (ents.Foundrising, error)
 }
 
-// swagger:operation DELETE /foundrisings/{id} Foundrising FoundrisingsDelete
+// swagger:route DELETE /foundrisings/{id} Foundrising FoundrisingsDelete
 //
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
+//	 Consumes:
+//	 - application/json
 //
-// parameters:
-//   - name: id
-//     in: path
-//     required: true
-//     schema:
-//     type: integer
-//     format: int32
+//	 Produces:
+//	 - application/json
 //
-// responses:
-//  '200':
-//   description: Success
-//   schema:
-//    "$ref": "#/definitions/Foundrising"
-//  '401':
-//   description: Unauthorized
-//  '404':
-//   description: Not Found
+//	 Schemes: http
+//
+//
+//	 Security:
+//		  bearerAuth:
+//
+//	 Parameters:
+//	      + name: id
+//	        in: query
+//	        required: true
+//	        type: integer
+//	        format: int64
+//
+//	 Responses:
+//	   default: ValidateError
+//	   200: FoundrisingsBaseResponse
+//	   401: ValidateError
+//	   404: ValidateError
 func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

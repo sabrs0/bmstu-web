@@ -1,22 +1,21 @@
 //   Version: 0.1
-//  Schemes: http
-//  Host: localhost:8081
-//  BasePath: /api/v1
 //
-//  Consumes:
-//  - application/json
+//	Schemes: http
+//	Host: localhost:8081
+//	BasePath: /api/v1
 //
-//  Produces:
-//  - application/json
+//	Consumes:
+//	- application/json
 //
-//  Security:
-//  - bearerAuth:
+//	Produces:
+//	- application/json
 //
-//  SecurityDefinitions:
-//  bearerAuth:
-//   type: http
-//   scheme: bearer
-//   bearerFormat: JWT
+//
+//	SecurityDefinitions:
+//	bearerAuth:
+//	    type: apiKey
+//	    name: Authorization
+//	    in: header
 //
 // swagger:meta
 package main

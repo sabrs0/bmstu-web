@@ -44,7 +44,7 @@ func (FR *FoundrisingRepository) Insert(F ents.Foundrising) (ents.Foundrising, e
 		F.Closing_date,
 	)
 	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf("error in insert Foundrising repo")
+		return ents.Foundrising{}, fmt.Errorf("error in insert Foundrising repo: %s", err.Error())
 	} else {
 		return F, nil
 	}
@@ -53,7 +53,7 @@ func (FR *FoundrisingRepository) Insert(F ents.Foundrising) (ents.Foundrising, e
 func (FR *FoundrisingRepository) Delete(F ents.Foundrising) (ents.Foundrising, error) {
 	_, err := FR.DB.Exec("delete from Foundrising_tab where id = $1", F.Id)
 	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf("error in Delete Foundrising repo")
+		return ents.Foundrising{}, fmt.Errorf("error in Delete Foundrising repo: %s", err.Error())
 	} else {
 		return F, nil
 	}
@@ -77,7 +77,7 @@ func (FR *FoundrisingRepository) Update(F ents.Foundrising) (ents.Foundrising, e
 		F.Closing_date,
 		F.Id)
 	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf("error in Update Foundrising_tab repo")
+		return ents.Foundrising{}, fmt.Errorf("error in Update Foundrising_tab repo: %s", err.Error())
 	} else {
 		return F, nil
 	}

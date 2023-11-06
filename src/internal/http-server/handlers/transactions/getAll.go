@@ -14,25 +14,23 @@ type IGetter interface {
 	GetAll() ([]ents.Transaction, error)
 }
 
-// swagger:operation GET /transactions Transaction TransactionsGet
+// swagger:route GET /transactions Transaction TransactionsGet
 //
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-// responses:
+//	 Consumes:
+//	 - application/json
 //
-//  '200':
-//    schema:
-//     type: array
-//     items:
-//      $ref": "#/definitions/Transaction"
-//    description: Success
-//  '401':
-//    description: Unauthorized
+//	 Produces:
+//	 - application/json
+//
+//	 Schemes: http
+//
+//
+//	 Security:
+//		  bearerAuth:
+//
+//	 Responses:
+//	   default: ValidateError
+//	   200: TransactionsGetAllResponse
 func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

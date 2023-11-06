@@ -31,7 +31,7 @@ func (FR *UserRepository) Insert(U ents.User) (ents.User, error) {
 		password, 
 		balance, 
 		charity_Sum,
-		closed_Fing_Amount,) 
+		closed_Fing_Amount) 
 		values ($1, $2, $3, $4, $5, $6)`,
 		U.Id,
 		U.Login,
@@ -41,7 +41,7 @@ func (FR *UserRepository) Insert(U ents.User) (ents.User, error) {
 		U.ClosedFingAmount,
 	)
 	if err != nil {
-		return ents.User{}, fmt.Errorf("error in insert User repo")
+		return ents.User{}, fmt.Errorf("error in insert User repo: %s", err.Error())
 	}
 	return U, nil
 }
@@ -49,7 +49,7 @@ func (FR *UserRepository) Insert(U ents.User) (ents.User, error) {
 func (FR *UserRepository) Delete(F ents.User) (ents.User, error) {
 	_, err := FR.DB.Exec("delete from User_tab where id = $1", F.Id)
 	if err != nil {
-		return ents.User{}, fmt.Errorf("error in Delete User repo")
+		return ents.User{}, fmt.Errorf("error in Delete User repo: %s", err.Error())
 	}
 	return F, nil
 }
@@ -73,7 +73,7 @@ func (FR *UserRepository) Update(U ents.User) (ents.User, error) {
 		U.ClosedFingAmount,
 		U.Id)
 	if err != nil {
-		return ents.User{}, fmt.Errorf("error in Update User_tab repo")
+		return ents.User{}, fmt.Errorf("error in Update User_tab repo: %s", err.Error())
 	}
 	return U, nil
 }

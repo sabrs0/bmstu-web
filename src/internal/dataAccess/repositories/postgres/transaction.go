@@ -43,7 +43,7 @@ func (TR *TransactionRepository) Insert(T ents.Transaction) (ents.Transaction, e
 		T.To_id,
 	)
 	if err != nil {
-		return ents.Transaction{}, fmt.Errorf("error in insert Transaction repo")
+		return ents.Transaction{}, fmt.Errorf("error in insert Transaction repo: %s", err.Error())
 	}
 	return T, nil
 }
@@ -51,7 +51,7 @@ func (TR *TransactionRepository) Insert(T ents.Transaction) (ents.Transaction, e
 func (TR *TransactionRepository) Delete(T ents.Transaction) (ents.Transaction, error) {
 	_, err := TR.DB.Exec("delete from transaction_tab where id = $1", T.Id)
 	if err != nil {
-		return ents.Transaction{}, fmt.Errorf("error in Delete transaction repo")
+		return ents.Transaction{}, fmt.Errorf("error in Delete transaction repo: %s", err.Error())
 	}
 	return T, nil
 }

@@ -36,32 +36,6 @@ type IAdder interface {
 //    401: ValidateError
 //    409: ValidateError
 
-/*
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-// requestBody:
-//
-//	schema:
-//	 "$ref": "#/definitions/UserAdd"
-//
-// responses:
-//
-//	'200':
-//	 description: Success
-//	 schema:
-//	   "$ref": "#/definitions/User"
-//	'400':
-//	 description: Bad Request
-//	'401':
-//	 description: Unauthorized
-//	'409':
-//	 description: Conflict
-*/
 func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

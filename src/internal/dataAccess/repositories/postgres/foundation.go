@@ -51,7 +51,7 @@ func (FR *FoundationRepository) Insert(F ents.Foundation) (ents.Foundation, erro
 		F.Login,
 	)
 	if err != nil {
-		return ents.Foundation{}, fmt.Errorf("error in insert Foundation repo")
+		return ents.Foundation{}, fmt.Errorf("error in insert Foundation repo: %s", err.Error())
 	}
 	return F, nil
 }
@@ -59,7 +59,7 @@ func (FR *FoundationRepository) Insert(F ents.Foundation) (ents.Foundation, erro
 func (FR *FoundationRepository) Delete(F ents.Foundation) (ents.Foundation, error) {
 	_, err := FR.DB.Exec("delete from foundation_tab where id = $1", F.Id)
 	if err != nil {
-		return ents.Foundation{}, fmt.Errorf("error in Delete Foundation repo")
+		return ents.Foundation{}, fmt.Errorf("error in Delete Foundation repo: %s", err.Error())
 	}
 	return F, nil
 }
@@ -88,7 +88,7 @@ func (FR *FoundationRepository) Update(F ents.Foundation) (ents.Foundation, erro
 		F.Login,
 		F.Id)
 	if err != nil {
-		return ents.Foundation{}, fmt.Errorf("error in Update foundation_tab repo")
+		return ents.Foundation{}, fmt.Errorf("error in Update foundation_tab repo: %s", err.Error())
 	}
 	return F, nil
 }

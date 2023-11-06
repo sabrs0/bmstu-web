@@ -2,18 +2,14 @@ package entities
 
 var Countries [9]string = [9]string{"США", "Россия", "Великобритания", "Канада", "Франция", "Германия", "Китай", "Италия", "Испания"}
 
-// swagger:model
 type FoundationAdd struct {
-	// in: query
 	Name     string `json:"name"`
 	Password string `json:"password"`
 	Country  string `json:"country"`
 	Login    string `json:"login"`
 }
 
-// swagger:model
 type FoundationDonate struct {
-	// in: query
 	Foundrising_id string `json:"foundrising_id"`
 	Sum_of_Money   string `json:"sum_of_money"`
 	Comm           string `json:"comment"`
@@ -56,4 +52,32 @@ func (F *Foundation) SetName(newName string) {
 
 func (F *Foundation) SetCountry(newCntry string) {
 	F.Country = newCntry
+}
+
+// swagger:parameters FoundationsDonate
+type FoundationDonateRequest struct {
+	//in: query
+	//required: true
+	//type: integer
+	//format: int64
+	Id uint64
+	//in:body
+	Params FoundationDonate
+}
+
+// swagger:parameters  FoundationsPost
+type FoundationPostRequest struct {
+	//in:body
+	Params FoundationAdd
+}
+
+// swagger:parameters  FoundationsUpdate
+type FoundationUpdateRequest struct {
+	//in: query
+	//required: true
+	//type: integer
+	//format: int64
+	Id uint64
+	//in:body
+	Params FoundationAdd
 }

@@ -32,26 +32,6 @@ type IGetter interface {
 //    default: ValidateError
 //    200: UsersGetAllResponse
 
-/*
-//
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-// responses:
-//
-//  '200':
-//   schema:
-//    type: array
-//    items:
-//     $ref": "#/definitions/User"
-//   description: Success
-//  '401':
-//   description: Unauthorized
-*/
 func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

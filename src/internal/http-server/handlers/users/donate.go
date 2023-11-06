@@ -38,39 +38,6 @@ type IDonator interface {
 //    404: ValidateError
 //    409: ValidateError
 
-/*
-//
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-//
-// parameters:
-//   - name: id
-//     in: path
-//     required: true
-//     schema:
-//     type: integer
-//     format: int32
-//
-// responses:
-//
-//  '200':
-//   description: Success
-//   schema:
-//     "$ref": "#/definitions/Transaction"
-//  '400':
-//   description: Bad Request
-//  '401':
-//   description: Unauthorized
-//  '404':
-//   description: Not Found
-//  '409':
-//   description: Conflict
-*/
 func Donate(log *slog.Logger, ctrl IDonator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

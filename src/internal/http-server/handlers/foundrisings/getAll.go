@@ -14,23 +14,21 @@ type IGetter interface {
 	GetAll() ([]ents.Foundrising, error)
 }
 
-// swagger:operation GET /foundrisings Foundrising FoundrisingsGet
+// swagger:route GET /foundrisings Foundrising FoundrisingsGet
 //
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-// responses:
+//  Consumes:
+//  - application/json
 //
-//  '200':
-//   schema:
-//    type: array
-//    items:
-//      $ref": "#/definitions/Foundrising"
-//   description: Success
+//  Produces:
+//  - application/json
+//
+//  Schemes: http
+//
+//
+//
+//  Responses:
+//    default: ValidateError
+//    200: FoundrisingsGetAllResponse
 
 func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

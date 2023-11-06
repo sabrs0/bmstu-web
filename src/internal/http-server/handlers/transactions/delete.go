@@ -15,34 +15,32 @@ type IDeleter interface {
 	Delete(id string) (ents.Transaction, error)
 }
 
-// swagger:operation DELETE /transactions/{id} Transaction TransactionsDelete
+// swagger:route DELETE /transactions/{id} Transaction TransactionsDelete
 //
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
+//	 Consumes:
+//	 - application/json
 //
-// parameters:
-//   - name: id
-//     in: path
-//     required: true
-//     schema:
-//     type: integer
-//     format: int32
+//	 Produces:
+//	 - application/json
 //
-// responses:
+//	 Schemes: http
 //
-//  '200':
-//   description: Success
-//   schema:
-//      "$ref": "#/definitions/Transaction"
-//  '401':
-//   description: Unauthorized
-//  '404':
-//   description: Not Found
+//
+//	 Security:
+//		  bearerAuth:
+//
+//	 Parameters:
+//	      + name: id
+//	        in: query
+//	        required: true
+//	        type: integer
+//	        format: int64
+//
+//	 Responses:
+//	   default: ValidateError
+//	   200: TransactionsBaseResponse
+//	   401: ValidateError
+//	   404: ValidateError
 func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

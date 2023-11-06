@@ -16,43 +16,28 @@ type IDonator interface {
 		params ents.FoundationDonate) (ents.Transaction, error)
 }
 
-// swagger:operation POST /foundations/{id}/donate Foundation FoundationsDonate
+// swagger:route POST /foundations/{id}/donate Foundation FoundationsDonate
 //
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
+//  Consumes:
+//  - application/json
 //
-// parameters:
-//   - name: id
-//     in: path
-//     required: true
-//     schema:
-//     	type: integer
-//     	format: int32
+//  Produces:
+//  - application/json
 //
-// requestBody:
+//  Schemes: http
 //
-// schema:
-//     "$ref": "#/definitions/FoundationDonate"
 //
-// responses:
+//  Security:
+//	  bearerAuth:
 //
-//  '200':
-//   description: Success
-//   schema:
-//    "$ref": "#/definitions/Transaction"
-//  '400':
-//   description: Bad Request
-//  '401':
-//   description: Unauthorized
-//  '404':
-//   description: Not Found
-//  '409':
-//   description: Conflict
+//  Responses:
+//    default: ValidateError
+//    200: FoundationsDonateResponse
+//    400: ValidateError
+//    401: ValidateError
+//    404: ValidateError
+//    409: ValidateError
+
 func Donate(log *slog.Logger, ctrl IDonator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error

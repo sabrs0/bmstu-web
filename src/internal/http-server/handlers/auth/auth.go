@@ -15,31 +15,23 @@ type IAuther interface {
 	Login(params auth.Params) (string, error)
 }
 
-// swagger:operation POST /login Login Login
+// swagger:route POST /login Login LoginPost
+//
+//	 Consumes:
+//	 - application/json
+//
+//	 Produces:
+//	 - application/json
+//
+//	 Schemes: http
 //
 //
 //
-//
-//
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-// requestBody:
-//    schema:
-//        "$ref": "#/definitions/LoginParams"
-// responses:
-// '200':
-//   description: Success
-//   schema:
-//    "$ref": "#/definitions/Token"
-// '400':
-//   description: Bad Request
-// '404':
-//   description: Not Found
+//	 Responses:
+//	   default: ValidateError
+//	   200: LoginResponse
+//	   400: ValidateError
+//	   404: ValidateError
 
 func Login(log *slog.Logger, ctrl IAuther) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

@@ -7,23 +7,18 @@ import (
 
 const DateFormat string = "2006-01-02"
 
-// swagger:model
 type FoundrisingPut struct {
-	// in: query
 	Description  string `json:"description,omitempty"`
 	Required_sum string `json:"required_sum,omitempty"`
 }
 
-// swagger:model
 type FoundrisingAdd struct {
-	// in: query
 	Found_id      uint64 `json:"found_id"`
 	Description   string `json:"description"`
 	Required_sum  string `json:"required_sum"`
 	Creation_date string `json:"creation_date"`
 }
 
-// swagger:model
 type Foundrising struct {
 	Id                 uint64         `gorm:"primaryKey;not null" json:"id"`
 	Found_id           uint64         `gorm:"not null" json:"found_id"`
@@ -68,4 +63,21 @@ func (params FoundrisingPut) ValidatePatch() error {
 		return fmt.Errorf("Not enough params for foundrising patch")
 	}
 	return nil
+}
+
+// swagger:parameters  FoundrisingsPost
+type FoundrisingPostRequest struct {
+	//in:body
+	Params FoundrisingAdd
+}
+
+// swagger:parameters  FoundrisingsUpdate
+type FoundrisingUpdateRequest struct {
+	//in: query
+	//required: true
+	//type: integer
+	//format: int64
+	Id uint64
+	//in:body
+	Params FoundrisingPut
 }

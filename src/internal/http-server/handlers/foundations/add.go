@@ -14,32 +14,26 @@ type IAdder interface {
 	Add(params ents.FoundationAdd) (ents.Foundation, error)
 }
 
-// swagger:operation POST /foundations Foundation FoundationsPost
+// swagger:route POST /foundations Foundation FoundationsPost
 //
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-// requestBody:
+//	 Consumes:
+//	 - application/json
 //
-//	schema:
-//	  "$ref": "#/definitions/FoundationAdd"
+//	 Produces:
+//	 - application/json
 //
-// responses:
+//	 Schemes: http
 //
-//	'200':
-//	 description: Success
-//	 schema:
-//	   "$ref": "#/definitions/Foundation"
-//	'400':
-//	 description: Bad Request
-//	'401':
-//	 description: Unauthorized
-//	'409':
-//	 description: Conflict
+//
+//	 Security:
+//		  bearerAuth:
+//
+//	 Responses:
+//	   default: ValidateError
+//	   200: FoundationsBaseResponse
+//	   400: ValidateError
+//	   401: ValidateError
+//	   409: ValidateError
 func Add(logger *slog.Logger, ctrl IAdder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
