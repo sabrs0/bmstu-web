@@ -146,7 +146,7 @@
             "type": "integer",
             "format": "uint64",
             "name": "Id",
-            "in": "query",
+            "in": "path",
             "required": true
           },
           {
@@ -247,7 +247,7 @@
             "type": "integer",
             "format": "uint64",
             "name": "Id",
-            "in": "query",
+            "in": "path",
             "required": true
           },
           {
@@ -448,7 +448,7 @@
             "type": "integer",
             "format": "uint64",
             "name": "Id",
-            "in": "query",
+            "in": "path",
             "required": true
           },
           {
@@ -823,7 +823,7 @@
             "type": "integer",
             "format": "uint64",
             "name": "Id",
-            "in": "query",
+            "in": "path",
             "required": true
           },
           {
@@ -926,7 +926,7 @@
             "type": "integer",
             "format": "uint64",
             "name": "Id",
-            "in": "query",
+            "in": "path",
             "required": true
           },
           {

@@ -40,7 +40,7 @@ func (U *User) SetPassword(newPass string) {
 
 // swagger:parameters UsersDonate
 type UserDonateRequest struct {
-	//in: query
+	//in: path
 	//required: true
 	//type: integer
 	//format: int64
@@ -57,7 +57,7 @@ type UserPostRequest struct {
 
 // swagger:parameters  UsersUpdate
 type UserUpdateRequest struct {
-	//in: query
+	//in: path
 	//required: true
 	//type: integer
 	//format: int64

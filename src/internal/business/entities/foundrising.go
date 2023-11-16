@@ -54,13 +54,13 @@ func (F *Foundrising) SetFoundId(id uint64) {
 }
 func (params FoundrisingPut) ValidatePut() error {
 	if params.Description == "" || params.Required_sum == "" {
-		return fmt.Errorf("Not enough params for foundrising put")
+		return fmt.Errorf("not enough params for foundrising put")
 	}
 	return nil
 }
 func (params FoundrisingPut) ValidatePatch() error {
 	if params.Description == "" && params.Required_sum == "" {
-		return fmt.Errorf("Not enough params for foundrising patch")
+		return fmt.Errorf("not enough params for foundrising patch")
 	}
 	return nil
 }
@@ -73,7 +73,7 @@ type FoundrisingPostRequest struct {
 
 // swagger:parameters  FoundrisingsUpdate
 type FoundrisingUpdateRequest struct {
-	//in: query
+	//in: path
 	//required: true
 	//type: integer
 	//format: int64

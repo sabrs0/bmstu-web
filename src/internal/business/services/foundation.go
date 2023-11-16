@@ -66,8 +66,8 @@ func (FS *FoundationService) Add(FPars ents.FoundationAdd) (ents.Foundation, err
 }
 
 func (FS *FoundationService) Update(id_ string, FPars ents.FoundationAdd) (ents.Foundation, error) {
-	if !FS.ExistsByLogin(FPars.Login) {
-		return ents.Foundation{}, fmt.Errorf(my_errors.ErrNotExists)
+	if FS.ExistsByLogin(FPars.Login) {
+		return ents.Foundation{}, my_errors.ErrorConflict
 	}
 	var err error
 	var F ents.Foundation

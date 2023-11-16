@@ -56,7 +56,7 @@ func (F *Foundation) SetCountry(newCntry string) {
 
 // swagger:parameters FoundationsDonate
 type FoundationDonateRequest struct {
-	//in: query
+	//in: path
 	//required: true
 	//type: integer
 	//format: int64
@@ -73,7 +73,7 @@ type FoundationPostRequest struct {
 
 // swagger:parameters  FoundationsUpdate
 type FoundationUpdateRequest struct {
-	//in: query
+	//in: path
 	//required: true
 	//type: integer
 	//format: int64

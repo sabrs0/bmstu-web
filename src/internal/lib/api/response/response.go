@@ -34,6 +34,9 @@ func ErrWrapper(w http.ResponseWriter, resp any, err error) {
 	if err == my_errors.ErrorConflict {
 		status = http.StatusConflict
 	}
+	if err == my_errors.ErrorAuth {
+		status = http.StatusUnauthorized
+	}
 
 	//http.Error(w, err.Error(), status)
 	w.WriteHeader(status)

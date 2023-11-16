@@ -55,8 +55,8 @@ func (US *UserService) Add(UPars ents.UserAdd) (ents.User, error) {
 }
 
 func (US *UserService) Update(id_ string, UPars ents.UserAdd) (ents.User, error) {
-	if !US.ExistsByLogin(UPars.Login) {
-		return ents.User{}, fmt.Errorf(my_errors.ErrNotExists)
+	if US.ExistsByLogin(UPars.Login) {
+		return ents.User{}, my_errors.ErrorConflict
 	}
 	var errGet error
 	var U ents.User
@@ -94,7 +94,7 @@ func (US *UserService) GetById(id_ string) (ents.User, error) {
 	sid, err := strconv.Atoi(id_)
 	id := uint64(sid)
 	if err != nil {
-		return ents.User{}, fmt.Errorf("некорректный id")
+		return ents.User{}, fmt.Errorf("некорректный id=%s, %s", id_, err.Error())
 	}
 	if !US.ExistsById(id) {
 		return ents.User{}, fmt.Errorf(my_errors.ErrNotExists)

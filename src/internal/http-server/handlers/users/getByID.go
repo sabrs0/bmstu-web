@@ -55,7 +55,8 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 			}
 
 		}()
-		id := mux.Vars(r)["id"]
+		vars := mux.Vars(r)
+		id := vars["id"]
 		user, err := ctrl.GetByID(id)
 		if err != nil {
 			return

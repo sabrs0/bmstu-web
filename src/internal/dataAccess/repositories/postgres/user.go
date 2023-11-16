@@ -56,17 +56,12 @@ func (FR *UserRepository) Delete(F ents.User) (ents.User, error) {
 
 func (FR *UserRepository) Update(U ents.User) (ents.User, error) {
 	_, err := FR.DB.Exec(`update User_tab set 
-	name = $1, 
+	login = $1, 
 	password = $2, 
-	cur_Foudrising_Amount = $3, 
-	closed_Foundrising_Amount = $4,
-	fund_balance = $5, 
-	income_history = $6, 
-	outcome_history = $7,
-	volunteer_amount = $8,
-	country = $9, 
-	login = $10
-	where id = $11`, U.Login,
+	balance = $3, 
+	charity_Sum = $4,
+	closed_Fing_Amount = $5
+	where id = $6`, U.Login,
 		U.Password,
 		U.Balance,
 		U.CharitySum,
