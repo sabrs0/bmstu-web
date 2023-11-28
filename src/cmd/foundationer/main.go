@@ -23,6 +23,7 @@ package main
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"log/slog"
 
@@ -40,16 +41,18 @@ const (
 )
 
 func main() {
+
 	cfg := cfg.MustLoad() //config
 
 	log := setupLogger(cfg.Env) //logger
 	log.Info("starting foundationer", slog.String("env", cfg.Env))
 	log.Debug("Debug msgs are enabled")
-
+	time.Sleep(time.Second * 15)
 	storage, err := postgres.New() //storage
 	if err != nil {
 		log.Error("Failed to init database", sl.Err(err))
 	}
+	//log.Info("Successfully connected to database")
 	router := gorilla.SetRouter(storage.DB, log)
 
 	corsHandler := cors.Default().Handler(router)

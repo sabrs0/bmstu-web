@@ -38,13 +38,14 @@ swagger:
 swagger generate spec -m -o=swagger.json
 swagger serve -F=swagger swagger.json
 
-integration:
-
-пг дамп миграция
-
-описание тестов для каждой сущности
-
-описать докер
-
-тестконтейнерс
+servers:
+    0.0.0.0:<port1>
+    0.0.0.0:<port2>
+    0.0.0.0:<port3>
+nginx:
+    upstream <name>{
+        ...
+        ...
+        0.0.0.0: <port1>
+    }
 

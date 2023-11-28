@@ -1,0 +1,153 @@
+version: '3.8'
+services:
+  #nginx:
+  #      image:
+  #        nginx:latest
+  #      ports:
+  #        - "82:81"
+  #        - "8085:8080"
+  #      container_name: 
+  #        local-nginx
+  #      volumes:
+  #        - /etc/nginx/:/etc/nginx
+  #      networks:
+  #        - backend
+  #      depends_on:
+  #        server1:
+  #          condition: service_healthy
+   #       server2:
+    #        condition: service_healthy
+     #     server_main:
+     #       condition: service_healthy
+  server1:
+        hostname: foundations-server-1
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "8082:8081"
+        tty: true
+        logging:
+          driver: json-file
+        env_file: ./config_storage/server1/postgres.env
+        environment:
+          - FND_CFG_PATH=/go/src/app/src/config_server/local.yaml
+        depends_on:
+          - db_postgres
+        networks:
+          - backend
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          interval: 10s
+          timeout: 10s
+          retries: 3
+          #start_period: 40s
+          #start_interval: 5s
+  server2:
+        hostname: foundations-server-2
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "8083:8081"
+        logging:
+          driver: json-file
+        tty: true
+        env_file: "./config_storage/server2/postgres.env"
+        environment:
+          - FND_CFG_PATH=/go/src/app/src/config_server/local.yaml
+        depends_on:
+          - db_postgres
+        networks:
+          - backend
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          interval: 10s
+          timeout: 10s
+          retries: 3
+          #start_period: 40s
+          #start_interval: 5s
+  server_main:
+        hostname: foundations-server-main
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "8081:8081"
+        logging:
+          driver: json-file
+        tty: true
+        env_file: "./config_storage/server_main/postgres.env"
+        environment:
+          - FND_CFG_PATH=/go/src/app/src/config_server/local.yaml
+        depends_on:
+          - db_postgres
+        networks:
+          - backend
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          interval: 10s
+          timeout: 10s
+          retries: 3
+          #start_period: 40s
+          #start_interval: 5s
+  server_mirror:
+        hostname: foundations-server-mirror
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "8086:8081"
+        logging:
+          driver: json-file
+        tty: true
+        env_file: "./config_storage/server_main/postgres.env"
+        environment:
+          - FND_CFG_PATH=/go/src/app/src/config_server/local.yaml
+        depends_on:
+          - db_postgres
+        networks:
+          - backend
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          interval: 10s
+          timeout: 10s
+          retries: 3
+          #start_period: 40s
+          #start_interval: 5s
+  db_postgres:
+        hostname: foundations-db_postgres
+        image: postgres:latest
+        environment:
+          POSTGRES_DB: "foundations"
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "12345"
+        volumes:
+          - db_data:/var/lib/postgresql/data
+          - ./database/master/migrations/000001_foundations.up.sql:/docker-entrypoint-initdb.d/init.sql
+        ports:
+          - 5432
+        networks:
+          - backend
+  db_postgres_repl:
+        hostname: foundations-db_postgres_repl
+        image: postgres:latest
+        environment:
+          POSTGRES_DB: "foundations"
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "12345"
+        volumes:
+          - db_data_repl:/var/lib/postgresql/data
+          - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
+        ports:
+          - 5432
+        networks:
+          - backend
+        depends_on:
+          - db_postgres
+volumes:
+ db_data:
+ db_data_repl:
+networks:
+  backend:
+    driver: bridge

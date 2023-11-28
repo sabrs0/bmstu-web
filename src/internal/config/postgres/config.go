@@ -1,33 +1,29 @@
 package postgres
 
 import (
-	"log"
 	"os"
-
-	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
-	User     string `yaml:"user" env-default:"postgres"`
-	Password string `yaml:"password"`
-	DbName   string `yaml:"db_name" `
-	SslMode  string `yaml:"ssl_mode" env-default:"disable"`
-	Port     string `yaml:"port" env-default:"5432"`
-	Host     string `yaml:"host"`
+	User     string
+	Password string
+	DbName   string
+	SslMode  string
+	Port     string
+	Host     string
 }
 
 func (c *Config) String() string {
 	return "host=" + c.Host + " user=" + c.User + " password=" + c.Password + " dbname=" + c.DbName + " port=" + c.Port + " sslmode=" + c.SslMode
 }
 func MustLoad() *Config {
-	cfgPath := os.Getenv("FND_DB_CFG_PATH")
-	if _, err := os.Stat(cfgPath); os.IsNotExist(err) {
-		log.Fatalf("Cant load db config file %s: %s", cfgPath, err)
+
+	return &Config{
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DbName:   os.Getenv("DB_NAME"),
+		Port:     os.Getenv("DB_PORT"),
+		Host:     os.Getenv("DB_HOST"),
+		SslMode:  os.Getenv("DB_SSL_MODE"),
 	}
-	var cfg Config
-	err := cleanenv.ReadConfig(cfgPath, &cfg)
-	if err != nil {
-		log.Fatalf("Cant load db config file: %s", err)
-	}
-	return &cfg
 }
