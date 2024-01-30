@@ -11,7 +11,7 @@ import (
 )
 
 type IAdder interface {
-	Add(params ents.FoundationAdd) (ents.Foundation, error)
+	Add(params ents.FoundationAdd) (ents.FoundationTransfer, error)
 }
 
 // swagger:route POST /foundations Foundation FoundationsPost
@@ -57,7 +57,8 @@ func Add(logger *slog.Logger, ctrl IAdder) http.HandlerFunc {
 			return
 		}
 		logger.Info("Request body decoded")
-		foundation, err := ctrl.Add(params)
+		var foundation ents.FoundationTransfer
+		foundation, err = ctrl.Add(params)
 		if err != nil {
 
 			return

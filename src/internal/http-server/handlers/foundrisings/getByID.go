@@ -12,7 +12,7 @@ import (
 )
 
 type IByIdGetter interface {
-	GetByID(id_ string) (ents.Foundrising, error)
+	GetByID(id_ string) (ents.FoundrisingTransfer, error)
 }
 
 // swagger:route GET /foundrisings/{id} Foundrising FoundrisingsGetById
@@ -29,7 +29,7 @@ type IByIdGetter interface {
 //
 //  Parameters:
 //       + name: id
-//         in: query
+//         in: path
 //         required: true
 //         type: integer
 //         format: int64
@@ -43,6 +43,7 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.BaseResponse
+		var foundrising ents.FoundrisingTransfer
 		const op = "handlers.foundrisings.getByID"
 		log = log.With(
 			slog.String("operation", op),
@@ -55,7 +56,7 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 
 		}()
 		id := mux.Vars(r)["id"]
-		foundrising, err := ctrl.GetByID(id)
+		foundrising, err = ctrl.GetByID(id)
 		if err != nil {
 			return
 		}

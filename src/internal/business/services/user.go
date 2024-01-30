@@ -55,14 +55,15 @@ func (US *UserService) Add(UPars ents.UserAdd) (ents.User, error) {
 }
 
 func (US *UserService) Update(id_ string, UPars ents.UserAdd) (ents.User, error) {
-	if US.ExistsByLogin(UPars.Login) {
-		return ents.User{}, my_errors.ErrorConflict
-	}
+
 	var errGet error
 	var U ents.User
 	U, errGet = US.GetById(id_)
 	if errGet != nil {
 		return ents.User{}, errGet
+	}
+	if US.ExistsByLogin(UPars.Login) && U.Login != UPars.Login {
+		return ents.User{}, my_errors.ErrorConflict
 	}
 	err := validation.CheckUserAddParams(UPars)
 	if err != nil {
@@ -130,9 +131,9 @@ func (US *UserService) Donate(U *ents.User, sum float64) error {
 	return err
 }
 
-func (US *UserService) ReplenishBalance(U *ents.User, sum float64) error {
+func (US *UserService) ReplenishBalance(U *ents.User, sum float64) (ents.UserTransfer, error) {
 	U.Balance += sum
 
 	_, err := US.UR.Update(*U)
-	return err
+	return ents.NewUserTransfer(*U), err
 }

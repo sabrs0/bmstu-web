@@ -12,7 +12,7 @@ import (
 )
 
 type IAdder interface {
-	Add(params ents.UserAdd) (ents.User, error)
+	Add(params ents.UserAdd) (ents.UserTransfer, error)
 }
 
 // swagger:route POST /users User UsersPost
@@ -41,6 +41,7 @@ func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 		var err error
 		var response usrResp.BaseResponse
 		const op = "handlers.users.add"
+		var user ents.UserTransfer
 		log = log.With(
 			slog.String("operation", op),
 		)
@@ -56,7 +57,7 @@ func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 		if err != nil {
 			return
 		}
-		user, err := ctrl.Add(params)
+		user, err = ctrl.Add(params)
 		if err != nil {
 			return
 		}

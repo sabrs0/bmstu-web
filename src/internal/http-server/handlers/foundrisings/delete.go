@@ -12,7 +12,7 @@ import (
 )
 
 type IDeleter interface {
-	Delete(id string) (ents.Foundrising, error)
+	Delete(id string) (ents.FoundrisingTransfer, error)
 }
 
 // swagger:route DELETE /foundrisings/{id} Foundrising FoundrisingsDelete
@@ -31,7 +31,7 @@ type IDeleter interface {
 //
 //	 Parameters:
 //	      + name: id
-//	        in: query
+//	        in: path
 //	        required: true
 //	        type: integer
 //	        format: int64
@@ -45,6 +45,7 @@ func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.BaseResponse
+		var foundrising ents.FoundrisingTransfer
 		const op = "handlers.foundrisings.delete"
 		log = log.With(
 			slog.String("operation", op),
@@ -57,7 +58,8 @@ func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 
 		}()
 		id := mux.Vars(r)["id"]
-		foundrising, err := ctrl.Delete(id)
+		// важно чтобы не было двоеточки := иначе не перехватим ошибку
+		foundrising, err = ctrl.Delete(id)
 		if err != nil {
 			return
 		}

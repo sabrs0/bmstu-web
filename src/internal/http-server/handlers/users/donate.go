@@ -13,7 +13,7 @@ import (
 )
 
 type IDonator interface {
-	Donate(userID string, params ents.UserDonate) (ents.Transaction, error)
+	Donate(userID string, params ents.UserDonate) (ents.TransactionTransfer, error)
 }
 
 // swagger:route POST /users/{id}/donate User UsersDonate
@@ -42,7 +42,7 @@ func Donate(log *slog.Logger, ctrl IDonator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response usrResp.DonateResponse
-		var transaction ents.Transaction
+		var transaction ents.TransactionTransfer
 		defer func() {
 			if err != nil {
 				log.Error(err.Error())

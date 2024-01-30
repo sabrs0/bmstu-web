@@ -6,13 +6,14 @@
     "application/json"
   ],
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "swagger": "2.0",
   "info": {
     "version": "0.1"
   },
-  "host": "localhost:8081",
+  "host": "localhost:8080",
   "basePath": "/api/v1",
   "paths": {
     "/foundations": {
@@ -106,7 +107,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -145,13 +146,15 @@
           {
             "type": "integer",
             "format": "uint64",
-            "name": "Id",
+            "x-go-name": "Id",
+            "name": "id",
             "in": "path",
             "required": true
           },
           {
             "name": "Params",
             "in": "body",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/FoundationAdd"
             }
@@ -202,7 +205,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -246,7 +249,8 @@
           {
             "type": "integer",
             "format": "uint64",
-            "name": "Id",
+            "x-go-name": "Id",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -282,6 +286,11 @@
     },
     "/foundations/{id}/foundrisings": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "consumes": [
           "application/json"
         ],
@@ -300,7 +309,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -408,7 +417,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -447,7 +456,8 @@
           {
             "type": "integer",
             "format": "uint64",
-            "name": "Id",
+            "x-go-name": "Id",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -504,7 +514,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -619,7 +629,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -659,7 +669,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -780,7 +790,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -822,7 +832,8 @@
           {
             "type": "integer",
             "format": "uint64",
-            "name": "Id",
+            "x-go-name": "Id",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -881,7 +892,7 @@
             "type": "integer",
             "format": "int64",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true
           }
         ],
@@ -925,7 +936,8 @@
           {
             "type": "integer",
             "format": "uint64",
-            "name": "Id",
+            "x-go-name": "Id",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -1058,44 +1070,36 @@
       },
       "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
     },
-    "Foundrising": {
+    "FoundationTransfer": {
       "type": "object",
       "properties": {
-        "closing_date": {
-          "$ref": "#/definitions/NullString"
-        },
-        "creation_date": {
-          "type": "string",
-          "x-go-name": "Creation_date"
-        },
-        "current_sum": {
-          "type": "number",
-          "format": "double",
-          "x-go-name": "Current_sum"
-        },
-        "description": {
-          "type": "string",
-          "x-go-name": "Description"
-        },
-        "found_id": {
+        "closed_foundrising_amount": {
           "type": "integer",
-          "format": "uint64",
-          "x-go-name": "Found_id"
+          "format": "uint32",
+          "x-go-name": "ClosedFoundrisingAmount"
+        },
+        "country": {
+          "type": "string",
+          "x-go-name": "Country"
+        },
+        "cur_foudrising_amount": {
+          "type": "integer",
+          "format": "uint32",
+          "x-go-name": "CurFoudrisingAmount"
         },
         "id": {
           "type": "integer",
           "format": "uint64",
           "x-go-name": "Id"
         },
-        "philantrops_amount": {
-          "type": "integer",
-          "format": "uint64",
-          "x-go-name": "Philantrops_amount"
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
         },
-        "required_sum": {
-          "type": "number",
-          "format": "double",
-          "x-go-name": "Required_sum"
+        "volunteer_amount": {
+          "type": "integer",
+          "format": "uint32",
+          "x-go-name": "Volunteer_amount"
         }
       },
       "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
@@ -1132,6 +1136,48 @@
         },
         "required_sum": {
           "type": "string",
+          "x-go-name": "Required_sum"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "FoundrisingTransfer": {
+      "type": "object",
+      "properties": {
+        "closing_date": {
+          "$ref": "#/definitions/NullString"
+        },
+        "creation_date": {
+          "type": "string",
+          "x-go-name": "Creation_date"
+        },
+        "current_sum": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Current_sum"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "found_id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Found_id"
+        },
+        "id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "philantrops_amount": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Philantrops_amount"
+        },
+        "required_sum": {
+          "type": "number",
+          "format": "double",
           "x-go-name": "Required_sum"
         }
       },
@@ -1179,21 +1225,16 @@
       },
       "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/lib/api/response/auth"
     },
-    "Transaction": {
+    "TransactionTransfer": {
       "type": "object",
       "properties": {
         "comment": {
           "type": "string",
           "x-go-name": "Comment"
         },
-        "from_essence_type": {
-          "type": "boolean",
-          "x-go-name": "From_essence_type"
-        },
-        "from_id": {
-          "type": "integer",
-          "format": "uint64",
-          "x-go-name": "From_id"
+        "from": {
+          "type": "string",
+          "x-go-name": "From"
         },
         "id": {
           "type": "integer",
@@ -1205,14 +1246,9 @@
           "format": "double",
           "x-go-name": "Sum_of_money"
         },
-        "to_essence_type": {
-          "type": "boolean",
-          "x-go-name": "To_essence_type"
-        },
-        "to_id": {
-          "type": "integer",
-          "format": "uint64",
-          "x-go-name": "To_id"
+        "to": {
+          "type": "string",
+          "x-go-name": "To"
         }
       },
       "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
@@ -1286,19 +1322,53 @@
         }
       },
       "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
+    },
+    "UserTransfer": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Balance"
+        },
+        "charity_sum": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "CharitySum"
+        },
+        "closed_fing_amount": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "ClosedFingAmount"
+        },
+        "id": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "login": {
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        }
+      },
+      "x-go-package": "github.com/sabrs0/bmstu-web/src/internal/business/entities"
     }
   },
   "responses": {
     "FoundationsBaseResponse": {
       "description": "",
       "schema": {
-        "$ref": "#/definitions/Foundation"
+        "$ref": "#/definitions/FoundationTransfer"
       }
     },
     "FoundationsDonateResponse": {
       "description": "",
       "schema": {
-        "$ref": "#/definitions/Transaction"
+        "$ref": "#/definitions/TransactionTransfer"
       }
     },
     "FoundationsFoundrisingsResponse": {
@@ -1306,7 +1376,7 @@
       "schema": {
         "type": "array",
         "items": {
-          "$ref": "#/definitions/Foundrising"
+          "$ref": "#/definitions/FoundrisingTransfer"
         }
       }
     },
@@ -1315,14 +1385,14 @@
       "schema": {
         "type": "array",
         "items": {
-          "$ref": "#/definitions/Foundation"
+          "$ref": "#/definitions/FoundationTransfer"
         }
       }
     },
     "FoundrisingsBaseResponse": {
       "description": "",
       "schema": {
-        "$ref": "#/definitions/Foundrising"
+        "$ref": "#/definitions/FoundrisingTransfer"
       }
     },
     "FoundrisingsGetAllResponse": {
@@ -1330,7 +1400,7 @@
       "schema": {
         "type": "array",
         "items": {
-          "$ref": "#/definitions/Foundrising"
+          "$ref": "#/definitions/FoundrisingTransfer"
         }
       }
     },
@@ -1343,7 +1413,7 @@
     "TransactionsBaseResponse": {
       "description": "",
       "schema": {
-        "$ref": "#/definitions/Transaction"
+        "$ref": "#/definitions/TransactionTransfer"
       }
     },
     "TransactionsGetAllResponse": {
@@ -1351,20 +1421,20 @@
       "schema": {
         "type": "array",
         "items": {
-          "$ref": "#/definitions/Transaction"
+          "$ref": "#/definitions/TransactionTransfer"
         }
       }
     },
     "UsersBaseResponse": {
       "description": "",
       "schema": {
-        "$ref": "#/definitions/User"
+        "$ref": "#/definitions/UserTransfer"
       }
     },
     "UsersDonateResponse": {
       "description": "",
       "schema": {
-        "$ref": "#/definitions/Transaction"
+        "$ref": "#/definitions/TransactionTransfer"
       }
     },
     "UsersGetAllResponse": {
@@ -1372,7 +1442,7 @@
       "schema": {
         "type": "array",
         "items": {
-          "$ref": "#/definitions/User"
+          "$ref": "#/definitions/UserTransfer"
         }
       }
     },

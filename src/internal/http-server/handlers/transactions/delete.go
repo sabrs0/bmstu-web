@@ -12,7 +12,7 @@ import (
 )
 
 type IDeleter interface {
-	Delete(id string) (ents.Transaction, error)
+	Delete(id string) (ents.TransactionTransfer, error)
 }
 
 // swagger:route DELETE /transactions/{id} Transaction TransactionsDelete
@@ -31,7 +31,7 @@ type IDeleter interface {
 //
 //	 Parameters:
 //	      + name: id
-//	        in: query
+//	        in: path
 //	        required: true
 //	        type: integer
 //	        format: int64
@@ -45,6 +45,7 @@ func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response trResp.BaseResponse
+		var transaction ents.TransactionTransfer
 		const op = "handlers.transactions.delete"
 		log = log.With(
 			slog.String("operation", op),
@@ -57,7 +58,7 @@ func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 
 		}()
 		id := mux.Vars(r)["id"]
-		transaction, err := ctrl.Delete(id)
+		transaction, err = ctrl.Delete(id)
 		if err != nil {
 			return
 		}

@@ -20,14 +20,30 @@ type FoundrisingAdd struct {
 }
 
 type Foundrising struct {
-	Id                 uint64         `gorm:"primaryKey;not null" json:"id"`
-	Found_id           uint64         `gorm:"not null" json:"found_id"`
+	Id                 uint64 `gorm:"primaryKey;not null" json:"id"`
+	Found_id           uint64 `gorm:"not null" json:"found_id"`
+	Description        string
+	Required_sum       float64
+	Current_sum        float64
+	Philantrops_amount uint64
+	Creation_date      string
+	Closing_date       sql.NullString
+}
+
+// swagger:model
+type FoundrisingTransfer struct {
+	Id                 uint64         `json:"id"`
+	Found_id           uint64         `json:"found_id"`
 	Description        string         `json:"description"`
 	Required_sum       float64        `json:"required_sum"`
 	Current_sum        float64        `json:"current_sum"`
 	Philantrops_amount uint64         `json:"philantrops_amount"`
 	Creation_date      string         `json:"creation_date"`
 	Closing_date       sql.NullString `json:"closing_date"`
+}
+
+func NewFoundrisingTransfer(f Foundrising) FoundrisingTransfer {
+	return FoundrisingTransfer(f)
 }
 
 func NewFoundrising() Foundrising {
@@ -77,7 +93,7 @@ type FoundrisingUpdateRequest struct {
 	//required: true
 	//type: integer
 	//format: int64
-	Id uint64
+	Id uint64 `json:"id"`
 	//in:body
 	Params FoundrisingPut
 }

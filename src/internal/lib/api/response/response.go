@@ -2,6 +2,7 @@ package response
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/sabrs0/bmstu-web/src/internal/my_errors"
@@ -49,6 +50,7 @@ func JSONRender(w http.ResponseWriter, status int, jsonData any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	data, err := json.Marshal(jsonData)
+	fmt.Println("JSONNED DATA IS: ", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

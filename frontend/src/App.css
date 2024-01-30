@@ -1,0 +1,31 @@
+header {
+  height: 5.1875rem;
+}
+
+a.button.active {
+  border: 1px solid var(--fore-color);
+}
+
+.nav-link {
+  position: relative;
+  top: -15px;
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #000;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+.nav-link:hover {
+  background-color: #333; /* Небольшое изменение при наведении курсора */
+}
+.alert-error {
+  background-color: red;
+  color: white;
+}
+.alert-success {
+  background-color: green;
+  color: black;
+}

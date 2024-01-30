@@ -83,19 +83,40 @@ func (FR *UserRepository) Select() ([]ents.User, error) {
 		}
 
 	}
+	var horribleBalancePtr sql.NullFloat64
+	var horribleSumAmPtr sql.NullFloat64
+	var horribleCloAmPtr sql.NullInt64
 	defer rows.Close()
 	for rows.Next() {
 		U := ents.User{}
 		err := rows.Scan(&U.Id,
 			&U.Login,
 			&U.Password,
-			&U.Balance,
-			&U.CharitySum,
-			&U.ClosedFingAmount,
+			&horribleBalancePtr,
+			&horribleSumAmPtr,
+			&horribleCloAmPtr,
 		)
 		if err != nil {
 			return nil, err
 		}
+		//PLEASE DONT WATCH BELOW
+		if !horribleBalancePtr.Valid {
+			U.Balance = 0
+		} else {
+			U.Balance = horribleBalancePtr.Float64
+		}
+		if !horribleSumAmPtr.Valid {
+			U.CharitySum = 0
+		} else {
+			U.CharitySum = horribleSumAmPtr.Float64
+		}
+		if !horribleCloAmPtr.Valid {
+			U.ClosedFingAmount = 0.0
+		} else {
+			U.ClosedFingAmount = uint64(horribleCloAmPtr.Int64)
+		}
+
+		//PLEASE DONT WATCH UPSIDE
 		User_tab = append(User_tab, U)
 	}
 
@@ -103,30 +124,73 @@ func (FR *UserRepository) Select() ([]ents.User, error) {
 }
 func (FR *UserRepository) SelectById(id uint64) (ents.User, error) {
 	var U ents.User
+	var horribleBalancePtr sql.NullFloat64
+	var horribleSumAmPtr sql.NullFloat64
+	var horribleCloAmPtr sql.NullInt64
 	row := FR.DB.QueryRow("select * from User_tab where id = $1", id)
 	err := row.Scan(&U.Id,
 		&U.Login,
 		&U.Password,
-		&U.Balance,
-		&U.CharitySum,
-		&U.ClosedFingAmount)
+		&horribleBalancePtr,
+		&horribleSumAmPtr,
+		&horribleCloAmPtr)
 	if err != nil {
 		return ents.User{}, err
 	}
+	//PLEASE DONT WATCH BELOW
+	if !horribleBalancePtr.Valid {
+		U.Balance = 0
+	} else {
+		U.Balance = horribleBalancePtr.Float64
+	}
+	if !horribleSumAmPtr.Valid {
+		U.CharitySum = 0
+	} else {
+		U.CharitySum = horribleSumAmPtr.Float64
+	}
+	if !horribleCloAmPtr.Valid {
+		U.ClosedFingAmount = 0.0
+	} else {
+		U.ClosedFingAmount = uint64(horribleCloAmPtr.Int64)
+	}
+
+	//PLEASE DONT WATCH UPSIDE
 	return U, nil
 }
 
 func (FR *UserRepository) SelectByLogin(name string) (ents.User, error) {
 	var U ents.User
+	var horribleBalancePtr sql.NullFloat64
+	var horribleSumAmPtr sql.NullFloat64
+	var horribleCloAmPtr sql.NullInt64
 	row := FR.DB.QueryRow("select * from User_tab where login = $1", name)
 	err := row.Scan(&U.Id,
 		&U.Login,
 		&U.Password,
-		&U.Balance,
-		&U.CharitySum,
-		&U.ClosedFingAmount)
+		&horribleBalancePtr,
+		&horribleSumAmPtr,
+		&horribleCloAmPtr)
 	if err != nil {
 		return ents.User{}, err
 	}
+
+	//PLEASE DONT WATCH BELOW
+	if !horribleBalancePtr.Valid {
+		U.Balance = 0
+	} else {
+		U.Balance = horribleBalancePtr.Float64
+	}
+	if !horribleSumAmPtr.Valid {
+		U.CharitySum = 0
+	} else {
+		U.CharitySum = horribleSumAmPtr.Float64
+	}
+	if !horribleCloAmPtr.Valid {
+		U.ClosedFingAmount = 0.0
+	} else {
+		U.ClosedFingAmount = uint64(horribleCloAmPtr.Int64)
+	}
+
+	//PLEASE DONT WATCH UPSIDE
 	return U, nil
 }

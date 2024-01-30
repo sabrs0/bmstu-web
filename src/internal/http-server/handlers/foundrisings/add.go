@@ -12,7 +12,7 @@ import (
 )
 
 type IAdder interface {
-	Add(params ents.FoundrisingAdd) (ents.Foundrising, error)
+	Add(params ents.FoundrisingAdd) (ents.FoundrisingTransfer, error)
 }
 
 // swagger:route POST /foundrisings Foundrising FoundrisingsPost
@@ -39,6 +39,7 @@ func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.BaseResponse
+		var foundrising ents.FoundrisingTransfer
 		const op = "handlers.foundrisings.add"
 		log = log.With(
 			slog.String("operation", op),
@@ -55,11 +56,11 @@ func Add(log *slog.Logger, ctrl IAdder) http.HandlerFunc {
 		if err != nil {
 			return
 		}
-		foundrising, err := ctrl.Add(params)
+		foundrising, err = ctrl.Add(params)
 		if err != nil {
 			return
 		}
-		log.Info("Success")
+		log.Info("Success. AddParams are: ", params)
 		response = fndResp.BaseResponse{Foundrising: foundrising}
 		resp.JSONRender(w, http.StatusOK, &response)
 	}

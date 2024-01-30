@@ -11,7 +11,8 @@ import (
 )
 
 type IByIdGetter interface {
-	GetByID(id_ string) (ents.Foundation, error)
+	GetByID(id_ string) (ents.FoundationTransfer, error)
+	GetExtByID(id_ string) (ents.FoundationTransferExtended, error)
 }
 
 // swagger:route GET /foundations/{id} Foundation FoundationsGetById
@@ -28,7 +29,7 @@ type IByIdGetter interface {
 //
 //	 Parameters:
 //	      + name: id
-//	        in: query
+//	        in: path
 //	        required: true
 //	        type: integer
 //	        format: int64
@@ -41,7 +42,7 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.BaseResponse
-		var foundation ents.Foundation
+		var foundation ents.FoundationTransfer
 		defer func() {
 			if err != nil {
 				log.Error(err.Error())
@@ -59,6 +60,34 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 			return
 		}
 		response = fndResp.BaseResponse{Foundation: foundation}
+		log.Info("Success")
+		resp.JSONRender(w, http.StatusOK, &response)
+
+	}
+}
+
+func GetExtByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var err error
+		var response fndResp.ExtResponse
+		var foundation ents.FoundationTransferExtended
+		defer func() {
+			if err != nil {
+				log.Error(err.Error())
+				resp.ErrWrapper(w, &response, err)
+			}
+
+		}()
+		const op = "handlers.foundation.getById"
+		log = log.With(
+			slog.String("operation", op),
+		)
+		id := mux.Vars(r)["id"]
+		foundation, err = ctrl.GetExtByID(id)
+		if err != nil {
+			return
+		}
+		response = fndResp.ExtResponse{Foundation: foundation}
 		log.Info("Success")
 		resp.JSONRender(w, http.StatusOK, &response)
 

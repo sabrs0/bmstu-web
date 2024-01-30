@@ -46,7 +46,12 @@ func (service *JWTService) ValidateToken(signedToken string) (*jwt.Token, error)
 			return []byte(jwtKey), nil
 		},
 	)
-	if err != nil || !token.Valid {
+	if err != nil {
+		err = fmt.Errorf("TOKEN IS %s: %w", signedToken, err)
+		return nil, err
+	}
+	if !token.Valid {
+		err = fmt.Errorf("TOKEN IS %s: %w", signedToken, err)
 		return nil, err
 	}
 	claims, ok := token.Claims.(*JWTClaims)
@@ -57,7 +62,6 @@ func (service *JWTService) ValidateToken(signedToken string) (*jwt.Token, error)
 		return nil, errors.New("Токен просрочен")
 	}
 	//логика валидации токена на разрешение операции
-
 	return token, nil
 
 }

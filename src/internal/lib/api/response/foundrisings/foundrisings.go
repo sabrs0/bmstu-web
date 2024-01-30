@@ -7,11 +7,11 @@ import (
 // swagger:response FoundrisingsGetAllResponse
 type GetAllResponse struct {
 	//in: body
-	Foundrisings []ents.Foundrising `json:"foundrisings"`
+	Foundrisings []ents.FoundrisingTransfer `json:"foundrisings"`
 }
 
 // swagger:response FoundrisingsBaseResponse
 type BaseResponse struct {
 	//in: body
-	Foundrising ents.Foundrising
+	Foundrising ents.FoundrisingTransfer
 }

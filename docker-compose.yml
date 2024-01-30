@@ -1,24 +1,6 @@
 version: '3.8'
 services:
-  #nginx:
-  #      image:
-  #        nginx:latest
-  #      ports:
-  #        - "82:81"
-  #        - "8085:8080"
-  #      container_name: 
-  #        local-nginx
-  #      volumes:
-  #        - /etc/nginx/:/etc/nginx
-  #      networks:
-  #        - backend
-  #      depends_on:
-  #        server1:
-  #          condition: service_healthy
-   #       server2:
-    #        condition: service_healthy
-     #     server_main:
-     #       condition: service_healthy
+
   server1:
         hostname: foundations-server-1
         build:
@@ -101,11 +83,11 @@ services:
         logging:
           driver: json-file
         tty: true
-        env_file: "./config_storage/server_main/postgres.env"
+        env_file: "./config_storage/server_mirror/postgres.env"
         environment:
           - FND_CFG_PATH=/go/src/app/src/config_server/local.yaml
         depends_on:
-          - db_postgres
+          - db_postgres_repl
         networks:
           - backend
         healthcheck:

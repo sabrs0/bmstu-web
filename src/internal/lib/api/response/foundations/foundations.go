@@ -7,23 +7,26 @@ import (
 // swagger:response FoundationsGetAllResponse
 type GetAllResponse struct {
 	//in: body
-	Foundations []ents.Foundation `json:"foundations"`
+	Foundations []ents.FoundationTransfer `json:"foundations"`
 }
 
 // swagger:response FoundationsBaseResponse
 type BaseResponse struct {
 	//in: body
-	Foundation ents.Foundation
+	Foundation ents.FoundationTransfer
+}
+type ExtResponse struct {
+	Foundation ents.FoundationTransferExtended
 }
 
 // swagger:response FoundationsDonateResponse
 type DonateResponse struct {
 	//in: body
-	Transaction ents.Transaction
+	Transaction ents.TransactionTransfer
 }
 
 // swagger:response FoundationsFoundrisingsResponse
 type FoundrisingsResponse struct {
 	//in: body
-	Foundrisings []ents.Foundrising `json:"foundrisings"`
+	Foundrisings []ents.FoundrisingTransfer `json:"foundrisings"`
 }

@@ -11,7 +11,7 @@ import (
 )
 
 type IFoundrisingsGetter interface {
-	GetAllFoundrisings(id string) ([]ents.Foundrising, error)
+	GetAllFoundrisings(id string) ([]ents.FoundrisingTransfer, error)
 }
 
 // swagger:route GET /foundations/{id}/foundrisings Foundation FoundationsFoundrisings
@@ -25,10 +25,12 @@ type IFoundrisingsGetter interface {
 //  Schemes: http
 //
 //
+//	 Security:
+//		  bearerAuth:
 //
 //  Parameters:
 //       + name: id
-//         in: query
+//         in: path
 //         required: true
 //         type: integer
 //         format: int64
@@ -42,7 +44,7 @@ func GetFoundrisings(log *slog.Logger, ctrl IFoundrisingsGetter) http.HandlerFun
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.FoundrisingsResponse
-		var foundrisings []ents.Foundrising
+		var foundrisings []ents.FoundrisingTransfer
 		defer func() {
 			if err != nil {
 				log.Error(err.Error())

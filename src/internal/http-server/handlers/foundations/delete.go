@@ -11,7 +11,7 @@ import (
 )
 
 type IDeleter interface {
-	Delete(id string) (ents.Foundation, error)
+	Delete(id string) (ents.FoundationTransfer, error)
 }
 
 // swagger:route DELETE /foundations/{id} Foundation FoundationsDelete
@@ -30,7 +30,7 @@ type IDeleter interface {
 //
 //  Parameters:
 //       + name: id
-//         in: query
+//         in: path
 //         required: true
 //         type: integer
 //         format: int64
@@ -45,7 +45,7 @@ func Delete(log *slog.Logger, ctrl IDeleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.BaseResponse
-		var foundation ents.Foundation
+		var foundation ents.FoundationTransfer
 		defer func() {
 			if err != nil {
 				log.Error(err.Error())

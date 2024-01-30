@@ -11,7 +11,7 @@ import (
 )
 
 type IGetter interface {
-	GetAll() ([]ents.Foundrising, error)
+	GetAll() ([]ents.FoundrisingTransfer, error)
 }
 
 // swagger:route GET /foundrisings Foundrising FoundrisingsGet
@@ -34,6 +34,7 @@ func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.GetAllResponse
+		var foundrisings []ents.FoundrisingTransfer
 		const op = "handlers.foundrisings.getAll"
 		log = log.With(
 			slog.String("operation", op),
@@ -45,14 +46,11 @@ func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 			}
 
 		}()
-		var foundrisings []ents.Foundrising
 		foundrisings, err = ctrl.GetAll()
 		if err != nil {
 			return
 		}
-		response = fndResp.GetAllResponse{
-			Foundrisings: foundrisings,
-		}
+		response.Foundrisings = foundrisings
 		log.Info("Success")
 		resp.JSONRender(w, http.StatusOK, &response)
 	}

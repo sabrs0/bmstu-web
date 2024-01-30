@@ -7,11 +7,11 @@ import (
 // swagger:response TransactionsGetAllResponse
 type GetAllResponse struct {
 	//in: body
-	Transactions []ents.Transaction `json:"transactions"`
+	Transactions []ents.TransactionTransfer `json:"transactions"`
 }
 
 // swagger:response TransactionsBaseResponse
 type BaseResponse struct {
 	//in: body
-	Transaction ents.Transaction
+	Transaction ents.TransactionTransfer
 }

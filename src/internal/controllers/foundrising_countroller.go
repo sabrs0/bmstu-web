@@ -23,59 +23,134 @@ func NewFoundrisingController(FgR servs.IFoundrisingRepository, FndR servs.IFoun
 	}
 }
 
-func (UC *FoundrisingController) GetAll() ([]ents.Foundrising, error) {
-	return UC.FS.GetAll()
+func (UC *FoundrisingController) GetAll() ([]ents.FoundrisingTransfer, error) {
+	fRisings, err := UC.FS.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	fTransfer := []ents.FoundrisingTransfer{}
+	for _, f := range fRisings {
+		fTransfer = append(fTransfer, ents.NewFoundrisingTransfer(f))
+	}
+	return fTransfer, nil
+
 }
-func (UC *FoundrisingController) GetByID(id_ string) (ents.Foundrising, error) {
-	return UC.FS.GetById(id_)
+func (UC *FoundrisingController) GetByID(id_ string) (ents.FoundrisingTransfer, error) {
+	fRising, err := UC.FS.GetById(id_)
+	if err != nil {
+		return ents.FoundrisingTransfer{}, err
+	}
+	return ents.FoundrisingTransfer(fRising), nil
 }
-func (UC *FoundrisingController) GetByCreDate(date string) ([]ents.Foundrising, error) {
-	return UC.FS.GetByCreateDate(date)
+func (UC *FoundrisingController) GetByCreDate(date string) ([]ents.FoundrisingTransfer, error) {
+	fRisings, err := UC.FS.GetByCreateDate(date)
+	if err != nil {
+		return nil, err
+	}
+	fTransfer := []ents.FoundrisingTransfer{}
+	for _, f := range fRisings {
+		fTransfer = append(fTransfer, ents.NewFoundrisingTransfer(f))
+	}
+	return fTransfer, nil
 }
-func (UC *FoundrisingController) GetByCloDate(date string) ([]ents.Foundrising, error) {
-	return UC.FS.GetByCloseDate(date)
+func (UC *FoundrisingController) GetByCloDate(date string) ([]ents.FoundrisingTransfer, error) {
+
+	fRisings, err := UC.FS.GetByCloseDate(date)
+	if err != nil {
+		return nil, err
+	}
+	fTransfer := []ents.FoundrisingTransfer{}
+	for _, f := range fRisings {
+		fTransfer = append(fTransfer, ents.NewFoundrisingTransfer(f))
+	}
+	return fTransfer, nil
 }
-func (UC *FoundrisingController) GetByFoundId(id string) ([]ents.Foundrising, error) {
-	return UC.FS.GetByFoundId(id)
+func (UC *FoundrisingController) GetByFoundId(id string) ([]ents.FoundrisingTransfer, error) {
+	fRisings, err := UC.FS.GetByFoundId(id)
+	if err != nil {
+		return nil, err
+	}
+	fTransfer := []ents.FoundrisingTransfer{}
+	for _, f := range fRisings {
+		fTransfer = append(fTransfer, ents.NewFoundrisingTransfer(f))
+	}
+	return fTransfer, nil
 }
-func (UC *FoundrisingController) GetByFoundIdActive(id string) ([]ents.Foundrising, error) {
-	return UC.FS.GetByFoundIdActive(id)
+func (UC *FoundrisingController) GetByFoundIdActive(id string) ([]ents.FoundrisingTransfer, error) {
+	fRisings, err := UC.FS.GetByFoundIdActive(id)
+	if err != nil {
+		return nil, err
+	}
+	fTransfer := []ents.FoundrisingTransfer{}
+	for _, f := range fRisings {
+		fTransfer = append(fTransfer, ents.NewFoundrisingTransfer(f))
+	}
+	return fTransfer, nil
 }
-func (UC *FoundrisingController) GetByIdAndFoundId(id string, found_id string) (ents.Foundrising, error) {
-	return UC.FS.GetByIdAndFoundId(id, found_id)
+func (UC *FoundrisingController) GetByIdAndFoundId(id string, found_id string) (ents.FoundrisingTransfer, error) {
+	fRising, err := UC.FS.GetByIdAndFoundId(id, found_id)
+	if err != nil {
+		return ents.FoundrisingTransfer{}, err
+	}
+	return ents.FoundrisingTransfer(fRising), nil
 }
 
-func (UC *FoundrisingController) Add(params ents.FoundrisingAdd) (ents.Foundrising, error) {
-	//А может все таки в params found_id - string ?
-	/*sid, err := strconv.Atoi(params.Found_id)
-	found_id := uint64(sid)
-	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf("некорректный id фонда")
-	}*/
+func (UC *FoundrisingController) Add(params ents.FoundrisingAdd) (ents.FoundrisingTransfer, error) {
 	err := validation.CheckMoneyFormat(params.Required_sum)
 	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf(my_errors.ErrMoney)
+		return ents.FoundrisingTransfer{}, fmt.Errorf(my_errors.ErrMoney)
 	}
 	_, err = strconv.ParseFloat(params.Required_sum, 64)
-	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf(my_errors.ErrMoney)
+	if err != nil || params.Required_sum == "NaN" || params.Required_sum == "Infinity" || params.Required_sum == "Inf" {
+		return ents.FoundrisingTransfer{}, fmt.Errorf(my_errors.ErrMoney)
 	}
 	create_date := time.Now().Format(ents.DateFormat)
 	params.Creation_date = create_date
 	if !UC.FndS.ExistsById(params.Found_id) {
-		return ents.Foundrising{}, fmt.Errorf("фонда с таким ID не существует %w", my_errors.ErrorNotExists)
+		return ents.FoundrisingTransfer{}, fmt.Errorf("фонда с таким ID не существует %w", my_errors.ErrorNotExists)
 	}
-	return UC.FS.Add(params)
+	fRising, err := UC.FS.Add(params)
+	if err != nil {
+		return ents.FoundrisingTransfer{}, err
+	}
+	strID := strconv.FormatUint(params.Found_id, 10)
+	foundation, err := UC.FndS.GetById(strID)
+	if err != nil {
+		return ents.FoundrisingTransfer{}, err
+	}
+	foundation.CurFoudrisingAmount += 1
+	_, err = UC.FndS.FR.Update(foundation)
+	if err != nil {
+		return ents.FoundrisingTransfer{}, err
+	}
 
+	return ents.FoundrisingTransfer(fRising), nil
 }
 
-func (UC *FoundrisingController) Delete(id string) (ents.Foundrising, error) {
-	return UC.FS.Delete(id)
+func (UC *FoundrisingController) Delete(id string) (ents.FoundrisingTransfer, error) {
+	fRising, err := UC.FS.Delete(id)
+	if err != nil {
+		return ents.FoundrisingTransfer{}, err
+	}
+	// удалили незакрытый сбор - надо подчистить у foundation cur fing amount
+	if !fRising.Closing_date.Valid {
+		strID := strconv.FormatUint(fRising.Id, 10)
+		foundation, err := UC.FndS.GetById(strID)
+		if err != nil {
+			return ents.FoundrisingTransfer{}, err
+		}
+		foundation.CurFoudrisingAmount -= 1
+		_, err = UC.FndS.FR.Update(foundation)
+		if err != nil {
+			return ents.FoundrisingTransfer{}, err
+		}
+	}
+	return ents.FoundrisingTransfer(fRising), nil
 
 }
-func (UC *FoundrisingController) Update(id string, params ents.FoundrisingPut) (ents.Foundrising, error) {
+func (UC *FoundrisingController) Update(id string, params ents.FoundrisingPut) (ents.FoundrisingTransfer, error) {
 	var Foundrising ents.Foundrising
-	Foundrising, _ = UC.GetByID(id)
+	Foundrising, _ = UC.FS.GetById(id)
 	if params.Description == "" {
 		params.Description = Foundrising.Description
 	}
@@ -85,17 +160,20 @@ func (UC *FoundrisingController) Update(id string, params ents.FoundrisingPut) (
 	}
 	err := validation.CheckMoneyFormat(params.Required_sum)
 	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf(my_errors.ErrMoney)
+		return ents.FoundrisingTransfer{}, fmt.Errorf(my_errors.ErrMoney)
 	}
 	reqSumfloat, err := strconv.ParseFloat(params.Required_sum, 64)
-	if err != nil {
-		return ents.Foundrising{}, fmt.Errorf(my_errors.ErrMoney)
+	if err != nil || params.Required_sum == "NaN" || params.Required_sum == "Infinity" || params.Required_sum == "Inf" {
+		return ents.FoundrisingTransfer{}, fmt.Errorf(my_errors.ErrMoney)
 	}
 
 	if reqSumfloat < Foundrising.Required_sum {
-		return ents.Foundrising{}, fmt.Errorf("новая сумма меньше той, что была прежде")
+		return ents.FoundrisingTransfer{}, fmt.Errorf("новая сумма меньше той, что была прежде")
 	}
-
-	return UC.FS.Update(id, params)
+	fRising, err := UC.FS.Update(id, params)
+	if err != nil {
+		return ents.FoundrisingTransfer{}, err
+	}
+	return ents.FoundrisingTransfer(fRising), nil
 
 }

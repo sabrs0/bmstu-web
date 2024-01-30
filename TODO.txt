@@ -36,7 +36,7 @@ IMPORTANT:
 
 swagger:
 swagger generate spec -m -o=swagger.json
-swagger serve -F=swagger swagger.json
+swagger serve -F=swagger -p=40789 swagger.json
 
 servers:
     0.0.0.0:<port1>
@@ -48,4 +48,22 @@ nginx:
         ...
         0.0.0.0: <port1>
     }
+wrk -t12 -c400 -d30s http://localhost:8080/api/v1/foundations
+
+
+
+
+//FRONT
+
+1. По каждой сущности сверстать GET'ы без авторизации
+2. Логин пейдж
+3. Логоут Button
+3. Сверстать GET'ы с авторизацией
+3. Локалстораж/куки для токена
+4. Сверстать кабинет Foundation, User
+4. Сверстать все формы для POST
+5. Сверстать все формы для PUT
+6. СВЕРСТАТЬ POST'ы все
+7. СВЕРСТАТЬ PUT'ы все
+8. Настроить стили
 

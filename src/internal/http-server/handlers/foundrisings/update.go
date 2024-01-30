@@ -13,7 +13,7 @@ import (
 )
 
 type IUpdater interface {
-	Update(id string, params ents.FoundrisingPut) (ents.Foundrising, error)
+	Update(id string, params ents.FoundrisingPut) (ents.FoundrisingTransfer, error)
 }
 
 // swagger:route PUT /foundrisings/{id} Foundrising FoundrisingsUpdate
@@ -41,6 +41,7 @@ func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.BaseResponse
+		var foundrising ents.FoundrisingTransfer
 		const op = "handlers.foundrisings.update"
 		log = log.With(
 			slog.String("operation", op),
@@ -62,7 +63,7 @@ func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 			return
 		}
 		id := mux.Vars(r)["id"]
-		foundrising, err := ctrl.Update(id, params)
+		foundrising, err = ctrl.Update(id, params)
 		if err != nil {
 			return
 		}

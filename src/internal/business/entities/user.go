@@ -12,6 +12,10 @@ type UserAdd struct {
 	Password string `json:"password"`
 }
 
+type UserReplenish struct {
+	Sum_of_Money string `json:"sum_of_money"`
+}
+
 // swagger:model
 type User struct {
 	Id               uint64  `gorm:"primaryKey;not null" json:"id"`
@@ -22,6 +26,19 @@ type User struct {
 	ClosedFingAmount uint64  `json:"closed_fing_amount"`
 }
 
+// swagger:model
+type UserTransfer struct {
+	Id               uint64  `json:"id"`
+	Login            string  `json:"login"`
+	Password         string  `json:"password"`
+	Balance          float64 `json:"balance"`
+	CharitySum       float64 `json:"charity_sum"`
+	ClosedFingAmount uint64  `json:"closed_fing_amount"`
+}
+
+func NewUserTransfer(u User) UserTransfer {
+	return UserTransfer(u)
+}
 func NewUser() User {
 	return User{}
 }
@@ -44,7 +61,7 @@ type UserDonateRequest struct {
 	//required: true
 	//type: integer
 	//format: int64
-	Id uint64
+	Id uint64 `json:"id"`
 	//in:body
 	Params UserDonate //`json:"req"`
 }
@@ -61,7 +78,7 @@ type UserUpdateRequest struct {
 	//required: true
 	//type: integer
 	//format: int64
-	Id uint64
+	Id uint64 `json:"id"`
 	//in:body
 	Params UserAdd // `json:"req"`
 }

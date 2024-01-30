@@ -66,14 +66,14 @@ func (FS *FoundationService) Add(FPars ents.FoundationAdd) (ents.Foundation, err
 }
 
 func (FS *FoundationService) Update(id_ string, FPars ents.FoundationAdd) (ents.Foundation, error) {
-	if FS.ExistsByLogin(FPars.Login) {
-		return ents.Foundation{}, my_errors.ErrorConflict
-	}
 	var err error
 	var F ents.Foundation
 	F, err = FS.GetById(id_)
 	if err != nil {
 		return ents.Foundation{}, err
+	}
+	if FS.ExistsByLogin(FPars.Login) && F.Login != FPars.Login {
+		return ents.Foundation{}, fmt.Errorf("%s: Фонд с таким login уже существует", my_errors.ErrorConflict)
 	}
 	err = validation.CheckFoundationAddParams(FPars)
 	if err != nil {
@@ -180,12 +180,12 @@ func (FS *FoundationService) AcceptDonate(id_ string, sum float64) error {
 	_, err = FS.FR.Update(F)
 	return err
 }
-func (FS *FoundationService) ReplenishBalance(U *ents.Foundation, sum float64) error {
+func (FS *FoundationService) ReplenishBalance(U *ents.Foundation, sum float64) (ents.FoundationTransfer, error) {
 	var err error
 	if err != nil {
-		return fmt.Errorf("фонду не удалось пополнить баланс: %s", err)
+		return ents.FoundationTransfer{}, fmt.Errorf("фонду не удалось пополнить баланс: %s", err)
 	}
 	U.Fund_balance += sum
 	_, err = FS.FR.Update(*U)
-	return err
+	return ents.NewFoundationTransfer(*U), err
 }

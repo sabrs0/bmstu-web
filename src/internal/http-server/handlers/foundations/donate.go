@@ -13,7 +13,7 @@ import (
 
 type IDonator interface {
 	DonateToFoundrising(foundationID string,
-		params ents.FoundationDonate) (ents.Transaction, error)
+		params ents.FoundationDonate) (ents.TransactionTransfer, error)
 }
 
 // swagger:route POST /foundations/{id}/donate Foundation FoundationsDonate
@@ -42,7 +42,7 @@ func Donate(log *slog.Logger, ctrl IDonator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response fndResp.DonateResponse
-		var transaction ents.Transaction
+		var transaction ents.TransactionTransfer
 		defer func() {
 			if err != nil {
 				log.Error(err.Error())
@@ -51,6 +51,9 @@ func Donate(log *slog.Logger, ctrl IDonator) http.HandlerFunc {
 
 		}()
 		const op = "handlers.foundation.donate"
+		log.With(
+			slog.String("operation", op),
+		)
 		var params ents.FoundationDonate
 		err = json.NewDecoder(r.Body).Decode(&params)
 		if err != nil {

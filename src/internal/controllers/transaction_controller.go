@@ -24,35 +24,63 @@ func NewTransactionController(FdR servs.IFoundationRepository, FgR servs.IFoundr
 	}
 }
 
-func (TC *TransactionController) GetAll() ([]ents.Transaction, error) {
-	return TC.TS.GetAll()
+func (TC *TransactionController) GetAll() ([]ents.TransactionTransfer, error) {
+	transactions, err := TC.TS.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	var transactionsTransfer []ents.TransactionTransfer
+	for _, tr := range transactions {
+		transactionsTransfer = append(transactionsTransfer, ents.NewTransactionTransfer(tr))
+	}
+	return transactionsTransfer, nil
 }
-func (TC *TransactionController) GetByID(id_ string) (ents.Transaction, error) {
-	return TC.TS.GetById(id_)
+func (TC *TransactionController) GetByID(id_ string) (ents.TransactionTransfer, error) {
+	tr, err := TC.TS.GetById(id_)
+	if err != nil {
+		return ents.TransactionTransfer{}, err
+	}
+	return ents.NewTransactionTransfer(tr), nil
 }
-func (TC *TransactionController) GetFromId(type_ string, id_ string) ([]ents.Transaction, error) {
+func (TC *TransactionController) GetFromId(type_ string, id_ string) ([]ents.TransactionTransfer, error) {
 	booltype, err := strconv.ParseBool(type_)
 	var Transactions []ents.Transaction
 	if err != nil {
 		return nil, err
 	}
 	Transactions, err = TC.TS.GetFromId(booltype, id_, &TC.FS, &TC.US)
-	return Transactions, err
+	if err != nil {
+		return nil, err
+	}
+	var transactionsTransfer []ents.TransactionTransfer
+	for _, tr := range Transactions {
+		transactionsTransfer = append(transactionsTransfer, ents.NewTransactionTransfer(tr))
+	}
+	return transactionsTransfer, nil
 }
-func (TC *TransactionController) GetToId(type_ string, id_ string) ([]ents.Transaction, error) {
+func (TC *TransactionController) GetToId(type_ string, id_ string) ([]ents.TransactionTransfer, error) {
 	booltype, err := strconv.ParseBool(type_)
 	var Transactions []ents.Transaction
 	if err != nil {
 		return nil, err
 	}
 	Transactions, err = TC.TS.GetToId(booltype, id_, &TC.FS, &TC.FgS)
-
-	return Transactions, err
+	if err != nil {
+		return nil, err
+	}
+	var transactionsTransfer []ents.TransactionTransfer
+	for _, tr := range Transactions {
+		transactionsTransfer = append(transactionsTransfer, ents.NewTransactionTransfer(tr))
+	}
+	return transactionsTransfer, nil
 }
 
-func (TC *TransactionController) Delete(id string) (ents.Transaction, error) {
-	return TC.TS.Delete(id)
-
+func (TC *TransactionController) Delete(id string) (ents.TransactionTransfer, error) {
+	tr, err := TC.TS.Delete(id)
+	if err != nil {
+		return ents.TransactionTransfer{}, err
+	}
+	return ents.NewTransactionTransfer(tr), nil
 }
 
 func (TC *TransactionController) GetFoundrisingPhilantropIds(id_ string) ([]uint64, error) {

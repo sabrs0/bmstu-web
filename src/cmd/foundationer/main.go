@@ -1,7 +1,7 @@
 //   Version: 0.1
 //
-//	Schemes: http
-//	Host: localhost:8081
+//	Schemes: http, https
+//	Host: localhost:8080
 //	BasePath: /api/v1
 //
 //	Consumes:
@@ -27,11 +27,13 @@ import (
 
 	"log/slog"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/cors"
 	cfg "github.com/sabrs0/bmstu-web/src/internal/config"
 	"github.com/sabrs0/bmstu-web/src/internal/http-server/routers/gorilla"
 	"github.com/sabrs0/bmstu-web/src/internal/lib/logger/sl"
 	"github.com/sabrs0/bmstu-web/src/internal/storage/postgres"
+	"github.com/sabrs0/bmstu-web/src/test/benchmark"
 )
 
 const (
@@ -53,7 +55,10 @@ func main() {
 		log.Error("Failed to init database", sl.Err(err))
 	}
 	//log.Info("Successfully connected to database")
-	router := gorilla.SetRouter(storage.DB, log)
+	metrics := benchmark.NewMetrics()
+	prometheus.MustRegister(metrics.Timings)
+	prometheus.MustRegister(metrics.Counter)
+	router := gorilla.SetRouter(storage.DB, log, metrics)
 
 	corsHandler := cors.Default().Handler(router)
 	srv := &http.Server{

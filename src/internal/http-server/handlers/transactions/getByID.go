@@ -12,7 +12,7 @@ import (
 )
 
 type IByIdGetter interface {
-	GetByID(id_ string) (ents.Transaction, error)
+	GetByID(id_ string) (ents.TransactionTransfer, error)
 }
 
 // swagger:route GET /transactions/{id} Transaction TransactionsGetById
@@ -31,7 +31,7 @@ type IByIdGetter interface {
 //
 //  Parameters:
 //       + name: id
-//         in: query
+//         in: path
 //         required: true
 //         type: integer
 //         format: int64
@@ -45,6 +45,7 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response trResp.BaseResponse
+		var transaction ents.TransactionTransfer
 		const op = "handlers.transactions.getByID"
 		log = log.With(
 			slog.String("operation", op),
@@ -57,7 +58,7 @@ func GetByID(log *slog.Logger, ctrl IByIdGetter) http.HandlerFunc {
 
 		}()
 		id := mux.Vars(r)["id"]
-		transaction, err := ctrl.GetByID(id)
+		transaction, err = ctrl.GetByID(id)
 		if err != nil {
 			return
 		}

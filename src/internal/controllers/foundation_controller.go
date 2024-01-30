@@ -23,48 +23,106 @@ func NewFoundationController(FR servs.IFoundationRepository, TR servs.ITransacti
 		FgS: *servs.NewFoundrisingService(FgR),
 	}
 }
-func (UC *FoundationController) GetAll() ([]ents.Foundation, error) {
-	return UC.FS.GetAll()
+func (UC *FoundationController) GetAll() ([]ents.FoundationTransfer, error) {
+	foundartions, err := UC.FS.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	ft := []ents.FoundationTransfer{}
+	for _, f := range foundartions {
+		ft = append(ft, ents.NewFoundationTransfer(f))
+	}
+	return ft, nil
 }
-func (UC *FoundationController) GetAllFoundrisings(id string) ([]ents.Foundrising, error) {
-	return UC.FgS.GetByFoundId(id)
+func (UC *FoundationController) GetAllFoundrisings(id string) ([]ents.FoundrisingTransfer, error) {
+	foundrisings, err := UC.FgS.GetByFoundId(id)
+	if err != nil {
+		return nil, err
+	}
+	ft := []ents.FoundrisingTransfer{}
+	for _, f := range foundrisings {
+		ft = append(ft, ents.NewFoundrisingTransfer(f))
+	}
+	return ft, nil
 }
-func (UC *FoundationController) GetByID(id_ string) (ents.Foundation, error) {
-	return UC.FS.GetById(id_)
+func (UC *FoundationController) GetByID(id_ string) (ents.FoundationTransfer, error) {
+	f, err := UC.FS.GetById(id_)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
+	}
+	return ents.NewFoundationTransfer(f), nil
 }
-func (UC *FoundationController) GetByName(name string) (ents.Foundation, error) {
-	return UC.FS.GetByName(name)
+func (UC *FoundationController) GetExtByID(id_ string) (ents.FoundationTransferExtended, error) {
+	f, err := UC.FS.GetById(id_)
+	if err != nil {
+		return ents.FoundationTransferExtended{}, err
+	}
+	return ents.NewFoundationTransferExtended(f), nil
 }
-func (UC *FoundationController) GetByLogin(login string) (ents.Foundation, error) {
-	return UC.FS.GetByLogin(login)
+func (UC *FoundationController) GetExtByLogin(login string) (ents.FoundationTransferExtended, error) {
+	f, err := UC.FS.GetByLogin(login)
+	if err != nil {
+		return ents.FoundationTransferExtended{}, err
+	}
+	return ents.NewFoundationTransferExtended(f), nil
+}
+func (UC *FoundationController) GetByName(name string) (ents.FoundationTransfer, error) {
+	f, err := UC.FS.GetByName(name)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
+	}
+	return ents.NewFoundationTransfer(f), nil
+}
+func (UC *FoundationController) GetByLogin(login string) (ents.FoundationTransfer, error) {
+	f, err := UC.FS.GetByLogin(login)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
+	}
+	return ents.NewFoundationTransfer(f), nil
 }
 
-func (UC *FoundationController) GetByCountry(country string) ([]ents.Foundation, error) {
-	return UC.FS.GetByCountry(country)
+func (UC *FoundationController) GetByCountry(country string) ([]ents.FoundationTransfer, error) {
+	foundartions, err := UC.FS.GetByCountry(country)
+	if err != nil {
+		return nil, err
+	}
+	ft := []ents.FoundationTransfer{}
+	for _, f := range foundartions {
+		ft = append(ft, ents.NewFoundationTransfer(f))
+	}
+	return ft, nil
 }
 
-func (UC *FoundationController) Add(params ents.FoundationAdd) (ents.Foundation, error) {
+func (UC *FoundationController) Add(params ents.FoundationAdd) (ents.FoundationTransfer, error) {
 	foundations_by_country, err := UC.FS.GetByCountry(params.Country)
 	if err != nil {
-		return ents.Foundation{}, err
+		return ents.FoundationTransfer{}, err
 	}
 	for _, f := range foundations_by_country {
 		if f.Name == params.Name {
-			return ents.Foundation{}, fmt.Errorf("в данной стране уже есть фонд с таким названием")
+			return ents.FoundationTransfer{}, fmt.Errorf("в данной стране уже есть фонд с таким названием")
 		}
 	}
-	return UC.FS.Add(params)
+	f, err := UC.FS.Add(params)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
+	}
+	return ents.NewFoundationTransfer(f), nil
 
 }
 
-func (UC *FoundationController) Delete(id string) (ents.Foundation, error) { //это делают триггеры (каскадное удаление)
+func (UC *FoundationController) Delete(id string) (ents.FoundationTransfer, error) { //это делают триггеры (каскадное удаление)
 
-	return UC.FS.Delete(id)
+	f, err := UC.FS.Delete(id)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
+	}
+	return ents.NewFoundationTransfer(f), nil
 
 }
-func (UC *FoundationController) Update(id string, params ents.FoundationAdd) (ents.Foundation, error) {
+func (UC *FoundationController) Update(id string, params ents.FoundationAdd) (ents.FoundationTransfer, error) {
 	var foundation ents.Foundation
-	foundation, _ = UC.GetByID(id)
+	foundation, _ = UC.FS.GetById(id) //US.GetByID(id)
 	if params.Login == "" {
 		params.Login = foundation.Login
 	}
@@ -77,50 +135,54 @@ func (UC *FoundationController) Update(id string, params ents.FoundationAdd) (en
 	if params.Country == "" {
 		params.Country = foundation.Country
 	}
-	return UC.FS.Update(id, params)
+	f, err := UC.FS.Update(id, params)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
+	}
+	return ents.NewFoundationTransfer(f), nil
 
 }
 func (UC *FoundationController) AcceptDonate(id string, sum float64) error {
 	return UC.FS.AcceptDonate(id, sum)
 }
 func (UC *FoundationController) DonateToFoundrising(foundationID string,
-	params ents.FoundationDonate) (ents.Transaction, error) {
+	params ents.FoundationDonate) (ents.TransactionTransfer, error) {
 	var Transaction ents.Transaction
 	err := validation.CheckMoneyFormat(params.Sum_of_Money)
 	if err != nil {
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
 	reqSum, err := strconv.ParseFloat(params.Sum_of_Money, 64)
-	if err != nil {
-		return ents.Transaction{}, err
+	if err != nil || params.Sum_of_Money == "NaN" || params.Sum_of_Money == "Infinity" || params.Sum_of_Money == "Inf" {
+		return ents.TransactionTransfer{}, err
 	}
-	U, err := UC.GetByID(foundationID)
+	U, err := UC.FS.GetById(foundationID) //UC.GetByID(foundationID)
 	if err != nil {
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
 	if U.Fund_balance < reqSum {
-		return ents.Transaction{}, fmt.Errorf("недостаточно средств ")
+		return ents.TransactionTransfer{}, fmt.Errorf("недостаточно средств ")
 	}
 	foundrising, err := UC.FgS.GetById(params.Foundrising_id)
 	if err != nil {
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
 	if foundrising.Closing_date.Valid {
-		return ents.Transaction{}, fmt.Errorf("данный сбор уже закрыт")
+		return ents.TransactionTransfer{}, fmt.Errorf("данный сбор уже закрыт")
 	}
 	err = UC.FS.Donate(&U, reqSum)
 	if err != nil {
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
 	var remainder float64
 	remainder, err = UC.FgS.AcceptDonate(params.Foundrising_id, reqSum, false)
 	if err != nil {
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
 	sid, err := strconv.Atoi(params.Foundrising_id)
 	foundrising_id := uint64(sid)
 	if err != nil {
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
 	TP := ents.TransactionAdd{
 		From_essence_type: ents.FROM_FOUNDATION,
@@ -132,7 +194,7 @@ func (UC *FoundationController) DonateToFoundrising(foundationID string,
 	}
 	Transaction, err = UC.TS.Add(TP)
 	if err != nil {
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
 	if remainder > 0.0 {
 		foundrising, _ := UC.FgS.GetById(params.Foundrising_id)
@@ -146,7 +208,7 @@ func (UC *FoundationController) DonateToFoundrising(foundationID string,
 			To_id:             found_id,
 		}
 		_, err = UC.TS.Add(TP)
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	} else if remainder <= 1e-9 {
 		U.ClosedFoundrisingAmount += 1
 		if U.CurFoudrisingAmount > 0 {
@@ -154,25 +216,34 @@ func (UC *FoundationController) DonateToFoundrising(foundationID string,
 		}
 		//это кошмарище:
 		_, err := UC.FS.GetRepo().Update(U)
-		return ents.Transaction{}, err
+		return ents.TransactionTransfer{}, err
 	}
-	return Transaction, nil
+	return ents.NewTransactionTransfer(Transaction), nil
 }
 
-func (UC *FoundationController) ReplenishBalance(sum string, U *ents.Foundation) error {
+func (UC *FoundationController) ReplenishBalance(id string, params ents.FoundationReplenish) (ents.FoundationTransfer, error) {
 	var err error
 	var reqSum float64
-	reqSum, err = strconv.ParseFloat(sum, 64)
-	if err != nil {
-		return err
+
+	reqSum, err = strconv.ParseFloat(params.Sum_of_Money, 64)
+	if err != nil || params.Sum_of_Money == "NaN" || params.Sum_of_Money == "Infinity" || params.Sum_of_Money == "Inf" {
+		return ents.FoundationTransfer{}, err
 	}
-	err = validation.CheckMoneyFormat(sum)
+	err = validation.CheckMoneyFormat(params.Sum_of_Money)
 	if err != nil {
-		return err
+		return ents.FoundationTransfer{}, err
+	}
+	U, err := UC.FS.GetById(id) //UC.GetByID(foundationID)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
 	}
 	if reqSum > 50000.00 {
-		return fmt.Errorf("введенная сумма превышается 50 000")
+		return ents.FoundationTransfer{}, fmt.Errorf("введенная сумма превышается 50 000")
 	}
-	return UC.FS.ReplenishBalance(U, reqSum)
 
+	_, err = UC.FS.ReplenishBalance(&U, reqSum)
+	if err != nil {
+		return ents.FoundationTransfer{}, err
+	}
+	return ents.NewFoundationTransfer(U), nil
 }

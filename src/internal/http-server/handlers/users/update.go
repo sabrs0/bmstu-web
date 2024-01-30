@@ -13,7 +13,7 @@ import (
 )
 
 type IUpdater interface {
-	Update(id string, params ents.UserAdd) (ents.User, error)
+	Update(id string, params ents.UserAdd) (ents.UserTransfer, error)
 }
 
 // swagger:route PUT /users/{id} User UsersUpdate
@@ -38,48 +38,12 @@ type IUpdater interface {
 //    404: ValidateError
 //    409: ValidateError
 
-/*
-//
-// ---
-// produces:
-// - application/json
-// - application/xml
-// - text/xml
-// - text/html
-// - text/plain
-//
-// parameters:
-//   - name: id
-//     in: path
-//     required: true
-//     schema:
-//      type: integer
-//      format: int32
-//   - name: UserAdd
-//     in: body
-//     schema:
-//       "$ref": "#/definitions/UserAdd"
-//
-// responses:
-//
-//  '200':
-//   description: Success
-//   schema:
-//     "$ref": "#/definitions/User"
-//  '400':
-//   description: Bad Request
-//  '401':
-//   description: Unauthorized
-//  '404':
-//   description: Not Found
-//  '409':
-//   description: Conflict
-*/
 func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var response usrResp.BaseResponse
 		const op = "handlers.users.update"
+		var user ents.UserTransfer
 		log = log.With(
 			slog.String("operation", op),
 		)
@@ -96,7 +60,7 @@ func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 			return
 		}
 		id := mux.Vars(r)["id"]
-		user, err := ctrl.Update(id, params)
+		user, err = ctrl.Update(id, params)
 		if err != nil {
 			return
 		}

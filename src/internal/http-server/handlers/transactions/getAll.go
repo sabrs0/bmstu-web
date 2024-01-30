@@ -11,7 +11,7 @@ import (
 )
 
 type IGetter interface {
-	GetAll() ([]ents.Transaction, error)
+	GetAll() ([]ents.TransactionTransfer, error)
 }
 
 // swagger:route GET /transactions Transaction TransactionsGet
@@ -36,6 +36,7 @@ func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 		var err error
 		var response trResp.GetAllResponse
 		const op = "handlers.transactions.getAll"
+		var transactions []ents.TransactionTransfer
 		log = log.With(
 			slog.String("operation", op),
 		)
@@ -46,7 +47,7 @@ func GetAll(log *slog.Logger, ctrl IGetter) http.HandlerFunc {
 			}
 
 		}()
-		transactions, err := ctrl.GetAll()
+		transactions, err = ctrl.GetAll()
 		if err != nil {
 			return
 		}

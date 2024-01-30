@@ -12,7 +12,7 @@ import (
 )
 
 type IUpdater interface {
-	Update(id string, params ents.FoundationAdd) (ents.Foundation, error)
+	Update(id string, params ents.FoundationAdd) (ents.FoundationTransfer, error)
 }
 
 // swagger:route PUT /foundations/{id} Foundation FoundationsUpdate
@@ -28,6 +28,8 @@ type IUpdater interface {
 //
 //	 Security:
 //		  bearerAuth:
+//
+//
 //
 //	 Responses:
 //	   default: ValidateError
@@ -59,8 +61,8 @@ func Update(log *slog.Logger, ctrl IUpdater) http.HandlerFunc {
 		if err != nil {
 			return
 		}
-		log.Info("Request body decoded")
-		var foundation ents.Foundation
+		log.Info("Request body decoded", params)
+		var foundation ents.FoundationTransfer
 		foundation, err = ctrl.Update(id, params)
 		if err != nil {
 			return

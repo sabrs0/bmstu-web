@@ -10,7 +10,7 @@ import (
 )
 
 type IGetter interface {
-	GetAll() ([]ents.Foundation, error)
+	GetAll() ([]ents.FoundationTransfer, error)
 }
 
 // swagger:route GET /foundations Foundation FoundationsGet
@@ -43,7 +43,8 @@ func GetAll(logger *slog.Logger, ctrl IGetter) http.HandlerFunc {
 			}
 
 		}()
-		foundations, err := ctrl.GetAll()
+		var foundations []ents.FoundationTransfer
+		foundations, err = ctrl.GetAll()
 		if err != nil {
 			return
 		}
