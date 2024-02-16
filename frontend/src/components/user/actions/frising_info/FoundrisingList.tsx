@@ -3,14 +3,14 @@ import FoundrisingCardExt from "./FoundrisingCard";
 
 interface FoundrisingListExtProps{
     user_id: number
-    Foundrisings: FoundrisingTransfer[];
+    foundrisings: FoundrisingTransfer[];
 }
-function FoundrisingListExt({user_id, Foundrisings}: FoundrisingListExtProps){
+function FoundrisingListExt({user_id, foundrisings}: FoundrisingListExtProps){
      
   return (
             <div className="row">
 
-              {Foundrisings.map((Foundrising) => (
+              {foundrisings.map((Foundrising) => (
                 <div key={Foundrising.id} className="cols-sm">
                   <FoundrisingCardExt user_id={user_id} Found={Foundrising}/>
                 </div>

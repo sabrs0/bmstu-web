@@ -23,12 +23,14 @@ export class UserTransferExt {
   }
 
   export class UserDonate {
+    
     entity_type: boolean = false;
     entity_id: string = '';
     sum_of_money: string = '';
     comment: string = '';
 
     constructor(initializer?: any){
+      if (!initializer) return;
       this.entity_type = initializer.entity_type;
       this.entity_id = initializer.entity_id;
       this.sum_of_money = initializer.sum_of_money;

@@ -21,7 +21,9 @@ function FoundrisingListForm({user_id}: FoundrisingListProps) {
         setFoundrisingLoading(true);
           try{
               const data = await FoundrisingAPI.get();
+                console.log('Foundrisings before cast are: ', data);
                   setFoundrisings(data);
+                  console.log('Foundrisings after cast are: ', Foundrisings);
           }catch (e){
               if (e instanceof Error){
                 setFoundrisingError(e.message);
@@ -61,7 +63,7 @@ function FoundrisingListForm({user_id}: FoundrisingListProps) {
                     </div>
                 </div>
             )}
-                <FoundrisingListExt user_id={user_id} Foundrisings={Foundrisings} />
+                <FoundrisingListExt user_id={user_id} foundrisings={Foundrisings} />
         </div>
     </div>
   );
