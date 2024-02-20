@@ -39,7 +39,7 @@ function FoundationsPage(){
     }, [/*currentPage*/]);
     return(
         <Fragment>
-            <h1>Foundations</h1>
+            <h1 style={{textAlign: 'center'}}>Foundations</h1>
             {error &&( 
                 <div className="row">
                     <div className="card large error">
@@ -52,25 +52,15 @@ function FoundationsPage(){
                     </div>
                 </div>
             )}
+            <div className="wrapper">
                 <FoundationList foundations={Foundations} />
-
-                {/*!loading && !error && (
-                    <div className="row">
-                    <div className="col-sm-12">
-                        <div className="button-group fluid">
-                        <button className="button default" onClick={handleOnMoreClick}>
-                            More...
-                        </button>
-                        </div>
-                    </div>
-                    </div>
-                )*/}
                 {loading && ( 
                     <div className="center-page">
                         <span className="spinning primary"></span>
                         <p>Loading...</p>
                     </div>)
                 }
+            </div>
         </Fragment>
     ); 
 }

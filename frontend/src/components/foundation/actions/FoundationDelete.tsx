@@ -49,7 +49,8 @@ function FoundationDeleteForm({found_id}: FoundationDeleteProps){
     };
 
     return (
-        <div>
+        <div className="form-container">
+            <h1>Delete Foundation</h1>
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -62,8 +63,8 @@ function FoundationDeleteForm({found_id}: FoundationDeleteProps){
                     Успешно
                   </div>
             )}
-            <button type="submit">Delete Foundation</button>
-            <button onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Delete</button>
+            <button className="button-login" onClick={handleClose}>Close</button>
             
             </form>
         </div>

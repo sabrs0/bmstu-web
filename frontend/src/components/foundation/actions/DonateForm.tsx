@@ -4,6 +4,9 @@ import  {useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FoundationDonate } from "../Transfer";
 import { FoundationAPI } from "../API";
+import DescriptionList from "../../foundrising/descriptionListCurrent";
+import SelectedComponent from "../../foundrising/descriptionListCurrent";
+import FoundrisingChoice from "../../foundrising/descriptionListCurrent";
 
 interface FoundationDonateFormProps{
     found_id: number;
@@ -20,11 +23,17 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
     const [foundrisingIDError, setFoundrisingIDError] = useState<string>('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [donateClicked, setDonateClicked] = useState(false);
     
+
     const isValid = ()=>{
         return (sumOfMoneyError.length === 0 && foundrisingIDError.length === 0);
     }
     const validateSumOfMoney = (value: string) => {
+        if (value.length === 0){
+            setSumOfMoneyError('Empty sum');
+            return;
+        }
         if (!/^\d+(\.\d{1,2})?$/.test(value)) {
             setSumOfMoneyError('Invalid required sum format. Example: 1000.00');
         }else if (parseFloat(value) <= 10.00) {
@@ -58,27 +67,31 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
         setSumOfMoney(event.target.value);
         validateSumOfMoney(event.target.value);
     };
-    const handleFoundrisingIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFoundrisingID(event.target.value);
-        validateFoundrisingID(event.target.value);
+    const handleFoundrisingIDChange = (id: string) => {
+        
+        setFoundrisingID(id);
+        
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         window.location.reload();
     }
+    
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         
-        event.preventDefault();
+        
         setError('')
+        setDonateClicked(true)
         setSuccess('')
         validateFoundrisingID(foundrisingID)
         validateSumOfMoney(sumOfMoney)
-
+        
         if (!isValid()) {
             // обработка невалидной формы
             setError('Invalid data. Try again');
             return;
         }
+        event.preventDefault();
         try {
             const DonateData: FoundationDonate = {
                 foundrising_id: foundrisingID,
@@ -97,8 +110,7 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
                     if (e instanceof Error){
                         setError(e.message);
                     }
-                }
-                
+                }   
             }
             }catch (e){
                 if (e instanceof Error){
@@ -108,30 +120,26 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
     };
 
     return (
-        <div>
+        <div className="form-container">
+            <h1>Donate to Foundrising</h1>
             <form onSubmit={handleFormSubmit}>
             
-            {error.length !== 0 && (
+            {error.length !== 0 && donateClicked && (
                     <div className="alert alert-error" role="alert">
                     {`Error: ${error}`}
                   </div>
             )}
-            {success.length !== 0 && (
+            {success.length !== 0 && donateClicked && isValid() &&(
                     <div className="alert alert-success" role="alert">
                     Успешно
                   </div>
             )}
-            <div>
-                <label htmlFor="foundrisingID">Foundrising ID</label>
-                <input
-                type="text"
-                id="foundrisingID"
-                value={foundrisingID}
-                onChange={handleFoundrisingIDChange}
-                />
-                <span style={{ color: 'red' }}>{foundrisingIDError}</span>
+            <div className="input-row">
+                <label htmlFor="foundrising">Foundrising</label>
+                <FoundrisingChoice handleSetID={handleFoundrisingIDChange} />
+                {/*<span style={{ color: 'red' }}>{foundrisingIDError}</span>*/}
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="comment">Comment</label>
                 <textarea
                 id="comment"
@@ -139,7 +147,7 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
                 onChange={handleCommentChange}
                 />
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="sumOfMoney">Sum of money</label>
                 <input
                 type="text"
@@ -149,8 +157,8 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
                 />
                 <span style={{ color: 'red' }}>{sumOfMoneyError}</span>
             </div>
-            <button type="submit">Donate to Foundrising</button>
-            <button onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Donate</button>
+            <button className="button-login" onClick={handleClose}>Close</button>
             </form>
         </div>
     );

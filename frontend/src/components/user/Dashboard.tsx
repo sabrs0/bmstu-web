@@ -10,6 +10,12 @@ import UserReplenishForm from "./actions/ReplenishForm";
 import UserUpdateForm from "./actions/UserUpdateForm";
 import FoundationListForm from "./actions/found_info/FoundationsComponent";
 import FoundrisingListForm from "./actions/frising_info/FoundrisingsComponent";
+import { IconButton } from "@mui/material";
+import UpgradeIcon from "@mui/icons-material/Upgrade"
+import PaidIcon from '@mui/icons-material/Paid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 //props: any
 function UserDashboard(){
     const [loading, setLoading] = useState(false);
@@ -24,11 +30,12 @@ function UserDashboard(){
     const[showDonateFrisingForm, setShowDonateFrisingForm] = useState(false);
     const[showReplenishForm, setShowReplenishForm] = useState(false);
     const [userPut, setUserPut] = useState<UserPut | undefined>(undefined)
+    const[showDash, setShowDash] = useState(true);
     let setsArr: React.Dispatch<React.SetStateAction<boolean>>[] = [
         setShowUpdateForm,setShowDeleteForm,
         setShowDonateFoundForm, setShowDonateFrisingForm, 
         setShowReplenishForm, setShowFoundationsForm,
-        setShowFoundrisingsForm ]
+        setShowFoundrisingsForm, setShowDash ]
     function falseAll(){
         for (let i = 0; i < setsArr.length; i ++){
             setsArr[i](false);
@@ -96,7 +103,9 @@ function UserDashboard(){
         }
     }, [login, token]);
     return (
+
         <div>
+
             {loading && (
                 <div className="center-page">
                     <span className="spinner primary"></span>
@@ -118,26 +127,34 @@ function UserDashboard(){
             )}
             
             {!error && !loading && user &&(
-                <div>
-                <div>
-                    <p>Role - User</p>
-                    <p>ID: {user.id}</p>
-                    <p>Login: {user.login}</p>
-                    <p>Balance: {user.balance}</p>
-                    <p>Charity sum: {user.charity_sum}</p>
-                    <p>Closed Foundrising Amount: {user.closed_fing_amount}</p>
-                    
+                 <div className="dash">
+                 {showDash && (<div className="dash">
+                    <div className="panel-container">
+                        <div className="user-info">
+                            <strong>
+                            <p>Login: {user.login}</p>
+                            </strong>
+                            <p>Balance: {user.balance}</p>
+                            <p>Charity sum: {user.charity_sum}</p>
+                            <p>Closed Foundrising Amount: {user.closed_fing_amount}</p>
+                            
+                        </div>
+                        <div className="icon-operations">    
+                            <button className="button-login" onClick={handleRep}> <PaidIcon/></button>
+                            <button className="button-login" onClick={handleUpd}><UpgradeIcon/></button>
+                            <button className="button-login" onClick={handleDel}><DeleteIcon/></button>
+        
+                            <button className="button-login" onClick={handleExit}><LogoutIcon/></button>
+                        </div>
                 </div>
-                <div>
-                    <button onClick={handleDonFound}>Donate to Foundation</button>
-                    <button onClick={handleDonFrising}>Donate to Foundrising</button>
-                    <button onClick={handleRep}>Replenish Balance</button>
-                    <button onClick={handleUpd}>Update User Info</button>
-                    <button onClick={handleDel}>Delete User</button>
-                    <button onClick={handleListFounds}>List Foundations</button>
-                    <button onClick={handleListFrisings}>List Foundrisings</button>
-                    <button onClick={handleExit}>Выйти</button>
+                <div className="operations">
+                    <button className="button-login" onClick={handleDonFound}>Donate to Foundation</button>
+                    <button className="button-login" onClick={handleDonFrising}>Donate to Foundrising</button>
+                    <button className="button-login"  onClick={handleListFounds}>List Foundations</button>
+                    <button className="button-login" onClick={handleListFrisings}>List Foundrisings</button>
+
                 </div>
+                </div>)}
 
                 {showDonateFoundForm && (<UserDonateToFoundForm user_id={user.id === undefined ? 0 :user.id} initialDonateForm={new UserDonate} /> ) }
                 {showDonateFrisingForm && (<UserDonateToFrisingForm user_id={user.id === undefined ? 0 :user.id} initialDonateForm={new UserDonate}/> ) }

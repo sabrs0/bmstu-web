@@ -1,6 +1,7 @@
 package entities
 
-var Countries [9]string = [9]string{"США", "Россия", "Великобритания", "Канада", "Франция", "Германия", "Китай", "Италия", "Испания"}
+var Countries [9]string = [9]string{"USA", "Russia", "Great Britain", "Canada", "France", "Germany", "China",
+	"Italy", "Spain"}
 
 type FoundationAdd struct {
 	Name     string `json:"name"`

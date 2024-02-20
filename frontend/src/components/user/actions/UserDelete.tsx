@@ -49,7 +49,7 @@ function UserDeleteForm({user_id}: UserDeleteProps){
     };
 
     return (
-        <div>
+        <div className="form-container">
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -62,8 +62,8 @@ function UserDeleteForm({user_id}: UserDeleteProps){
                     Успешно
                   </div>
             )}
-            <button type="submit">Delete User</button>
-            <button onClick={handleClose}>Close</button>
+            <button className='button-login' type="submit">Delete User</button>
+            <button className='button-login' onClick={handleClose}>Close</button>
             
             </form>
         </div>

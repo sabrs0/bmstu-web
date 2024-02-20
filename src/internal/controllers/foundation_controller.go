@@ -196,7 +196,7 @@ func (UC *FoundationController) DonateToFoundrising(foundationID string,
 	if err != nil {
 		return ents.TransactionTransfer{}, err
 	}
-	if remainder > 0.0 {
+	if remainder > 1e-9 {
 		foundrising, _ := UC.FgS.GetById(params.Foundrising_id)
 		found_id := foundrising.Found_id
 		TP := ents.TransactionAdd{
@@ -209,7 +209,7 @@ func (UC *FoundationController) DonateToFoundrising(foundationID string,
 		}
 		_, err = UC.TS.Add(TP)
 		return ents.TransactionTransfer{}, err
-	} else if remainder <= 1e-9 {
+	} else if remainder <= 1e-9 && remainder > -1.0 {
 		U.ClosedFoundrisingAmount += 1
 		if U.CurFoudrisingAmount > 0 {
 			U.CurFoudrisingAmount -= 1

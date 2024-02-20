@@ -93,7 +93,9 @@ function FoundrisingAddForm({found_id}: FoundrisingAddFormProps){
     };
 
     return (
-        <div>
+        <div className="form-container">
+        <h1>Add Foundrising</h1>
+
             <form onSubmit={handleFormSubmit}>
             
             {error.length != 0 && (
@@ -106,7 +108,7 @@ function FoundrisingAddForm({found_id}: FoundrisingAddFormProps){
                     Успешно
                   </div>
             )}
-            <div>
+            <div className="input-row">
                 <label htmlFor="description">Description</label>
                 <textarea
                 id="description"
@@ -115,7 +117,7 @@ function FoundrisingAddForm({found_id}: FoundrisingAddFormProps){
                 />
                 <span style={{ color: 'red' }}>{descriptionError}</span>
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="requiredSum">Required Sum</label>
                 <input
                 type="text"
@@ -125,8 +127,8 @@ function FoundrisingAddForm({found_id}: FoundrisingAddFormProps){
                 />
                 <span style={{ color: 'red' }}>{requiredSumError}</span>
             </div>
-            <button type="submit">Create Foundrising</button>
-            <button onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Add</button>
+            <button className="button-login" onClick={handleClose}>Close</button>
             
             </form>
         </div>

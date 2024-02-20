@@ -109,7 +109,8 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
     };
 
     return (
-        <div>
+        <div className="form-container">
+            <h1>Update Foundation</h1>
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -122,7 +123,7 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
                     Успешно
                   </div>
             )}
-            <div>
+            <div className="input-row">
                 <label htmlFor="name">Name</label>
                 <input
                 type="text"
@@ -132,7 +133,7 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
                 />
                 <span style={{ color: 'red' }}>{nameError}</span>
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="login">Login</label>
                 <input
                 type="text"
@@ -142,7 +143,7 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
                 />
                 <span style={{ color: 'red' }}>{loginError}</span>
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="password">Password</label>
                 <input
                 type="text"
@@ -152,7 +153,7 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
                 />
                 <span style={{ color: 'red' }}>{passwordError}</span>
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="country">Country</label>
                 <input
                 type="text"
@@ -162,8 +163,8 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
                 />
                 <span style={{ color: 'red' }}>{countryError}</span>
             </div>
-            <button type="submit">Update</button>
-            <button onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Update</button>
+            <button className="button-login" onClick={handleClose}>Close</button>
             
             </form>
         </div>

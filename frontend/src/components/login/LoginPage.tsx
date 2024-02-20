@@ -10,8 +10,8 @@ import Logout from "./Logout";
     //onCancel: () =>void;
 }*/
 function LoginForm(){
-    const [login, setLogin] = useState('gduggen0');
-    const [password, setPassword] = useState('hbsvo9r');
+    const [login, setLogin] = useState('ecane1');
+    const [password, setPassword] = useState('JEqZ7pO8xTb');
     const [role, setRole] = useState('User');
     const [loginToken, setLoginToken] = useState<LoginToken | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
@@ -55,39 +55,46 @@ function LoginForm(){
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-        
-        {error &&( 
-                <div className="row">
-                    <div className="card large error">
-                        <section>
-                            <p>
-                                <span className="icon-alert inverse "></span>
-                                {error}
-                            </p>
-                        </section>
+        <div className="form-container">
+            <h1>
+                Login
+            </h1>
+            <form onSubmit={handleSubmit}>
+            
+            {error &&( 
+                    <div className="row">
+                        <div className="card large error">
+                            <section>
+                                <p>
+                                    <span className="icon-alert inverse "></span>
+                                    {error}
+                                </p>
+                            </section>
+                        </div>
                     </div>
-                </div>
-            )}
-        
-        <div>
-            <label htmlFor="login">Login:</label>
-            <input type="text" id="login" value={login} onChange={handleLoginChange} />
+                )}
+            
+            <div className="input-row">
+                <label htmlFor="login">Login:</label>
+                <input type="text" id="login" value={login} onChange={handleLoginChange} />
+            </div>
+            <div className="input-row">
+                <label htmlFor="password">Password:</label>
+                <input type="password" id="password" value={password} onChange={handlePasswordChange} />
+            </div>
+            <div className="input-row">
+                <label htmlFor="role">Role:</label>
+                <select id="role" value={role} onChange={handleRoleChange}>
+                <option value="User">User</option>
+                <option value="Foundation">Foundation</option>
+                </select>
+            </div>
+            <div className="input-row">
+            <button type="submit" className="button-login" >Log in</button>
+            </div>
+            </form>
         </div>
-        <div>
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" value={password} onChange={handlePasswordChange} />
-        </div>
-        <div>
-            <label htmlFor="role">Role:</label>
-            <select id="role" value={role} onChange={handleRoleChange}>
-            <option value="User">User</option>
-            <option value="Foundation">Foundation</option>
-            </select>
-        </div>
-        <button type="submit" >Log in</button>
-        
-        </form>
+
     );
 }
 export default LoginForm;

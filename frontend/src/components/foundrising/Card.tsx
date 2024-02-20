@@ -8,15 +8,12 @@ interface FoundrisingCardProps{
 function FoundrisingCard({Foundrising}: FoundrisingCardProps){
   console.log("In Foundrising card. Foundrising is - ", Foundrising.description)
   return (
-    <div className="card border-dark mb-3" style={{maxWidth: "350px", border: "2px solid"}}>
+    <div className="card-basic">
       <div className="card-body">
         <section className="section dark">
         <h5 className="strong">
-            <strong>ID: {Foundrising.id}</strong>
+            <strong>Description: {Foundrising.description}</strong>
             </h5>
-        
-            <p>Found ID: {Foundrising.found_id.toLocaleString()}</p>
-            <p>Description: {Foundrising.description}</p>
             <p>Required sum: {Foundrising.required_sum.toLocaleString()}</p>
             <p>Current sum: {Foundrising.current_sum.toLocaleString()}</p>
             <p>Philantrops amount: {Foundrising.philantrops_amount.toLocaleString()}</p>

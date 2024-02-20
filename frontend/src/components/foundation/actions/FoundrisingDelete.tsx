@@ -1,6 +1,7 @@
 import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
 import  {useState } from "react";
+import FoundrisingChoice from "../../foundrising/descriptionList";
 
 interface FoundrisingUpdateFormProps{
     found_id: number;
@@ -30,9 +31,10 @@ function FoundrisingDeleteForm(){
     const isValid = ()=>{
         return (foundrisingIDError.length === 0);
     }
-    const handleFoundrisingIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFoundrisingID(event.target.value);
-        validateFoundrisingID(event.target.value);
+    const handleFoundrisingIDChange = (id: string) => {
+        
+        setFoundrisingID(id);
+        
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -74,7 +76,8 @@ function FoundrisingDeleteForm(){
     };
 
     return (
-        <div>
+        <div className="form-container">
+            <h1>Delete Foundrising</h1>
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -87,18 +90,13 @@ function FoundrisingDeleteForm(){
                     Успешно
                   </div>
             )}
-            <div>
-                <label htmlFor="foundrisingID">Foundrising ID</label>
-                <input
-                type="text"
-                id="foundrisingID"
-                value={foundrisingID}
-                onChange={handleFoundrisingIDChange}
-                />
-                <span style={{ color: 'red' }}>{foundrisingIDError}</span>
+            <div className="input-row">
+                <label htmlFor="foundrising">Foundrising</label>
+                <FoundrisingChoice handleSetID={handleFoundrisingIDChange} />
+                {/*<span style={{ color: 'red' }}>{foundrisingIDError}</span>*/}
             </div>
-            <button type="submit">Delete Foundrising</button>
-            <button onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Delete</button>
+            <button className="button-login" onClick={handleClose}>Close</button>
             
             </form>
         </div>

@@ -72,7 +72,7 @@ function UserReplenishForm({user_id}: UserReplenishFormProps){
 };
 
     return (
-        <div>
+        <div className="form-container">
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -85,7 +85,7 @@ function UserReplenishForm({user_id}: UserReplenishFormProps){
                     Успешно
                   </div>
             )}
-            <div>
+            <div className="input-row">
                 <label htmlFor="sumOfMoney">Sum of money</label>
                 <input
                 type="text"
@@ -95,8 +95,8 @@ function UserReplenishForm({user_id}: UserReplenishFormProps){
                 />
                 <span style={{ color: 'red' }}>{sumOfMoneyError}</span>
             </div>
-            <button type="submit">Replenish</button>
-            <button onClick={handleClose}>Close</button>
+            <button className='button-login' type="submit">Replenish</button>
+            <button className='button-login' onClick={handleClose}>Close</button>
             </form>
         </div>
     );

@@ -8,7 +8,7 @@ interface FoundationListExtProps{
 function FoundationListExt({user_id, foundations}: FoundationListExtProps){
      
   return (
-            <div className="row">
+            <div className="row" >
 
               {foundations.map((foundation) => (
                 <div key={foundation.id} className="cols-sm">

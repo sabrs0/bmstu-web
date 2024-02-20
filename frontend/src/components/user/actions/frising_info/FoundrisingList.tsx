@@ -11,6 +11,7 @@ function FoundrisingListExt({user_id, foundrisings}: FoundrisingListExtProps){
             <div className="row">
 
               {foundrisings.map((Foundrising) => (
+                (!Foundrising.closing_date || Foundrising.closing_date.length === 0) &&
                 <div key={Foundrising.id} className="cols-sm">
                   <FoundrisingCardExt user_id={user_id} Found={Foundrising}/>
                 </div>

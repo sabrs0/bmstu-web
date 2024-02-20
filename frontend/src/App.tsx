@@ -9,26 +9,25 @@ import LoginForm from './components/login/LoginPage';
 import FoundationDashboard from './components/foundation/Dashboard';
 import FoundrisingAddForm from './components/foundation/actions/FoundrisingAddForm';
 import UserDashboard from './components/user/Dashboard';
-
+import { ButtonGroup } from '@mui/material';
+import Button from '@mui/material';
+import { BorderBottom } from '@mui/icons-material';
 function App() {
   //const [role, setRole] = useState('')  
   return (
       <Router>
-        <header className='sticky' >
-        <span className='logo'>
-          <img src="/assets/b_logo.jpg" alt="logo" width="59" height="49" />
-        </span>
-          <NavLink to='/' className='nav-link'>
-            <span className='icon-home'></span>
+        <header style={{borderBottom: '2px solid black'}}>
+          <div className='nav-container'>
+          <NavLink to='/' className='button-nav'>
             Home
           </NavLink>
-          <NavLink to='/login' className='nav-link'>
-            Войти
+          <NavLink to='/login' className='button-nav'>
+            Login
           </NavLink>
-          <NavLink to='/foundations' className='nav-link'>
-            Список фондов
+          <NavLink to='/foundations' className='button-nav'>
+            Foundations
           </NavLink>
-          
+          </div>
         </header>
         <div className='container'>
           <Routes>

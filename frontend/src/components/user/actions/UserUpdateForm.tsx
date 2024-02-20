@@ -93,7 +93,7 @@ function UserUpdateForm({user_id, user_put_info}: UserUpdateProps){
     };
 
     return (
-        <div>
+        <div className="form-container">
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -106,7 +106,7 @@ function UserUpdateForm({user_id, user_put_info}: UserUpdateProps){
                     Успешно
                   </div>
             )}
-            <div>
+            <div className="input-row">
                 <label htmlFor="login">Login</label>
                 <input
                 type="text"
@@ -116,7 +116,7 @@ function UserUpdateForm({user_id, user_put_info}: UserUpdateProps){
                 />
                 <span style={{ color: 'red' }}>{loginError}</span>
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="password">Password</label>
                 <input
                 type="text"
@@ -126,8 +126,8 @@ function UserUpdateForm({user_id, user_put_info}: UserUpdateProps){
                 />
                 <span style={{ color: 'red' }}>{passwordError}</span>
             </div>
-            <button type="submit">Update</button>
-            <button onClick={handleClose}>Close</button>
+            <button className='button-login' type="submit">Update</button>
+            <button className='button-login' onClick={handleClose}>Close</button>
             
             </form>
         </div>

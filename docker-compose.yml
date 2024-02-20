@@ -8,7 +8,6 @@ services:
           dockerfile: Dockerfile
         ports:
           - "8082:8081"
-        #tty: true
         logging:
           driver: json-file
         env_file: ./config_storage/server1/postgres.env
@@ -19,12 +18,10 @@ services:
         networks:
           - backend
         healthcheck:
-          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] 
           interval: 10s
           timeout: 10s
           retries: 3
-          #start_period: 40s
-          #start_interval: 5s
   server2:
         hostname: foundations-server-2
         build:
@@ -43,12 +40,10 @@ services:
         networks:
           - backend
         healthcheck:
-          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] 
           interval: 10s
           timeout: 10s
           retries: 3
-          #start_period: 40s
-          #start_interval: 5s
   server_main:
         hostname: foundations-server-main
         build:
@@ -67,12 +62,10 @@ services:
         networks:
           - backend
         healthcheck:
-          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"]
           interval: 10s
           timeout: 10s
           retries: 3
-          #start_period: 40s
-          #start_interval: 5s
   server_mirror:
         hostname: foundations-server-mirror
         build:
@@ -91,12 +84,10 @@ services:
         networks:
           - backend
         healthcheck:
-          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] #:8081/api/v1/foundations
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:8081/api/v1/foundations"] 
           interval: 10s
           timeout: 10s
           retries: 3
-          #start_period: 40s
-          #start_interval: 5s
   db_postgres:
         hostname: foundations-db_postgres
         image: postgres:latest

@@ -1,6 +1,7 @@
 import { FoundationTransfer } from "./Transfer";
 import { FoundationExt } from "./Transfer";
 import { FoundrisingTransfer} from "../foundrising/Transfer";
+import { isStringLiteral } from "typescript";
 const baseUrl = 'http://localhost:8080/api/v1';
 const url = `${baseUrl}/foundations`;
 
@@ -17,7 +18,7 @@ function translateStatusToErrorMessage(status: number) {
 
 function checkStatus(response: any) {
   if (response.ok) {
-    return response;
+      return response;
   } else {
     const httpErrorInfo = {
       status: response.status,
@@ -32,7 +33,10 @@ function checkStatus(response: any) {
 }
 
 function parseJSON(response: Response) {
-  return response.json();
+    return response.json();
+  
+  
+
 }
 
 // eslint-disable-next-line

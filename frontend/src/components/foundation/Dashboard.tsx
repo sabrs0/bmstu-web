@@ -10,6 +10,10 @@ import FoundationDonateForm from "./actions/DonateForm";
 import FoundationReplenishForm from "./actions/ReplenishForm";
 import FoundationUpdateForm from "./actions/FoundationUpdateForm";
 import FoundationDeleteForm from "./actions/FoundationDelete";
+import UpgradeIcon from "@mui/icons-material/Upgrade"
+import PaidIcon from '@mui/icons-material/Paid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import LogoutIcon from '@mui/icons-material/Logout';
 //props: any
 function FoundationDashboard(){
     const [loading, setLoading] = useState(false);
@@ -25,10 +29,12 @@ function FoundationDashboard(){
     const[showDonateForm, setShowDonateForm] = useState(false);
     const[showReplenishForm, setShowReplenishForm] = useState(false);
     const[showDeleteFingForm, setShowDeleteFingForm] = useState(false);
+    const[showDash, setShowDash] = useState(true);
     const [foundationPut, setFoundationPut] = useState<FoundationPut | undefined>(undefined)
     let setsArr: React.Dispatch<React.SetStateAction<boolean>>[] = [
         setShowAddForm, setShowUpdateFingForm, setShowUpdateForm,setShowDeleteForm,
-        setShowListForm, setShowDonateForm, setShowReplenishForm, setShowDeleteFingForm
+        setShowListForm, setShowDonateForm, setShowReplenishForm, setShowDeleteFingForm,
+        setShowDash
     ]
     function falseAll(){
         for (let i = 0; i < setsArr.length; i ++){
@@ -122,34 +128,41 @@ function FoundationDashboard(){
             )}
             
             {!error && !loading && Foundation &&(
-                <div>
-                <div>
-                    <p>Role - Foundation</p>
-                    <p>ID: {Foundation.id}</p>
-                    <p>Login: {Foundation.login}</p>
-                    <p>Name: {Foundation.name}</p>
-                    <p>Current Foundrising Amount: {Foundation.cur_foudrising_amount}</p>
-                    <p>Closed Foundrising Amount: {Foundation.closed_foundrising_amount}</p>
-                    <p>Volunteer Amount: {Foundation.volunteer_amount}</p>
-                    <p>Country: {Foundation.country}</p>
-                    <p>Balance: {Foundation.fund_balance}</p>
-                    <p>Income History: {Foundation.income_history}</p>
-                    <p>Outcome History: {Foundation.outcome_history}</p>
-                
-                </div>
-                <div>
-                    <button onClick={handleList}>My Foundrisings</button>
-                    <button onClick={handleAdd}>Add Foundrising</button>
-                    <button onClick={handleUpdFing}>Update Foundrising</button>
-                    <button onClick={handleDelFing}>Delete Foundrising</button>
-                </div>
-                <div>
-                    <button onClick={handleDon}>Donate</button>
-                    <button onClick={handleRep}>Replenish Balance</button>
-                    <button onClick={handleUpd}>Update Foundation Info</button>
-                    <button onClick={handleDel}>Delete Foundation</button>
-                    <button onClick={handleExit}>Выйти</button>
-                </div>
+                <div className="dash">
+                    {showDash && (<div className="dash">
+                        <div className="panel-container">
+                            <div className="user-info">
+                                <strong>
+                                <p>Name: {Foundation.name}</p>
+                                </strong>
+                                <p>Current Foundrising Amount: {Foundation.cur_foudrising_amount}</p>
+                                <p>Closed Foundrising Amount: {Foundation.closed_foundrising_amount}</p>
+                                <p>Volunteer Amount: {Foundation.volunteer_amount}</p>
+                                <p>Country: {Foundation.country}</p>
+                                <p>Balance: {Foundation.fund_balance}</p>
+                                <p>Income History: {Foundation.income_history}</p>
+                                <p>Outcome History: {Foundation.outcome_history}</p>
+                            
+                            </div>
+                            <div>
+                                <div className="icon-operations">    
+                                <button className="button-login" onClick={handleRep}> <PaidIcon/></button>
+                                <button className="button-login" onClick={handleUpd}><UpgradeIcon/></button>
+                                <button className="button-login" onClick={handleDel}><DeleteIcon/></button>
+            
+                                <button className="button-login" onClick={handleExit}><LogoutIcon/></button>
+                                </div>
+                            </div>
+                    </div>
+                    <div className="operations">
+                        <button className="button-login" onClick={handleList}>My Foundrisings</button>
+                        <button className="button-login" onClick={handleAdd}>Add Foundrising</button>
+                        <button className="button-login" onClick={handleUpdFing}>Update Foundrising</button>
+                        <button className="button-login" onClick={handleDelFing}>Delete Foundrising</button>
+                        <button className="button-login" onClick={handleDon}>Donate</button>
+                    </div>
+                </div>)}
+                    
                 {showAddForm && (<FoundrisingAddForm 
                     found_id={Foundation.id === undefined ? 0 :Foundation.id}/> ) }
                 {showUpdateFingForm && (<FoundrisingUpdateForm 

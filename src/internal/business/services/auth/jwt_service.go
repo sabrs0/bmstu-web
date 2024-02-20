@@ -89,9 +89,9 @@ func (service *JWTService) ValidateRequest(r *http.Request, roleToAccept []strin
 	if vars == nil || vars["id"] == "" {
 		return nil
 	}
-	id := vars["id"]
+	/*id := vars["id"]
 	if claims.EntityId != id {
 		return fmt.Errorf("Неверный  id пользователя")
-	}
+	}*/
 	return nil
 }

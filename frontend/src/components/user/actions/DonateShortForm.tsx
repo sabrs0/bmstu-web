@@ -1,25 +1,31 @@
-import { FoundrisingAPI } from "../../foundrising/API";
-import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
 import  {useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FoundationDonate, FoundationReplenish } from "../Transfer";
-import { FoundationAPI } from "../API";
+import { UserDonate } from "../Transfer";
+import { UserAPI } from "../API";
 
-interface FoundationReplenishFormProps{
-    found_id: number;
-   // setDashError:  React.Dispatch<React.SetStateAction<string | null>>
-  //  setDashSuccess:  React.Dispatch<React.SetStateAction<string | null>>
+
+
+
+
+
+interface UserDonateShortFormProps{
+    user_id: number;
+    entity_id: number;
+    entity_type: boolean;
 }
-
-function FoundationReplenishForm({found_id}: FoundationReplenishFormProps){
-    
+const FOUNDATION = false;
+const FOUNDRISING = true;
+function UserDonateShortForm({user_id, entity_id, entity_type}: UserDonateShortFormProps){
+    const [comment, setComment] = useState('');
     const [sumOfMoney, setSumOfMoney] = useState('');
+    const [entityID, setEntityID] = useState(entity_id.toString());
+    
     const [sumOfMoneyError, setSumOfMoneyError] = useState<string>('');
+    const [entityIDError, setentityIDError] = useState<string>('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     
     const isValid = ()=>{
-        return (sumOfMoneyError.length === 0);
+        return (sumOfMoneyError.length === 0 && entityIDError.length === 0);
     }
     const validateSumOfMoney = (value: string) => {
         if (!/^\d+(\.\d{1,2})?$/.test(value)) {
@@ -31,7 +37,25 @@ function FoundationReplenishForm({found_id}: FoundationReplenishFormProps){
             setSumOfMoneyError('');
         }
     };
+    const validateentityID = (value: string)  => {
+        const maxValue = Number.MAX_SAFE_INTEGER; // Максимальное значение для 64-битного целого числа
+      
+        if (!/^\d+$/.test(value)) {
+           setentityIDError('FundationID должен быть целым числом');
+        } else {
+          const numericValue = parseInt(value, 10);
+          if (numericValue < 0) {
+            setentityIDError('FundraisingID должен быть неотрицательным числом');
+          } else if (numericValue > maxValue) {
+            setentityIDError(`FundraisingID не должен превышать ${maxValue}`)
+          }
+        }
+    };
 
+    const handleCommentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setComment(event.target.value);
+        
+    };
 
     const handleSumOfMoneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSumOfMoney(event.target.value);
@@ -45,6 +69,7 @@ function FoundationReplenishForm({found_id}: FoundationReplenishFormProps){
         event.preventDefault();
         setError('')
         setSuccess('')
+        validateentityID(entityID)
         validateSumOfMoney(sumOfMoney)
         
 
@@ -54,16 +79,19 @@ function FoundationReplenishForm({found_id}: FoundationReplenishFormProps){
             return;
         }
         try {
-            const DonateData: FoundationReplenish = {
+            const DonateData: UserDonate = {
+                entity_type: entity_type,
+                entity_id:  entityID,
+                comment: comment,
                 sum_of_money: parseFloat(sumOfMoney).toFixed(2),
             };
             const token = localStorage.getItem('token');
             if (token === null){
-                setError("Foundrising add Form: token is undefined");
+                setError("User Donate Form: token is undefined");
                 
             }else{
                 try{
-                    const data =  await FoundationAPI.replenish(token, found_id.toString(), JSON.stringify(DonateData))
+                    const data =  await UserAPI.donate(token, user_id.toString(), JSON.stringify(DonateData))
                     setSuccess('Успешно')
                 }catch (e){
                     if (e instanceof Error){
@@ -80,9 +108,8 @@ function FoundationReplenishForm({found_id}: FoundationReplenishFormProps){
     };
 
     return (
-        <div className="form-container">
-            <h1>Replenish Balance</h1>
-            <form onSubmit={handleFormSubmit}>
+        <div className="form-container" style={{backgroundColor: 'darkgrey'}}>
+            <form onSubmit={handleFormSubmit} style={{backgroundColor: 'darkgrey'}}>
             
             {error.length !== 0 && (
                     <div className="alert alert-error" role="alert">
@@ -95,6 +122,14 @@ function FoundationReplenishForm({found_id}: FoundationReplenishFormProps){
                   </div>
             )}
             <div className="input-row">
+                <label htmlFor="comment">Comment</label>
+                <textarea
+                id="comment"
+                value={comment}
+                onChange={handleCommentChange}
+                />
+            </div>
+            <div className="input-row">
                 <label htmlFor="sumOfMoney">Sum of money</label>
                 <input
                 type="text"
@@ -104,11 +139,10 @@ function FoundationReplenishForm({found_id}: FoundationReplenishFormProps){
                 />
                 <span style={{ color: 'red' }}>{sumOfMoneyError}</span>
             </div>
-            <button className="button-login" type="submit">Replenish</button>
-            <button className="button-login" onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Donate</button>
             </form>
         </div>
     );
     };
 
-export default FoundationReplenishForm;
+export default UserDonateShortForm;

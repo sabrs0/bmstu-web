@@ -133,13 +133,16 @@ func (UC *FoundrisingController) Delete(id string) (ents.FoundrisingTransfer, er
 		return ents.FoundrisingTransfer{}, err
 	}
 	// удалили незакрытый сбор - надо подчистить у foundation cur fing amount
-	if !fRising.Closing_date.Valid {
-		strID := strconv.FormatUint(fRising.Id, 10)
+	if !fRising.Closing_date.Valid || len(fRising.Closing_date.String) == 0 {
+		strID := strconv.FormatUint(fRising.Found_id, 10)
 		foundation, err := UC.FndS.GetById(strID)
 		if err != nil {
 			return ents.FoundrisingTransfer{}, err
 		}
-		foundation.CurFoudrisingAmount -= 1
+		if foundation.CurFoudrisingAmount > 0 {
+			foundation.CurFoudrisingAmount -= 1
+		}
+
 		_, err = UC.FndS.FR.Update(foundation)
 		if err != nil {
 			return ents.FoundrisingTransfer{}, err

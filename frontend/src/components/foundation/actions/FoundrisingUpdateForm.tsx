@@ -2,6 +2,7 @@ import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
 import  {useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FoundrisingChoice from "../../foundrising/descriptionListCurrent";
 
 
 
@@ -58,9 +59,10 @@ function FoundrisingUpdateForm(){
         setRequiredSum(event.target.value);
         validateRequiredSum(event.target.value);
     };
-    const handleFoundrisingIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFoundrisingID(event.target.value);
-        validateFoundrisingID(event.target.value);
+    const handleFoundrisingIDChange = (id: string) => {
+        
+        setFoundrisingID(id);
+        
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -108,7 +110,8 @@ function FoundrisingUpdateForm(){
     };
 
     return (
-        <div>
+        <div className="form-container">
+            <h1>Update Foundrising</h1>
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -121,17 +124,12 @@ function FoundrisingUpdateForm(){
                     Успешно
                   </div>
             )}
-            <div>
-                <label htmlFor="foundrisingID">Foundrising ID</label>
-                <input
-                type="text"
-                id="foundrisingID"
-                value={foundrisingID}
-                onChange={handleFoundrisingIDChange}
-                />
-                <span style={{ color: 'red' }}>{foundrisingIDError}</span>
+            <div className="input-row">
+                <label htmlFor="foundrising">Foundrising</label>
+                <FoundrisingChoice handleSetID={handleFoundrisingIDChange} />
+                {/*<span style={{ color: 'red' }}>{foundrisingIDError}</span>*/}
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="description">Description</label>
                 <textarea
                 id="description"
@@ -140,7 +138,7 @@ function FoundrisingUpdateForm(){
                 />
                 <span style={{ color: 'red' }}>{descriptionError}</span>
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="requiredSum">Required Sum</label>
                 <input
                 type="text"
@@ -150,8 +148,8 @@ function FoundrisingUpdateForm(){
                 />
                 <span style={{ color: 'red' }}>{requiredSumError}</span>
             </div>
-            <button type="submit">Update Foundrising</button>
-            <button onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Update</button>
+            <button className="button-login" onClick={handleClose}>Close</button>
             
             </form>
         </div>

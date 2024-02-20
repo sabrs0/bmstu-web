@@ -15,7 +15,10 @@ function FoundrisingListForm({found_id}: FoundrisingListProps) {
   const [Foundrisings, setFoundrisings] = useState<FoundrisingTransfer[]>([]);
   const [foundrisingloading, setFoundrisingLoading] = useState(false);
   const [foundrisingError, setFoundrisingError] = useState<string | undefined>(undefined);
-  
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    window.location.reload();
+}
   useEffect(() =>{
       async function loadFoundrisings() {
         setFoundrisingLoading(true);
@@ -36,7 +39,7 @@ function FoundrisingListForm({found_id}: FoundrisingListProps) {
   }, [found_id]);
   
   return (
-    <div>
+    <div className='form-container'>
         {error && (
           <div className="row">
             <div className="card large error">
@@ -64,6 +67,7 @@ function FoundrisingListForm({found_id}: FoundrisingListProps) {
             )}
                 <FoundrisingList Foundrisings={Foundrisings} />
         </div>
+        <button className="button-login" onClick={handleClose}>Close</button>
     </div>
   );
 }

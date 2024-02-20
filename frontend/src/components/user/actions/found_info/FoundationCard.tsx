@@ -3,6 +3,8 @@ import { FoundationTransfer } from "../../../foundation/Transfer";
 import { useState } from "react";
 import UserDonateToFoundForm from "../DonateFoundForm";
 import { UserDonate } from "../../Transfer";
+import ModalDonate from "../ModalDonate";
+
 
 interface FoundationCardProps{
     user_id: number
@@ -17,30 +19,19 @@ function FoundationCard({user_id, Found}: FoundationCardProps){
         //window.location.reload()
     }
     return (
-        <div className="card border-dark mb-3" style={{maxWidth: "350px", border: "2px solid"}}>
-            {donate  && ( <UserDonateToFoundForm user_id={user_id} 
-                                initialDonateForm={{entity_type:false,
-                                    entity_id: Foundation.id ? Foundation.id.toString(): '',
-                                    sum_of_money: '',
-                                    comment: ''
-                                }
-                                }/>)
-                }
-            {!donate && (
+        <div className="card-basic">
             <div className="card-body">
                 <section className="section dark">
                     <h5 className="strong">
-                        <strong>id: {Foundation.id}</strong>
+                        <strong>name : {Foundation.name}</strong>
                     </h5>
-                            
-                    <p>name : {Foundation.name}</p>
                     <p>Current foundrising amount : {Foundation.cur_foudrising_amount.toLocaleString()}</p>
                     <p>Closed foundrising amount : {Foundation.closed_foundrising_amount.toLocaleString()}</p>
                     <p>Volunteer amount : {Foundation.volunteer_amount.toLocaleString()}</p>
                     <p>Country : {Foundation.country}</p>
-                    <button onClick={handleDonate}>Donate</button>
                 </section>
-            </div>)}
+            </div>
+            <ModalDonate user_id={user_id} entity_id={Found.id ? Found.id : -1} entity_type={false}/>
         </div>
             
     );

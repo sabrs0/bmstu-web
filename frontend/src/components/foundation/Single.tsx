@@ -63,9 +63,10 @@ function FoundationSinglePage(props: any) {
   //FOUNDRISINGS STOP
   
   return (
-    <div>
-      <>
-        <h1>Foundation Details</h1>
+    <div className='dash'>
+      <h1>Foundation Details</h1>
+      <div>
+        
 
         {loading && (
           <div className="center-page">
@@ -85,7 +86,7 @@ function FoundationSinglePage(props: any) {
             </div>
           </div>
         )}
-
+      </div >
         {Foundation && (<FoundationDetail Foundation={Foundation} />)}
         <div>
             <h1>Foundrisings</h1>
@@ -102,14 +103,9 @@ function FoundationSinglePage(props: any) {
                 </div>
             )}
                 <FoundrisingList Foundrisings={Foundrisings} />
-                {/*foundrisingloading && ( 
-                    <div className="center-page">
-                        <span className="spinning primary"></span>
-                        <p>Loading...</p>
-                    </div>)*/
-                }
+                
         </div>
-      </>
+      
     </div>
   );
 }

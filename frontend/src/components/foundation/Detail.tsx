@@ -6,9 +6,7 @@ interface FoundationDetailProps {
 }
 export default function FoundationDetail({ Foundation }: FoundationDetailProps) {
   return (
-    <div className="row">
-      <div className="col-sm-6">
-        <div className="card large">
+    <div className='panel-container'>
           <section className="section dark">
           <h5 className="strong">
             <strong>id: {Foundation.id}</strong>
@@ -19,8 +17,6 @@ export default function FoundationDetail({ Foundation }: FoundationDetailProps) 
             <p>Volunteer amount : {Foundation.volunteer_amount.toLocaleString()}</p>
             <p>Country : {Foundation.country}</p>
           </section>
-        </div>
-      </div>
     </div>
   );
 }

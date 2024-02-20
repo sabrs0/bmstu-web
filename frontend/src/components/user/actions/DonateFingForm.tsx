@@ -1,6 +1,7 @@
 import  {useState } from "react";
 import { UserDonate } from "../Transfer";
 import { UserAPI } from "../API";
+import FoundrisingChoice from "../../foundrising/descriptionListCurrent";
 
 interface UserDonateToFrisingFormProps{
     user_id: number;
@@ -54,9 +55,10 @@ function UserDonateToFrisingForm({user_id, initialDonateForm}: UserDonateToFrisi
         setSumOfMoney(event.target.value);
         validateSumOfMoney(event.target.value);
     };
-    const handleFoundrisingIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFoundrisingID(event.target.value);
-        validatefoundrisingID(event.target.value);
+    const handleFoundrisingIDChange = (id: string) => {
+        
+        setFoundrisingID(id);
+        
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -105,7 +107,7 @@ function UserDonateToFrisingForm({user_id, initialDonateForm}: UserDonateToFrisi
     };
 
     return (
-        <div>
+        <div className="form-container">
             <form onSubmit={handleFormSubmit}>
             
             {error.length !== 0 && (
@@ -118,17 +120,12 @@ function UserDonateToFrisingForm({user_id, initialDonateForm}: UserDonateToFrisi
                     Успешно
                   </div>
             )}
-            <div>
-                <label htmlFor="foundrisingID">Foundrising ID</label>
-                <input
-                type="text"
-                id="foundrisingID"
-                value={foundrisingID}
-                onChange={handleFoundrisingIDChange}
-                />
-                <span style={{ color: 'red' }}>{foundrisingIDError}</span>
+            <div className="input-row">
+                <label htmlFor="foundrising">Foundrising</label>
+                <FoundrisingChoice handleSetID={handleFoundrisingIDChange} />
+                {/*<span style={{ color: 'red' }}>{foundrisingIDError}</span>*/}
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="comment">Comment</label>
                 <textarea
                 id="comment"
@@ -136,7 +133,7 @@ function UserDonateToFrisingForm({user_id, initialDonateForm}: UserDonateToFrisi
                 onChange={handleCommentChange}
                 />
             </div>
-            <div>
+            <div className="input-row">
                 <label htmlFor="sumOfMoney">Sum of money</label>
                 <input
                 type="text"
@@ -146,8 +143,8 @@ function UserDonateToFrisingForm({user_id, initialDonateForm}: UserDonateToFrisi
                 />
                 <span style={{ color: 'red' }}>{sumOfMoneyError}</span>
             </div>
-            <button type="submit">Donate to Foundrising</button>
-            <button onClick={handleClose}>Close</button>
+            <button className="button-login" type="submit">Donate to Foundrising</button>
+            <button className="button-login" onClick={handleClose}>Close</button>
             </form>
         </div>
     );
