@@ -1,4 +1,4 @@
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { UserDonate } from "../Transfer";
 import { UserAPI } from "../API";
 import FoundrisingChoice from "../../foundrising/descriptionListCurrent";
@@ -18,6 +18,40 @@ function UserDonateToFrisingForm({user_id, initialDonateForm}: UserDonateToFrisi
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('userDonateFingComment')
+        if (item && item.length > 0){
+            setComment(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userDonateFingComment', comment as string);
+        }, [comment]);
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('userDonateFingSumOfMoney')
+        if (item && item.length > 0){
+            setSumOfMoney(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userDonateFingSumOfMoney', sumOfMoney as string);
+        }, [sumOfMoney]);
+        
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('userDonateFingFoundrisingID')
+        if (item && item.length > 0){
+            setFoundrisingID(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userDonateFingFoundrisingID', foundrisingID as string);
+        }, [foundrisingID]);
+
+
     const isValid = ()=>{
         return (sumOfMoneyError.length === 0 && foundrisingIDError.length === 0);
     }
@@ -62,6 +96,8 @@ function UserDonateToFrisingForm({user_id, initialDonateForm}: UserDonateToFrisi
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showDonateFrisingForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

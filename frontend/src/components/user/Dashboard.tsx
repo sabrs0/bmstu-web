@@ -22,16 +22,128 @@ function UserDashboard(){
     const [user, setUser] = useState<UserTransferExt | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const[showFoundationsForm, setShowFoundationsForm] = useState(false)
-    const[showFoundrisingsForm, setShowFoundrisingsForm] = useState(false)
-    const[showUpdateForm, setShowUpdateForm] = useState(false);
-    const[showDeleteForm, setShowDeleteForm] = useState(false);
-    const[showDonateFoundForm, setShowDonateFoundForm] = useState(false);
-    const[showDonateFrisingForm, setShowDonateFrisingForm] = useState(false);
-    const[showReplenishForm, setShowReplenishForm] = useState(false);
+    const[showFoundationsForm, setShowFoundationsForm] = useState<boolean | undefined>(undefined)
+    const[showFoundrisingsForm, setShowFoundrisingsForm] = useState<boolean | undefined>(undefined)
+    const[showUpdateForm, setShowUpdateForm] = useState<boolean | undefined>(undefined);
+    const[showDeleteForm, setShowDeleteForm] = useState<boolean | undefined>(undefined);
+    const[showDonateFoundForm, setShowDonateFoundForm] = useState<boolean | undefined>(undefined);
+    const[showDonateFrisingForm, setShowDonateFrisingForm] = useState<boolean | undefined>(undefined);
+    const[showReplenishForm, setShowReplenishForm] = useState<boolean | undefined>(undefined);
     const [userPut, setUserPut] = useState<UserPut | undefined>(undefined)
-    const[showDash, setShowDash] = useState(true);
-    let setsArr: React.Dispatch<React.SetStateAction<boolean>>[] = [
+    const[showDash, setShowDash] = useState<boolean | undefined>(true);
+
+    // сохранение состояния
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('showDash')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowDash(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (showDash !== undefined)
+        window.localStorage.setItem('showDash', showDash === true ? '1' : '0');
+    }, [showDash]);
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('showFoundationForm')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowFoundationsForm(true);
+        }
+        }, []);
+        useEffect(() => {
+            if (showFoundationsForm !== undefined)
+            window.localStorage.setItem('showFoundationForm', showFoundationsForm === true ? '1' : '0');
+        }, [showFoundationsForm]);    
+
+    
+    useEffect(() => {
+        const item = window.localStorage.getItem('showFoundrisingsForm')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowFoundrisingsForm(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (showFoundrisingsForm !== undefined)
+        window.localStorage.setItem('showFoundrisingsForm', showFoundrisingsForm === true ? '1' : '0');
+    }, [showFoundrisingsForm]);
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('showUpdateForm')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowUpdateForm(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (showUpdateForm !== undefined)
+        window.localStorage.setItem('showUpdateForm', showUpdateForm === true ? '1' : '0');
+    }, [showUpdateForm]);    
+    
+    
+    useEffect(() => {
+        const item = window.localStorage.getItem('showDeleteForm')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowDeleteForm(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (showDeleteForm !== undefined)
+        window.localStorage.setItem('showDeleteForm', showDeleteForm === true ? '1' : '0');
+    }, [showDeleteForm]);
+
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('showDonateFoundForm')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowDonateFoundForm(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (showDonateFoundForm !== undefined)
+        window.localStorage.setItem('showDonateFoundForm', showDonateFoundForm === true ? '1' : '0');
+    }, [showDonateFoundForm]);
+
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('showDonateFrisingForm')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowDonateFrisingForm(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (showDonateFrisingForm !== undefined)
+        window.localStorage.setItem('showDonateFrisingForm', showDonateFrisingForm === true ? '1' : '0');
+    }, [showDonateFrisingForm]);
+
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('showReplenishForm')
+        if (item && item.length > 0 && item === "1"){
+            falseAll();
+            setShowReplenishForm(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (showReplenishForm !== undefined)
+        window.localStorage.setItem('showReplenishForm', showReplenishForm === true ? '1' : '0');
+    }, [showReplenishForm]);
+
+
+
+
+
+    let setsArr: React.Dispatch<React.SetStateAction<boolean | undefined>>[] = [
         setShowUpdateForm,setShowDeleteForm,
         setShowDonateFoundForm, setShowDonateFrisingForm, 
         setShowReplenishForm, setShowFoundationsForm,

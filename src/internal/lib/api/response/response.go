@@ -27,7 +27,6 @@ func ErrWrapper(w http.ResponseWriter, resp any, err error) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	status := http.StatusBadRequest
 	if err == my_errors.ErrorNotExists {
 		status = http.StatusNotFound
@@ -48,7 +47,6 @@ func JSONRender(w http.ResponseWriter, status int, jsonData any) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	data, err := json.Marshal(jsonData)
 	fmt.Println("JSONNED DATA IS: ", data)
 	if err != nil {

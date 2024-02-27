@@ -1,5 +1,5 @@
 
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserPut } from "../Transfer";
 import { UserAPI } from "../API";
@@ -24,6 +24,31 @@ function UserUpdateForm({user_id, user_put_info}: UserUpdateProps){
         }
     };
     
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('userUpdateLogin')
+        if (item && item.length > 0){
+            setLogin(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userUpdateLogin', login as string);
+        }, [login]);
+
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('userUpdatePassword')
+        if (item && item.length > 0){
+            setPassword(item);
+        }
+    }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userUpdatePassword', password as string);
+        }, [password]);
+
+
     const isValid = ()=>{
         return (loginError.length === 0 && passwordError.length === 0 );
     }
@@ -49,6 +74,8 @@ function UserUpdateForm({user_id, user_put_info}: UserUpdateProps){
     
             window.location.href = newUrl;
         }else{
+            window.localStorage.setItem('showUpdateForm', '0')
+            window.localStorage.setItem('showDash', '1')
             window.location.reload()
         }
     }

@@ -12,7 +12,15 @@ interface FoundationChoiceProps {
 }
 function FoundationChoice({handleSetID} : FoundationChoiceProps){
     const [selectedName, setSelectedName] = useState('')
-
+    useEffect(() => {
+      const item = window.localStorage.getItem('selectedName')
+      if (item && item.length > 0){
+        setSelectedName(item);
+      }
+      }, []);
+  useEffect(() => {
+      window.localStorage.setItem('selectedName', selectedName);
+      }, [selectedName]);
     const handleSelectName = (name: string) => {
        setSelectedName(name);
     };

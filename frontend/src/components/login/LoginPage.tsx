@@ -1,25 +1,71 @@
 
 import { LoginAPI } from "./LoginAPI";
 import { LoginToken, LoginTransfer } from "./LoginTransfer";
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { redirect } from "react-router";
 import Logout from "./Logout";
-/*interface LoginFormProps{
-    setEntityRole:  React.Dispatch<React.SetStateAction<string>>
-   // onSave: (Login: Login) => void;
-    //onCancel: () =>void;
-}*/
+//USER:
+//ecane1
+//JEqZ7pO8xTb
+
 function LoginForm(){
-    const [login, setLogin] = useState('ecane1');
-    const [password, setPassword] = useState('JEqZ7pO8xTb');
-    const [role, setRole] = useState('User');
+    const [login, setLogin] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
     const [loginToken, setLoginToken] = useState<LoginToken | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
+    for (let i = 0; i < localStorage.length; i ++){
+        const key = localStorage.key(i);
+        if (key){
+            if (key.length >= 4){
+                if (key.slice(0, 4) === 'user' || 
+                    key.slice(0,10) === 'Foundation' || 
+                    key.slice(0, "selected".length) === "selected"){
+                    localStorage.removeItem(key)
+                }
+            }
+        }
+    }
     localStorage.removeItem('token')
+    // Сохранение состояния    
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('login')
+        if (item && item.length > 0){
+            setLogin(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('login', login);
+        }, [login]);
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('password')
+        if (item && item.length > 0){
+            setPassword(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('password', password);
+        }, [password]);
+    
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('role')
+        if (item && item.length > 0){
+            setRole(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('role', role);
+        }, [role]);
+    
+    
     const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setLogin(event.target.value);
     };
-
+    
+    // Сохранение состояния
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };

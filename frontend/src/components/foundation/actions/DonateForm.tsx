@@ -1,6 +1,6 @@
 import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FoundationDonate } from "../Transfer";
 import { FoundationAPI } from "../API";
@@ -25,8 +25,41 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
     const [success, setSuccess] = useState('');
     const [donateClicked, setDonateClicked] = useState(false);
     
+    
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationDonateComment')
+        if (item && item.length > 0){
+            setComment(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationDonateComment', comment as string);
+        }, [comment]);
 
-    const isValid = ()=>{
+    
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationDonateSumOfMoney')
+        if (item && item.length > 0){
+            setSumOfMoney(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationDonateSumOfMoney', sumOfMoney as string);
+        }, [sumOfMoney]);
+        
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationDonateFoundrisingID')
+        if (item && item.length > 0){
+            setFoundrisingID(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationDonateFoundrisingID', foundrisingID as string);
+        }, [foundrisingID]);
+    
+    
+        const isValid = ()=>{
         return (sumOfMoneyError.length === 0 && foundrisingIDError.length === 0);
     }
     const validateSumOfMoney = (value: string) => {
@@ -74,6 +107,8 @@ function FoundationDonateForm({found_id}: FoundationDonateFormProps){
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showDonateForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     

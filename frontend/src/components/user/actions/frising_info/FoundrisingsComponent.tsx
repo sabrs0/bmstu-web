@@ -17,6 +17,8 @@ function FoundrisingListForm({user_id}: FoundrisingListProps) {
   const [FoundrisingError, setFoundrisingError] = useState<string | undefined>(undefined);
   const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    window.localStorage.setItem('showFoundrisingsForm', '0')
+    window.localStorage.setItem('showDash', '1')
     window.location.reload();
 }
   useEffect(() =>{

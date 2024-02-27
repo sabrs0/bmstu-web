@@ -15,6 +15,8 @@ function FoundationDeleteForm({found_id}: FoundationDeleteProps){
     
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showDeleteForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

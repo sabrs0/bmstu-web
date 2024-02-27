@@ -24,11 +24,9 @@ function FoundrisingCardExt({user_id, Found}: FoundrisingCardProps){
                 <div className="card-body">
                     <section className="section dark">
                         <h5 className="strong">
-                            <strong>ID: {Foundrising.id}</strong>
+                            <strong>Description: {Foundrising.description.slice(0, 10)+(Foundrising.description.length > 10 ? '...' : '')}</strong>
                         </h5>
                     
-                        <p>Found ID: {Foundrising.found_id.toLocaleString()}</p>
-                        <p>Description: {Foundrising.description.slice(0, 10)+(Foundrising.description.length > 10 ? '...' : '')}</p>
                         <ModalExpand name={Foundrising.description} />
                         <p>Required sum: {Foundrising.required_sum.toLocaleString()}</p>
                         <p>Current sum: {Foundrising.current_sum.toLocaleString()}</p>

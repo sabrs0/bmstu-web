@@ -1,4 +1,4 @@
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { UserDonate } from "../Transfer";
 import { UserAPI } from "../API";
 import FoundationChoice from "../../foundation/descriptionList";
@@ -17,6 +17,41 @@ function UserDonateToFoundForm({user_id, initialDonateForm}: UserDonateToFoundFo
     const [foundationIDError, setFoundationIDError] = useState<string>('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    
+
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('userDonateFoundComment')
+        if (item && item.length > 0){
+            setComment(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userDonateFoundComment', comment as string);
+        }, [comment]);
+        
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('userDonateFoundSumOfMoney')
+        if (item && item.length > 0){
+            setSumOfMoney(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userDonateFoundSumOfMoney', sumOfMoney as string);
+        }, [sumOfMoney]);
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('userDonateFoundFoundationID')
+        if (item && item.length > 0){
+            setFoundationID(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userDonateFoundFoundationID', foundationID as string);
+        }, [foundationID]);
     
     const isValid = ()=>{
         return (sumOfMoneyError.length === 0 && foundationIDError.length === 0);
@@ -62,6 +97,8 @@ function UserDonateToFoundForm({user_id, initialDonateForm}: UserDonateToFoundFo
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showDonateFoundForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

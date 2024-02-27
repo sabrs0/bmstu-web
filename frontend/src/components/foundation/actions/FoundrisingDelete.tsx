@@ -1,6 +1,6 @@
 import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import FoundrisingChoice from "../../foundrising/descriptionList";
 
 interface FoundrisingUpdateFormProps{
@@ -13,7 +13,17 @@ function FoundrisingDeleteForm(){
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     
-    
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationDeleteFingFoundrisingID')
+        if (item && item.length > 0){
+            setFoundrisingID(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationDeleteFingFoundrisingID', foundrisingID as string);
+        }, [foundrisingID]);
+
+
     const validateFoundrisingID = (value: string)  => {
         const maxValue = Number.MAX_SAFE_INTEGER; // Максимальное значение для 64-битного целого числа
       
@@ -38,6 +48,8 @@ function FoundrisingDeleteForm(){
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showDeleteFingForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

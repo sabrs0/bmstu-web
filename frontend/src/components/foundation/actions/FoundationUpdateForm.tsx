@@ -1,6 +1,6 @@
 import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FoundationPut } from "../Transfer";
 import { FoundationAPI } from "../API";
@@ -21,6 +21,56 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
     const [countryError, setCountryError] = useState<string>('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationUpdateName')
+        if (item && item.length > 0){
+            setName(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationUpdateName', name as string);
+        }, [name]);
+
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationUpdateLogin')
+        if (item && item.length > 0){
+            setLogin(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationUpdateLogin', login as string);
+        }, [login]);
+
+
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationUpdatePassword')
+        if (item && item.length > 0){
+            setPassword(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationUpdatePassword', password as string);
+        }, [password]);
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationUpdateCountry')
+        if (item && item.length > 0){
+            setCountry(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationUpdateCountry', country as string);
+        }, [country]);
+
+
+
+
+
     const validateString = (value: string, setError: React.Dispatch<React.SetStateAction<string>>) => {
         if (value.length < 1) {
             setError('Must be at least 1 characters long');
@@ -61,6 +111,8 @@ function FoundationUpdateForm({found_id, foundation_put_info}: FoundationUpdateP
     
             window.location.href = newUrl;
         }else{
+            window.localStorage.setItem('showUpdateForm', '0')
+            window.localStorage.setItem('showDash', '1')
             window.location.reload()
         }
     }

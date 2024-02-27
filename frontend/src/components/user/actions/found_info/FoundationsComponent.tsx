@@ -17,6 +17,8 @@ function FoundationListForm({user_id}: FoundationListProps) {
   const [FoundationError, setFoundationError] = useState<string | undefined>(undefined);
   const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    window.localStorage.setItem('showFoundationForm', '0')
+    window.localStorage.setItem('showDash', '1')
     window.location.reload();
 }
   useEffect(() =>{

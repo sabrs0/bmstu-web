@@ -1,6 +1,6 @@
 import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FoundrisingChoice from "../../foundrising/descriptionListCurrent";
 
@@ -15,6 +15,42 @@ function FoundrisingUpdateForm(){
     const [foundrisingIDError, setFoundrisingIDError] = useState<string>('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationUpdateFingDescription')
+        if (item && item.length > 0){
+            setDescription(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationUpdateFingDescription', description as string);
+        }, [description]);
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationUpdateFingRequiredSum')
+        if (item && item.length > 0){
+            setRequiredSum(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationUpdateFingRequiredSum', requiredSum as string);
+        }, [requiredSum]);
+
+
+        
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationUpdateFingFoundrisingID')
+        if (item && item.length > 0){
+            setFoundrisingID(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationUpdateFingFoundrisingID', foundrisingID as string);
+        }, [foundrisingID]);
+
+        
     const validateDescription = (value: string) => {
         if (value.length < 20) {
         setDescriptionError('Description must be at least 20 characters long');
@@ -66,6 +102,8 @@ function FoundrisingUpdateForm(){
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showUpdateFingForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

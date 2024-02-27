@@ -1,6 +1,6 @@
 import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingPut, FoundrisingTransfer } from "../../foundrising/Transfer";
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserDonate, UserReplenish } from "../Transfer";
 import { UserAPI } from "../API";
@@ -17,6 +17,21 @@ function UserReplenishForm({user_id}: UserReplenishFormProps){
     const [sumOfMoneyError, setSumOfMoneyError] = useState<string>('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('userReplenishSumOfMoney')
+        if (item && item.length > 0){
+            setSumOfMoney(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('userReplenishSumOfMoney', sumOfMoney as string);
+        }, [sumOfMoney]);
+
+
+    
+
     
     const isValid = ()=>{
         return (sumOfMoneyError.length === 0);
@@ -39,6 +54,8 @@ function UserReplenishForm({user_id}: UserReplenishFormProps){
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showReplenishForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

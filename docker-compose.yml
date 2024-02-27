@@ -1,6 +1,5 @@
 version: '3.8'
 services:
-
   server1:
         hostname: foundations-server-1
         build:
@@ -53,7 +52,6 @@ services:
           - "8081:8081"
         logging:
           driver: json-file
-        tty: true
         env_file: "./config_storage/server_main/postgres.env"
         environment:
           - FND_CFG_PATH=/go/src/app/src/config_server/local.yaml
@@ -75,7 +73,6 @@ services:
           - "8086:8081"
         logging:
           driver: json-file
-        tty: true
         env_file: "./config_storage/server_mirror/postgres.env"
         environment:
           - FND_CFG_PATH=/go/src/app/src/config_server/local.yaml
@@ -118,6 +115,22 @@ services:
           - backend
         depends_on:
           - db_postgres
+
+  frontend:
+        hostname: foundations-frontend
+        build:
+          context: ./frontend
+          dockerfile: Dockerfile
+        ports:
+        - "3000:3000"
+        logging:
+          driver: json-file
+        network_mode: host
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://0.0.0.0:3000/"] 
+          interval: 10s
+          timeout: 10s
+          retries: 3
 volumes:
  db_data:
  db_data_repl:

@@ -1,6 +1,6 @@
 import { FoundrisingAPI } from "../../foundrising/API";
 import { FoundrisingAdd, FoundrisingTransfer } from "../../foundrising/Transfer";
-import  {useState } from "react";
+import  {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface FoundrisingAddFormProps{
@@ -16,6 +16,29 @@ function FoundrisingAddForm({found_id}: FoundrisingAddFormProps){
     const [requiredSumError, setRequiredSumError] = useState<string>('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+    
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationAddDescription')
+        if (item && item.length > 0){
+            setDescription(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationAddDescription', description as string);
+        }, [description]);
+
+    useEffect(() => {
+        const item = window.localStorage.getItem('FoundationAddRequiredSum')
+        if (item && item.length > 0){
+            setRequiredSum(item);
+        }
+        }, []);
+    useEffect(() => {
+        window.localStorage.setItem('FoundationAddRequiredSum', requiredSum as string);
+        }, [requiredSum]);
+
+
     const validateDescription = (value: string) => {
         if (value.length < 20) {
         setDescriptionError('Description must be at least 20 characters long');
@@ -48,6 +71,8 @@ function FoundrisingAddForm({found_id}: FoundrisingAddFormProps){
     };
     const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        window.localStorage.setItem('showAddForm', '0')
+        window.localStorage.setItem('showDash', '1')
         window.location.reload();
     }
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

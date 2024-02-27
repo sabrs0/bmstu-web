@@ -12,7 +12,15 @@ interface FoundrisingChoiceProps {
 }
 function FoundrisingChoice({handleSetID} : FoundrisingChoiceProps){
     const [selectedDescr, setSelectedDescr] = useState('')
-
+    useEffect(() => {
+      const item = window.localStorage.getItem('selectedDescr')
+      if (item && item.length > 0){
+        setSelectedDescr(item);
+      }
+      }, []);
+  useEffect(() => {
+      window.localStorage.setItem('selectedDescr', selectedDescr);
+      }, [selectedDescr]);
     const handleSelectDescr = (descr: string) => {
        setSelectedDescr(descr);
     };
